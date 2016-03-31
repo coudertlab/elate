@@ -381,7 +381,7 @@ def makePolarPlot(func, maxrad, legend = '', p="xy", width = 300, height = 300, 
         % (i, maxrad, maxrad, maxrad, maxrad))
 
   u = np.linspace(0, np.pi, npoints)
-  r = map(func, u)
+  r = list(map(func, u))
   if (p=="xy"):
     x = r * np.cos(u)
     y = r * np.sin(u)
@@ -403,14 +403,14 @@ def makePolarPlotPosNeg(func, maxrad, legend = '', p="xy", width = 300, height =
         % (i, maxrad, maxrad, maxrad, maxrad))
 
   u = np.linspace(0, np.pi, npoints)
-  r = map(lambda x: max(0, func(x)), u)
+  r = list(map(lambda x: max(0, func(x)), u))
   if (p=="xy"):
     x1 = r * np.cos(u)
     y1 = r * np.sin(u)
   else:
     y1 = r * np.cos(u)
     x1 = r * np.sin(u)
-  r = map(lambda x: max(0, -func(x)), u)
+  r = list(map(lambda x: max(0, -func(x)), u))
   if (p=="xy"):
     x2 = r * np.cos(u)
     y2 = r * np.sin(u)
@@ -434,7 +434,7 @@ def makePolarPlot2(func, maxrad, legend = '', p="xy", width = 300, height = 300,
         % (i, maxrad, maxrad, maxrad, maxrad))
 
   u = np.linspace(0, np.pi, npoints)
-  r = map(func, u)
+  r = list(map(func, u))
 
   if (p=="xy"):
     x1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
@@ -463,7 +463,7 @@ def makePolarPlot3(func, maxrad, legend = '', p="xy", width = 300, height = 300,
         % (i, maxrad, maxrad, maxrad, maxrad))
 
   u = np.linspace(0, np.pi, npoints)
-  r = map(func, u)
+  r = list(map(func, u))
 
   if (p=="xy"):
     x1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
@@ -542,13 +542,13 @@ class Elastic:
       # Remove empty lines
       lines = [line for line in s.split('\n') if line.strip()]
       if len(lines) != 6:
-	raise ValueError("should have six rows")
+        raise ValueError("should have six rows")
 
       # Convert to float
       try:
-	mat = [map(float, line.split()) for line in lines]
+        mat = [list(map(float, line.split())) for line in lines]
       except:
-	raise ValueError("not all entries are numbers")
+        raise ValueError("not all entries are numbers")
     elif type(s) == list:
       # If we already have a list, simply use it
       mat = s
@@ -556,16 +556,18 @@ class Elastic:
       raise ValueError("invalid argument as matrix")
 
     # Make it into a square matrix
+    print(mat)
     mat = np.array(mat)
+    print(mat)
     if mat.shape != (6,6):
       # Is it upper triangular?
-      if map(len, mat) == [6,5,4,3,2,1]:
-	mat = [ [0]*i + mat[i] for i in range(6) ]
+      if list(map(len, mat)) == [6,5,4,3,2,1]:
+        mat = [ [0]*i + mat[i] for i in range(6) ]
         mat = np.array(mat)
 
       # Is it lower triangular?
-      if map(len, mat) == [1,2,3,4,5,6]:
-	mat = [ mat[i] + [0]*(5-i) for i in range(6) ]
+      if list(map(len, mat)) == [1,2,3,4,5,6]:
+        mat = [ mat[i] + [0]*(5-i) for i in range(6) ]
         mat = np.array(mat)
 
     if mat.shape != (6,6):
