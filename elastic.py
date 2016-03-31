@@ -2,9 +2,8 @@
 
 from __future__ import print_function
 
-import sys, math, random, json, re, base64
+import sys, math, random, json, re, base64, time
 from collections import OrderedDict
-import IPython.utils.timing
 import numpy as np
 import numpy.linalg as la
 from scipy import optimize
@@ -38,7 +37,7 @@ def finishWebPage(outbuffer):
 
   print('<div id="footer" class="content">')
   print('Code version: ' + __version__ + '<br/>')
-  print('<script type="text/javascript">var endTime = %g;' % IPython.utils.timing.clock())
+  print('<script type="text/javascript">var endTime = %g;' % time.clock())
   print('document.write("Execution time: " + (endTime-startTime).toFixed(3) + " seconds<br/>");' )
   print('if(typeof isOrtho !== \'undefined\') document.write("Specific (faster) code for orthorhombic case was used.");')
   print('</script></div>')
@@ -926,7 +925,7 @@ def ELATE(matrix, sysname):
   sys.stdout = outbuffer = StringIO()
 
   # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % IPython.utils.timing.clock())
+  print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
 
   printTitle(outbuffer, "Elastic analysis of " + removeHTMLTags(sysname))
 
@@ -1148,7 +1147,7 @@ def YOUNG3D(matrix, sysname):
   writeHeader(outbuffer,"Young 3D for " + removeHTMLTags(sysname))
 
   # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % IPython.utils.timing.clock())
+  print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
   print('<div class="content">')
 
   print("<h1> 3D Visualization of Young's modulus </h1>")
@@ -1173,7 +1172,7 @@ def LC3D(matrix,sysname):
   writeHeader(outbuffer,"LC 3D for " + removeHTMLTags(sysname))
 
   # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % IPython.utils.timing.clock())
+  print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
   print('<div class="content">')
 
   print("<h1> 3D Visualization of Linear compressiblity </h1>")
@@ -1198,7 +1197,7 @@ def SHEAR3D(matrix,sysname):
   writeHeader(outbuffer,"Shear 3D for " + removeHTMLTags(sysname))
 
   # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % IPython.utils.timing.clock())
+  print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
   print('<div class="content">')
 
   print("<h1> 3D Visualization of Shear modulus </h1>")
@@ -1223,7 +1222,7 @@ def POISSON3D(matrix,sysname):
   writeHeader(outbuffer,"Poisson 3D for " + removeHTMLTags(sysname))
 
   # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % IPython.utils.timing.clock())
+  print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
   print('<div class="content">')
 
   print("<h1> 3D Visualization of Poisson's ratio </h1>")
