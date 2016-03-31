@@ -499,8 +499,8 @@ def dirVec1(theta, phi, chi):
 
 def dirVec2(theta, phi, chi):
   return [ math.cos(theta)*math.cos(phi)*math.cos(chi) - math.sin(phi)*math.sin(chi),
-	  math.cos(theta)*math.sin(phi)*math.cos(chi) + math.cos(phi)*math.sin(chi),
-	  - math.sin(theta)*math.cos(chi) ]
+          math.cos(theta)*math.sin(phi)*math.cos(chi) + math.cos(phi)*math.sin(chi),
+          - math.sin(theta)*math.cos(chi) ]
 
 
 # Functions to minimize/maximize
@@ -602,59 +602,59 @@ class Elastic:
   def isOrthorhombic(self):
     def iszero(x): return (abs(x) < 1.e-3)
     return (iszero(self.CVoigt[0][3]) and iszero(self.CVoigt[0][4]) and iszero(self.CVoigt[0][5])
-	    and iszero(self.CVoigt[1][3]) and iszero(self.CVoigt[1][4]) and iszero(self.CVoigt[1][5])
-	    and iszero(self.CVoigt[2][3]) and iszero(self.CVoigt[2][4]) and iszero(self.CVoigt[2][5])
-	    and iszero(self.CVoigt[3][4]) and iszero(self.CVoigt[3][5]) and iszero(self.CVoigt[4][5]))
+            and iszero(self.CVoigt[1][3]) and iszero(self.CVoigt[1][4]) and iszero(self.CVoigt[1][5])
+            and iszero(self.CVoigt[2][3]) and iszero(self.CVoigt[2][4]) and iszero(self.CVoigt[2][5])
+            and iszero(self.CVoigt[3][4]) and iszero(self.CVoigt[3][5]) and iszero(self.CVoigt[4][5]))
 
   def isCubic(self):
     def iszero(x): return (abs(x) < 1.e-3)
     return (iszero(self.CVoigt[0][3]) and iszero(self.CVoigt[0][4]) and iszero(self.CVoigt[0][5])
-	    and iszero(self.CVoigt[1][3]) and iszero(self.CVoigt[1][4]) and iszero(self.CVoigt[1][5])
-	    and iszero(self.CVoigt[2][3]) and iszero(self.CVoigt[2][4]) and iszero(self.CVoigt[2][5])
-	    and iszero(self.CVoigt[3][4]) and iszero(self.CVoigt[3][5]) and iszero(self.CVoigt[4][5])
-	    and iszero(self.CVoigt[0][0] - self.CVoigt[1][1]) and iszero(self.CVoigt[0][0] - self.CVoigt[2][2])
-	    and iszero(self.CVoigt[0][0] - self.CVoigt[1][1]) and iszero(self.CVoigt[0][0] - self.CVoigt[2][2])
-	    and iszero(self.CVoigt[3][3] - self.CVoigt[4][4]) and iszero(self.CVoigt[3][3] - self.CVoigt[5][5])
-	    and iszero(self.CVoigt[0][1] - self.CVoigt[0][2]) and iszero(self.CVoigt[0][1] - self.CVoigt[1][2]))
+            and iszero(self.CVoigt[1][3]) and iszero(self.CVoigt[1][4]) and iszero(self.CVoigt[1][5])
+            and iszero(self.CVoigt[2][3]) and iszero(self.CVoigt[2][4]) and iszero(self.CVoigt[2][5])
+            and iszero(self.CVoigt[3][4]) and iszero(self.CVoigt[3][5]) and iszero(self.CVoigt[4][5])
+            and iszero(self.CVoigt[0][0] - self.CVoigt[1][1]) and iszero(self.CVoigt[0][0] - self.CVoigt[2][2])
+            and iszero(self.CVoigt[0][0] - self.CVoigt[1][1]) and iszero(self.CVoigt[0][0] - self.CVoigt[2][2])
+            and iszero(self.CVoigt[3][3] - self.CVoigt[4][4]) and iszero(self.CVoigt[3][3] - self.CVoigt[5][5])
+            and iszero(self.CVoigt[0][1] - self.CVoigt[0][2]) and iszero(self.CVoigt[0][1] - self.CVoigt[1][2]))
 
   def Young(self, x):
     a = dirVec(x[0], x[1])
     r = sum([ a[i]*a[j]*a[k]*a[l] * self.Smat[i][j][k][l]
-	      for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
+              for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
     return 1/r
 
   def Young_2(self,x,y):
     a = dirVec(x, y)
     r = sum([ a[i]*a[j]*a[k]*a[l] * self.Smat[i][j][k][l]
-	      for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
+              for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
     return 1/r
 
   def LC(self, x):
     a = dirVec(x[0], x[1])
     r = sum([ a[i]*a[j] * self.Smat[i][j][k][k]
-	      for i in range(3) for j in range(3) for k in range(3) ])
+              for i in range(3) for j in range(3) for k in range(3) ])
     return 1000 * r
 
   def LC_2(self, x, y):
     a = dirVec(x, y)
     r = sum([ a[i]*a[j] * self.Smat[i][j][k][k]
-	      for i in range(3) for j in range(3) for k in range(3) ])
+              for i in range(3) for j in range(3) for k in range(3) ])
     return 1000 * r
 
   def shear(self, x):
     a = dirVec(x[0], x[1])
     b = dirVec2(x[0], x[1], x[2])
     r = sum([ a[i]*b[j]*a[k]*b[l] * self.Smat[i][j][k][l]
-	      for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
+              for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
     return 1/(4*r)
 
   def Poisson(self, x):
     a = dirVec(x[0], x[1])
     b = dirVec2(x[0], x[1], x[2])
     r1 = sum([ a[i]*a[j]*b[k]*b[l] * self.Smat[i][j][k][l]
-	      for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
+              for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
     r2 = sum([ a[i]*a[j]*a[k]*a[l] * self.Smat[i][j][k][l]
-	      for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
+              for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
     return -r1/r2
 
   def averages(self):
@@ -675,8 +675,8 @@ class Elastic:
     GH = (GV + GR) / 2
 
     return [ [KV, 1/(1/(3*GV) + 1/(9*KV)), GV, (1 - 3*GV/(3*KV+GV))/2],
-	     [KR, 1/(1/(3*GR) + 1/(9*KR)), GR, (1 - 3*GR/(3*KR+GR))/2],
-	     [KH, 1/(1/(3*GH) + 1/(9*KH)), GH, (1 - 3*GH/(3*KH+GH))/2] ]
+             [KR, 1/(1/(3*GR) + 1/(9*KR)), GR, (1 - 3*GR/(3*KR+GR))/2],
+             [KH, 1/(1/(3*GH) + 1/(9*KH)), GH, (1 - 3*GH/(3*KH+GH))/2] ]
 
   def shear2D(self, x):
     ftol = 0.001
@@ -775,11 +775,11 @@ class ElasticOrtho(Elastic):
     s13 = self.Smat[0][0][2][2]
     s23 = self.Smat[1][1][2][2]
     r = (
-	  ct2*ct2*cx2*s44*sf2 + cx2*s44*sf2*st2*st2 + 4*cf**3*ct*cx*(-2*s11 + 2*s12 + s66)*sf*st2*sx
-	  + 2*cf*ct*cx*sf*(ct2*(s44 - s55) + (4*s13 - 4*s23 - s44 + s55 - 4*s12*sf2 + 4*s22*sf2 - 2*s66*sf2)*st2)*sx
-	  + s66*sf2*sf2*st2*sx2 + cf**4*st2*(4*ct2*cx2*s11 + s66*sx2)
-	  + ct2*(2*cx2*(2*s33 + sf2*(-4*s23 - s44 + 2*s22*sf2))*st2 + s55*sf2*sx2)
-	  + cf**2*(ct2*ct2*cx2*s55 + ct2*(-2*cx2*(4*s13 + s55 - 2*(2*s12 + s66)*sf2)*st2 + s44*sx2)
+          ct2*ct2*cx2*s44*sf2 + cx2*s44*sf2*st2*st2 + 4*cf**3*ct*cx*(-2*s11 + 2*s12 + s66)*sf*st2*sx
+          + 2*cf*ct*cx*sf*(ct2*(s44 - s55) + (4*s13 - 4*s23 - s44 + s55 - 4*s12*sf2 + 4*s22*sf2 - 2*s66*sf2)*st2)*sx
+          + s66*sf2*sf2*st2*sx2 + cf**4*st2*(4*ct2*cx2*s11 + s66*sx2)
+          + ct2*(2*cx2*(2*s33 + sf2*(-4*s23 - s44 + 2*s22*sf2))*st2 + s55*sf2*sx2)
+          + cf**2*(ct2*ct2*cx2*s55 + ct2*(-2*cx2*(4*s13 + s55 - 2*(2*s12 + s66)*sf2)*st2 + s44*sx2)
                    + st2*(cx2*s55*st2 + 2*(2*s11 - 4*s12 + 2*s22 - s66)*sf2*sx2))
         )
     return 1/r
@@ -853,8 +853,8 @@ def queryElasticityV2(mat):
   """Return elastic properties for a given material ID, using V1 MAPI """
 
   data = urlencode({ 'criteria' : '{"task_id": "' + mat + '"}',
-		      'properties' : '["formula", "pretty_formula", "material_id", "elasticity"]',
-		      'API_KEY' : mapiKey })
+        	      'properties' : '["formula", "pretty_formula", "material_id", "elasticity"]',
+        	      'API_KEY' : mapiKey })
   data = data.encode("utf-8")
   try:
     url = Request(urlBase2, data)
@@ -888,16 +888,16 @@ def ELATE_MaterialsProject(query):
   # In case there is no match
   if len(materials) == 0:
     print("""<p>
-	    Your query for <tt style="background-color: #e0e0e0;">%s</tt> from the <a href="https://materialsproject.org">Materials Project</a> database
-	    has returned a total of zero result. Or is it zero results? In any case, we are very sorry.</p>
-	    
-	    <p>If you wish, you can try another query here:
-	    <form name="elastic" action="/elate/mp" method="get">
-	      <input type="text" name="query" style="font-family:sans-serif; width: 20em;">
-	      <input type="submit" style="font-size: 100%%; color: #b02020;" value="Submit query">
-	    </form>
-	    or go back to our <a href="/elate">main page</a>.
-	    </p>""" % (query))
+            Your query for <tt style="background-color: #e0e0e0;">%s</tt> from the <a href="https://materialsproject.org">Materials Project</a> database
+            has returned a total of zero result. Or is it zero results? In any case, we are very sorry.</p>
+            
+            <p>If you wish, you can try another query here:
+            <form name="elastic" action="/elate/mp" method="get">
+              <input type="text" name="query" style="font-family:sans-serif; width: 20em;">
+              <input type="submit" style="font-size: 100%%; color: #b02020;" value="Submit query">
+            </form>
+            or go back to our <a href="/elate">main page</a>.
+            </p>""" % (query))
     return finishWebPage(outbuffer)
 
 
@@ -961,14 +961,14 @@ def ELATE(matrix, sysname):
 
   print("<table><tr><th>Averaging scheme</th><th>Bulk modulus</th><th>Young's modulus</th><th>Shear modulus</th><th>Poisson's ratio</th></tr>")
   print(('<tr><td>Voigt</td><td><em>K</em><sub>V</sub> = %7.5g GPa</td><td><em>E</em><sub>V</sub> = %7.5g GPa</td>'
-	  + '<td><em>G</em><sub>V</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>V</sub> = %.5g</td></tr>')
-	% tuple(avg[0]))
+          + '<td><em>G</em><sub>V</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>V</sub> = %.5g</td></tr>')
+        % tuple(avg[0]))
   print(('<tr><td>Reuss</td><td><em>K</em><sub>R</sub> = %7.5g GPa</td><td><em>E</em><sub>R</sub> = %7.5g GPa</td>'
-	  + '<td><em>G</em><sub>R</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>R</sub> = %.5g</td></tr>')
-	% tuple(avg[1]))
+          + '<td><em>G</em><sub>R</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>R</sub> = %.5g</td></tr>')
+        % tuple(avg[1]))
   print(('<tr><td>Hill</td><td><em>K</em><sub>H</sub> = %7.5g GPa</td><td><em>E</em><sub>H</sub> = %7.5g GPa</td>'
-	  + '<td><em>G</em><sub>H</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>H</sub> = %.5g</td></tr>')
-	% tuple(avg[2]))
+          + '<td><em>G</em><sub>H</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>H</sub> = %.5g</td></tr>')
+        % tuple(avg[2]))
   print('</table>')
 
 
@@ -1001,24 +1001,24 @@ def ELATE(matrix, sysname):
   maxNu = maximize(elas.Poisson, 3)
 
   print("""<h3>Variations of the elastic moduli</h3>
-	    <table>
-	    <tr><td></td><th colspan="2">Young\'s modulus</th><th colspan="2">Linear compressibility</th>
-	    <th colspan="2">Shear modulus</th><th colspan="2">Poisson\'s ratio</th><th></th></tr>
-	    <td></td><th><em>E</em><sub>min</sub></th><th><em>E</em><sub>max</sub></th>
-	    <th>&beta;<sub>min</sub></th><th>&beta;<sub>max</sub></th><th><em>G</em><sub>min</sub></th><th><em>G</em><sub>max</sub></th>
-	    <th>&nu;<sub>min</sub></th><th>&nu;<sub>max</sub></th><th></th></tr>""")
+            <table>
+            <tr><td></td><th colspan="2">Young\'s modulus</th><th colspan="2">Linear compressibility</th>
+            <th colspan="2">Shear modulus</th><th colspan="2">Poisson\'s ratio</th><th></th></tr>
+            <td></td><th><em>E</em><sub>min</sub></th><th><em>E</em><sub>max</sub></th>
+            <th>&beta;<sub>min</sub></th><th>&beta;<sub>max</sub></th><th><em>G</em><sub>min</sub></th><th><em>G</em><sub>max</sub></th>
+            <th>&nu;<sub>min</sub></th><th>&nu;<sub>max</sub></th><th></th></tr>""")
 
   print(('<tr><td>Value</td><td>%8.5g GPa</td><td>%8.5g GPa</td>'
-	+ '<td>%8.5g TPa<sup>&ndash;1</sup></td><td>%8.5g TPa<sup>&ndash;1</sup></td>'
-	+ '<td>%8.5g GPa</td><td>%8.5g GPa</td>'
-	+ '<td>%.5g</td><td>%.5g</td><td>Value</td></tr>') % (minE[1], maxE[1], minLC[1], maxLC[1], minG[1], maxG[1], minNu[1], maxNu[1]))
+        + '<td>%8.5g TPa<sup>&ndash;1</sup></td><td>%8.5g TPa<sup>&ndash;1</sup></td>'
+        + '<td>%8.5g GPa</td><td>%8.5g GPa</td>'
+        + '<td>%.5g</td><td>%.5g</td><td>Value</td></tr>') % (minE[1], maxE[1], minLC[1], maxLC[1], minG[1], maxG[1], minNu[1], maxNu[1]))
 
   anisE = '%8.4g' % (maxE[1]/minE[1])
   anisLC = ('%8.4f' % (maxLC[1]/minLC[1])) if minLC[1] > 0 else "&infin;"
   anisG = '%8.4g' % (maxG[1]/minG[1])
   anisNu = ('%8.4f' % (maxNu[1]/minNu[1])) if minNu[1]*maxNu[1] > 0 else "&infin;"
   print(('<tr><td>Anisotropy</td>' + 4*'<td colspan="2">%s</td>'
-	+ '<td>Anisotropy</td></tr>') % ( anisE, anisLC, anisG, anisNu ))
+        + '<td>Anisotropy</td></tr>') % ( anisE, anisLC, anisG, anisNu ))
 
   print('<tr><td>Axis</td>')
   print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(dirVec(*minE[0])))
@@ -1041,10 +1041,10 @@ def ELATE(matrix, sysname):
 
   print("<h2>Spatial dependence of Young's modulus</h2>")
   print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
-	    <textarea name="matrix" style="display: none;">%s</textarea>
-	    <textarea name="sysname" style="display: none;">%s</textarea>
-	    <textarea name="job" style="display: none;">%s</textarea>
-	    <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
+            <textarea name="matrix" style="display: none;">%s</textarea>
+            <textarea name="sysname" style="display: none;">%s</textarea>
+            <textarea name="job" style="display: none;">%s</textarea>
+            <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
            </form>""" % (matrix, sysname, "young"))
   m = 1.2 * maxE[1]
   makePolarPlot(lambda x: elas.Young([np.pi/2,x]), m, "Young's modulus in (xy) plane","xy")
@@ -1054,10 +1054,10 @@ def ELATE(matrix, sysname):
 
   print("<h2>Spatial dependence of linear compressibility</h2>")
   print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
-	    <textarea name="matrix" style="display: none;">%s</textarea>
-	    <textarea name="sysname" style="display: none;">%s</textarea>
-	    <textarea name="job" style="display: none;">%s</textarea>
-	    <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
+            <textarea name="matrix" style="display: none;">%s</textarea>
+            <textarea name="sysname" style="display: none;">%s</textarea>
+            <textarea name="job" style="display: none;">%s</textarea>
+            <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
            </form>""" % (matrix, sysname, "lc"))
   m = 1.2 * max(maxLC[1], abs(minLC[1]))
   makePolarPlotPosNeg(lambda x: elas.LC([np.pi/2,x]), m, "linear compressibility in (xy) plane","xy")
@@ -1067,10 +1067,10 @@ def ELATE(matrix, sysname):
 
   print("<h2>Spatial dependence of shear modulus</h2>")
   print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
-	    <textarea name="matrix" style="display: none;">%s</textarea>
-	    <textarea name="sysname" style="display: none;">%s</textarea>
-	    <textarea name="job" style="display: none;">%s</textarea>
-	    <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
+            <textarea name="matrix" style="display: none;">%s</textarea>
+            <textarea name="sysname" style="display: none;">%s</textarea>
+            <textarea name="job" style="display: none;">%s</textarea>
+            <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
            </form>""" % (matrix, sysname, "shear"))
   m = 1.2 * maxG[1]
   makePolarPlot2(lambda x: elas.shear2D([np.pi/2,x]), m, "Shear modulus in (xy) plane","xy")
@@ -1080,10 +1080,10 @@ def ELATE(matrix, sysname):
 
   print("<h2>Spatial dependence of Poisson's ratio</h2>")
   print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
-	    <textarea name="matrix" style="display: none;">%s</textarea>
-	    <textarea name="sysname" style="display: none;">%s</textarea>
-	    <textarea name="job" style="display: none;">%s</textarea>
-	    <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
+            <textarea name="matrix" style="display: none;">%s</textarea>
+            <textarea name="sysname" style="display: none;">%s</textarea>
+            <textarea name="job" style="display: none;">%s</textarea>
+            <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
            </form>""" % (matrix, sysname, "poisson"))
   m = 1.2 * max(abs(maxNu[1]), abs(minNu[1]))
   makePolarPlot3(lambda x: elas.Poisson2D([np.pi/2,x]), m, "Poisson's ratio in (xy) plane","xy")
@@ -1120,9 +1120,9 @@ def wait3D(matrix, sysname, job):
     <script type="text/javascript">
     window.onload = function(){
     setTimeout(function () {
-	  document.getElementById("elastic").submit();
-	      }, 100);
-	  };
+          document.getElementById("elastic").submit();
+              }, 100);
+          };
     </script>""")
 
   return finishWebPage(outbuffer)
