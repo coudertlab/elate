@@ -716,7 +716,7 @@ class ElasticOrtho(Elastic):
 
   def __init__(self, arg):
     """Initialize from a matrix, or from an Elastic object"""
-    if isinstance(arg, basestring):
+    if isinstance(arg, str):
       Elastic.__init__(self, arg)
     elif isinstance(arg, Elastic):
       self.CVoigt = arg.CVoigt
