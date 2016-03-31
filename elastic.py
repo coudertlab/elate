@@ -3,7 +3,6 @@
 from __future__ import print_function
 
 import sys, math, random, json, re, base64
-from cStringIO import StringIO
 from collections import OrderedDict
 import IPython.utils.timing
 import numpy as np
@@ -17,6 +16,11 @@ try:
 except ImportError:
   from urllib import urlencode
   from urllib2 import urlopen, Request
+
+try:
+  from io import StringIO
+except ImportError:
+  from cStringIO import StringIO
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
