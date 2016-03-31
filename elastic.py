@@ -556,9 +556,7 @@ class Elastic:
       raise ValueError("invalid argument as matrix")
 
     # Make it into a square matrix
-    print(mat)
     mat = np.array(mat)
-    print(mat)
     if mat.shape != (6,6):
       # Is it upper triangular?
       if list(map(len, mat)) == [6,5,4,3,2,1]:
