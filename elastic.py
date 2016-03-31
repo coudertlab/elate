@@ -134,7 +134,7 @@ def make3DPlot(func, legend = '', width = 600, height = 600, npoints = 200):
       dataX[cu][cv] = x
       dataY[cu][cv] = y
       dataZ[cu][cv] = z
-      dataR[cu][cv] = "'E = "+str(float(int(10*r_tmp))/10.0)+" GPa, "+u"\u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+u"\u00B0, "+u"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+u"\u00B0'"
+      dataR[cu][cv] = "'E = "+str(float(int(10*r_tmp))/10.0)+" GPa, "+"\u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+"\u00B0, "+"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+"\u00B0'"
       count = count+1
 
   i = random.randint(0, 100000)
@@ -172,7 +172,7 @@ def make3DPlotPosNeg(func, legend = '', width = 600, height = 600, npoints = 200
       dataX1[cu][cv] = x
       dataY1[cu][cv] = y
       dataZ1[cu][cv] = z
-      dataR1[cu][cv] = "'"+u"\u03B2 = "+str(float(int(10*r_tmp))/10.0)+" TPa'"+"+'-1'.sup()+"+u"', \u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+u"\u00B0, "+u"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+u"\u00B0'"
+      dataR1[cu][cv] = "'"+"\u03B2 = "+str(float(int(10*r_tmp))/10.0)+" TPa'"+"+'-1'.sup()+"+"', \u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+"\u00B0, "+"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+"\u00B0'"
       count = count+1
 
   dataX2 = [[0.0 for i in range(len(v))] for j in range(len(u))]
@@ -190,7 +190,7 @@ def make3DPlotPosNeg(func, legend = '', width = 600, height = 600, npoints = 200
       dataX2[cu][cv] = x
       dataY2[cu][cv] = y
       dataZ2[cu][cv] = z
-      dataR2[cu][cv] = "'"+u"\u03B2 = -"+str(float(int(10*r_tmp))/10.0)+" TPa'"+"+'-1'.sup()+"+u"', \u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+u"\u00B0, "+u"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+u"\u00B0'"
+      dataR2[cu][cv] = "'"+"\u03B2 = -"+str(float(int(10*r_tmp))/10.0)+" TPa'"+"+'-1'.sup()+"+"', \u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+"\u00B0, "+"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+"\u00B0'"
       count = count+1
 
   i = random.randint(0, 100000)
@@ -244,7 +244,7 @@ def make3DPlot2(func, legend = '', width = 600, height = 600, npoints = 50):
       dataX1[cu][cv] = x1
       dataY1[cu][cv] = y1
       dataZ1[cu][cv] = z1
-      dataR1[cu][cv] = "'"+"G'"+"+'min'.sub()+"+"' = "+str(float(int(10*r1_tmp))/10.0)+"GPa, "+u"\u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+u"\u00B0, "+u"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+u"\u00B0'"
+      dataR1[cu][cv] = "'"+"G'"+"+'min'.sub()+"+"' = "+str(float(int(10*r1_tmp))/10.0)+"GPa, "+"\u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+"\u00B0, "+"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+"\u00B0'"
 
       r2_tmp = r[1]
       z2 = r2_tmp * z
@@ -253,7 +253,7 @@ def make3DPlot2(func, legend = '', width = 600, height = 600, npoints = 50):
       dataX2[cu][cv] = x2
       dataY2[cu][cv] = y2
       dataZ2[cu][cv] = z2
-      dataR2[cu][cv] = "'"+"G'"+"+'max'.sub()+"+"' = "+str(float(int(10*r1_tmp))/10.0)+"GPa, "+u"\u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+u"\u00B0, "+u"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+u"\u00B0'"
+      dataR2[cu][cv] = "'"+"G'"+"+'max'.sub()+"+"' = "+str(float(int(10*r1_tmp))/10.0)+"GPa, "+"\u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+"\u00B0, "+"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+"\u00B0'"
       count = count+1
 
   i = random.randint(0, 100000)
@@ -317,19 +317,19 @@ def make3DPlot3(func, legend = '', width = 600, height = 600, npoints = 50):
       dataX1[cu][cv] = r1_tmp * x
       dataY1[cu][cv] = r1_tmp * y
       dataZ1[cu][cv] = r1_tmp * z
-      dataR1[cu][cv] = "'"+u"\u03BD'"+"+'min'.sub()+"+"' = "+str(float(int(100*r1_tmp))/100.0)+", "+u"\u03B8 = "+str(float(int(100*u[cu]*180/np.pi))/100.0)+u"\u00B0, "+u"\u03c6 = "+str(float(int(100*v[cv]*180/np.pi))/100.0)+u"\u00B0'"
+      dataR1[cu][cv] = "'"+"\u03BD'"+"+'min'.sub()+"+"' = "+str(float(int(100*r1_tmp))/100.0)+", "+"\u03B8 = "+str(float(int(100*u[cu]*180/np.pi))/100.0)+"\u00B0, "+"\u03c6 = "+str(float(int(100*v[cv]*180/np.pi))/100.0)+"\u00B0'"
 
       r2_tmp = r[1]
       dataX2[cu][cv] = r2_tmp * x
       dataY2[cu][cv] = r2_tmp * y
       dataZ2[cu][cv] = r2_tmp * z
-      dataR2[cu][cv] = "'"+u"\u03BD'"+"+'min'.sub()+"+"' = "+str(float(int(100*r2_tmp))/100.0)+", "+u"\u03B8 = "+str(float(int(100*u[cu]*180/np.pi))/100.0)+u"\u00B0, "+u"\u03c6 = "+str(float(int(100*v[cv]*180/np.pi))/100.0)+u"\u00B0'"
+      dataR2[cu][cv] = "'"+"\u03BD'"+"+'min'.sub()+"+"' = "+str(float(int(100*r2_tmp))/100.0)+", "+"\u03B8 = "+str(float(int(100*u[cu]*180/np.pi))/100.0)+"\u00B0, "+"\u03c6 = "+str(float(int(100*v[cv]*180/np.pi))/100.0)+"\u00B0'"
 
       r3_tmp = r[2]
       dataX3[cu][cv] = r3_tmp * x
       dataY3[cu][cv] = r3_tmp * y
       dataZ3[cu][cv] = r3_tmp * z
-      dataR3[cu][cv] = "'"+u"\u03BD'"+"+'max'.sub()+"+"' = "+str(float(int(100*r3_tmp))/100.0)+", "+u"\u03B8 = "+str(float(int(100*u[cu]*180/np.pi))/100.0)+u"\u00B0, "+u"\u03c6 = "+str(float(int(100*v[cv]*180/np.pi))/100.0)+u"\u00B0'"
+      dataR3[cu][cv] = "'"+"\u03BD'"+"+'max'.sub()+"+"' = "+str(float(int(100*r3_tmp))/100.0)+", "+"\u03B8 = "+str(float(int(100*u[cu]*180/np.pi))/100.0)+"\u00B0, "+"\u03c6 = "+str(float(int(100*v[cv]*180/np.pi))/100.0)+"\u00B0'"
       count = count+1
 
   i = random.randint(0, 100000)
