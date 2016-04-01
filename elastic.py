@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import sys, math, random, json, re, base64, time
 from collections import OrderedDict
@@ -26,6 +27,14 @@ __author__ = "Romain Gaillac and François-Xavier Coudert"
 __version__ = "2016.01.15"
 __license__ = "MIT"
 
+
+
+def isstring(s):
+  """Is the argument a string (Unicode or not)?"""
+  try:
+    return isinstance(s, basestring)
+  except:
+    return isinstance(s, str)
 
 def removeHTMLTags(s):
   """Remove HTML tags, notably for use as page title"""
@@ -534,7 +543,7 @@ class Elastic:
     except:
       pass
 
-    if type(s) == str:
+    if isstring(s):
       # Remove braces and pipes
       s = s.replace("|", " ").replace("(", " ").replace(")", " ")
 
@@ -590,7 +599,7 @@ class Elastic:
       raise ValueError("matrix is singular")
 
     VoigtMat = [[0, 5, 4], [5, 1, 3], [4, 3, 2]]
-    def SVoigtCoeff(p,q): return 1. / ((1+p/3)*(1+q/3))
+    def SVoigtCoeff(p,q): return 1. / ((1+p//3)*(1+q//3))
 
     self.Smat = [[[[ SVoigtCoeff(VoigtMat[i][j], VoigtMat[k][l]) * self.SVoigt[VoigtMat[i][j]][VoigtMat[k][l]]
                      for i in range(3) ] for j in range(3) ] for k in range(3) ] for l in range(3) ]
@@ -715,7 +724,7 @@ class ElasticOrtho(Elastic):
 
   def __init__(self, arg):
     """Initialize from a matrix, or from an Elastic object"""
-    if isinstance(arg, str):
+    if isstring(arg):
       Elastic.__init__(self, arg)
     elif isinstance(arg, Elastic):
       self.CVoigt = arg.CVoigt
