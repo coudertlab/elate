@@ -3,7 +3,7 @@
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import sys, math, random, json, re, base64, time
+import sys, math, random, json, re, base64, time, platform
 from collections import OrderedDict
 import numpy as np
 import numpy.linalg as la
@@ -24,7 +24,7 @@ except ImportError:
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2016.01.15"
+__version__ = "2016.04.01"
 __license__ = "MIT"
 
 
@@ -45,7 +45,7 @@ def finishWebPage(outbuffer):
   """ Write the footer and finish the page """
 
   print('<div id="footer" class="content">')
-  print('Code version: ' + __version__ + '<br/>')
+  print('Code version: ' + __version__ + ' (running on Python ' + platform.python_version() + ')<br/>')
   print('<script type="text/javascript">var endTime = %g;' % time.clock())
   print('document.write("Execution time: " + (endTime-startTime).toFixed(3) + " seconds<br/>");' )
   print('if(typeof isOrtho !== \'undefined\') document.write("Specific (faster) code for orthorhombic case was used.");')
