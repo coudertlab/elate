@@ -24,7 +24,7 @@ except ImportError:
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2016.04.01"
+__version__ = "2017.06.27"
 __license__ = "MIT"
 
 
@@ -85,10 +85,10 @@ def printTitle(outbuffer, title="Elastic Tensor Analysis"):
     <p>Welcome to ELATE, the online tool for analysis of elastic tensors, developed by <b>Romain Gaillac</b> and <b><a
       href="http://coudert.name">François-Xavier Coudert</a></b> at <a href="http://www.chimie-paristech.fr/molsim/">CNRS / Chimie
       ParisTech</a>. <br/> If you use the software in published results (paper, conference, etc.), please cite the <a
-      href="http://dx.doi.org/10.1063/1.4802770">corresponding paper</a> (<em>J. Chem. Phys.</em>, 2013, 138, 174703) and give the
+      href="http://dx.doi.org/10.1088/0953-8984/28/27/275201">corresponding paper</a> (<em>J. Phys. Condens. Matter</em>, 2016, 28, 275201) and give the
     website URL.</p>
 
-    <p>ELATE is <a href="https://github.com/fxcoudert/elate">open source software</a>. Any queries or comments are welcome at 
+    <p>ELATE is <a href="https://github.com/fxcoudert/elate">open source software</a>. Any queries or comments are welcome at
   <script type="text/javascript">
   //<![CDATA[
   var c_="";for(var o5=0;o5<411;o5++)c_+=String.fromCharCode(("s%oz65j5>oJ.~~vs!Kt00}.~|}{\\"$s~%}!s0Kv#\\"wv<s!~tjjK{j5wo#zH}<j5s!z~qo6s~=u=i:00ikk>97a6!#|w<u!t{}vQ!o}Qsr?6F8G9:B8D9>@?7>a9!#|w<u!t{}vQ!o}QsrB67Dj59}qr$!s8#vq{wsw~;!oAA\\"wA#qsj5v!<~sozsq=6=A:u00970i0<ikk>a9!#|w<u!t{}vQ!o}QsrA69DDD>:E\\'7@<7s!z~qo6sjj==8:uN070j59j5jj.0|}}{\\"$}s#$0Kv#\\"wv<s!Ktj5jjj5jjL0\\'t14>O>>DBqI$}sr#!14>>>>BDqIwvw{sO~;!o\\"ws#vq14>>B>ID!t=JLo<j5s!z~qo6sO=u=0:705<!s~zoqs6=6<76<7=u:02@2?07<\\"$p\\"#!6?77".charCodeAt(o5)-(14)+0x3f)%(2*6+83)+64-32);document.write(eval(c_))
@@ -102,7 +102,7 @@ def printTitle(outbuffer, title="Elastic Tensor Analysis"):
 # 3D plot functions
 ################################################################################################
 
-def write3DPlotData(dataX, dataY, dataZ, dataR,n,opacity=1.0):
+def write3DPlotData(dataX, dataY, dataZ, dataR, n, opacity=1.0):
 
   showcont = "true"
   if (opacity!=1.0): showcont = "false"
@@ -151,7 +151,7 @@ def make3DPlot(func, legend = '', width = 600, height = 600, npoints = 200):
   print('</div>')
   print('<script type="text/javascript">')
   print("var trace =")
-  write3DPlotData (dataX, dataY, dataZ, dataR,1)
+  write3DPlotData (dataX, dataY, dataZ, dataR, 1)
   print("var data = [trace]")
   print("var layout =")
   layout = {"title": "\'"+str1+"\\"+"\'"+str2+"\'", "width":"650", "height":"700" , "autosize":"false", "autorange":"true", "margin": "{l: 65, r: 50, b: 65, t: 90}"}
@@ -207,9 +207,9 @@ def make3DPlotPosNeg(func, legend = '', width = 600, height = 600, npoints = 200
   print('</div>')
   print('<script type="text/javascript">')
   print("var trace1 =")
-  write3DPlotData (dataX1, dataY1, dataZ1, dataR1,1)
+  write3DPlotData (dataX1, dataY1, dataZ1, dataR1, 1)
   print("var trace2 =")
-  write3DPlotData (dataX2, dataY2, dataZ2, dataR2,2)
+  write3DPlotData (dataX2, dataY2, dataZ2, dataR2, 2)
   print("var data = [trace1, trace2]")
   print("var layout =")
   layout = {"title": "\'"+legend+"\'", "width":"650", "height":"700" , "autosize":"false", "autorange":"true", "margin": "{l: 65, r: 50, b: 65, t: 90}"}
@@ -270,9 +270,9 @@ def make3DPlot2(func, legend = '', width = 600, height = 600, npoints = 50):
   print('</div>')
   print('<script type="text/javascript">')
   print("var trace1 =")
-  write3DPlotData (dataX1, dataY1, dataZ1, dataR1,1)
+  write3DPlotData (dataX1, dataY1, dataZ1, dataR1, 1)
   print("var trace2 =")
-  write3DPlotData (dataX2, dataY2, dataZ2, dataR2,3,0.99)
+  write3DPlotData (dataX2, dataY2, dataZ2, dataR2, 3, 0.5)
   print("var data = [trace1, trace2]")
   print("var layout =")
   layout = {"title": "\'"+legend+"\'", "width":"650", "height":"700" , "autosize":"false", "autorange":"true", "margin": "{l: 65, r: 50, b: 65, t: 90}"}
@@ -346,11 +346,11 @@ def make3DPlot3(func, legend = '', width = 600, height = 600, npoints = 50):
   print('</div>')
   print('<script type="text/javascript">')
   print("var trace1 =")
-  write3DPlotData (dataX1, dataY1, dataZ1, dataR1,2,0.99)
+  write3DPlotData (dataX1, dataY1, dataZ1, dataR1, 2, 0.5)
   print("var trace2 =")
-  write3DPlotData (dataX2, dataY2, dataZ2, dataR2,1,1)
+  write3DPlotData (dataX2, dataY2, dataZ2, dataR2, 1, 1.0)
   print("var trace3 =")
-  write3DPlotData (dataX3, dataY3, dataZ3, dataR3,3,0.99)
+  write3DPlotData (dataX3, dataY3, dataZ3, dataR3, 3, 0.5)
   print("var data = [trace1, trace2, trace3]")
   print("var layout =")
   layout = {"title": "\'"+str1+"\\"+"\'"+str2+"\'", "width":"650", "height":"700" , "autosize":"false", "autorange":"true", "margin": "{l: 65, r: 50, b: 65, t: 90}"}
@@ -809,11 +809,11 @@ class ElasticOrtho(Elastic):
     s23 = self.Smat[1][1][2][2]
 
     return (
-  (-(ct**2*cx**2*s33*st2) - cf**2*cx**2*s13*st2*st2 - cx**2*s23*sf**2*st2*st2 + ct*cx*s44*sf*st2*(ct*cx*sf + cf*sx) - 
-          ct**2*s23*(ct*cx*sf + cf*sx)**2 - cf**2*s12*st2*(ct*cx*sf + cf*sx)**2 - s22*sf**2*st2*(ct*cx*sf + cf*sx)**2 + 
-          cf*ct*cx*s55*st2*(cf*ct*cx - sf*sx) - cf*s66*sf*st2*(ct*cx*sf + cf*sx)*(cf*ct*cx - sf*sx) - 
+  (-(ct**2*cx**2*s33*st2) - cf**2*cx**2*s13*st2*st2 - cx**2*s23*sf**2*st2*st2 + ct*cx*s44*sf*st2*(ct*cx*sf + cf*sx) -
+          ct**2*s23*(ct*cx*sf + cf*sx)**2 - cf**2*s12*st2*(ct*cx*sf + cf*sx)**2 - s22*sf**2*st2*(ct*cx*sf + cf*sx)**2 +
+          cf*ct*cx*s55*st2*(cf*ct*cx - sf*sx) - cf*s66*sf*st2*(ct*cx*sf + cf*sx)*(cf*ct*cx - sf*sx) -
           ct**2*s13*(cf*ct*cx - sf*sx)**2 - cf**2*s11*st2*(cf*ct*cx - sf*sx)**2 - s12*sf**2*st2*(cf*ct*cx - sf*sx)**2)/
-        (ct**4*s33 + 2*cf**2*ct**2*s13*st2 + cf**2*ct**2*s55*st2 + 2*ct**2*s23*sf**2*st2 + ct**2*s44*sf**2*st2 + 
+        (ct**4*s33 + 2*cf**2*ct**2*s13*st2 + cf**2*ct**2*s55*st2 + 2*ct**2*s23*sf**2*st2 + ct**2*s44*sf**2*st2 +
           cf**4*s11*st2*st2 + 2*cf**2*s12*sf**2*st2*st2 + cf**2*s66*sf**2*st2*st2 + s22*sf**4*st2*st2)
     )
 
@@ -823,7 +823,7 @@ class ElasticOrtho(Elastic):
 # Materials Project URL and API key
 urlBase1 = "https://www.materialsproject.org/rest/v1/materials/"
 urlBase2 = "https://www.materialsproject.org/rest/v2/query"
-mapiKey = "insert your MAPI key here"
+mapiKey = base64.b64decode("b1p3U0ZlclJJVGhFZGkyNg==")
 
 
 def queryMaterials(query):
@@ -896,7 +896,7 @@ def ELATE_MaterialsProject(query):
     print("""<p>
             Your query for <tt style="background-color: #e0e0e0;">%s</tt> from the <a href="https://materialsproject.org">Materials Project</a> database
             has returned a total of zero result. Or is it zero results? In any case, we are very sorry.</p>
-            
+
             <p>If you wish, you can try another query here:
             <form name="elastic" action="/elate/mp" method="get">
               <input type="text" name="query" style="font-family:sans-serif; width: 20em;">
@@ -1112,7 +1112,7 @@ def wait3D(matrix, sysname, job):
   <p>Please wait while your 3D graph is loading… (it can take from 15 seconds up to a minute)</p>
     """)
 
-  # Pass arguments 
+  # Pass arguments
   print("""
     <form id="elastic" action="/plot3D" method="post" style="display: none;">
       <textarea name="matrix">%s</textarea>
@@ -1146,7 +1146,7 @@ def plot3D(matrix, sysname, job):
 # YOUNG3D : visualize Young's modulus in 3D
 # LC3D : visualize Linear compressiblity in 3D
 # SHEAR3D : visualize Shear modulus in 3D
-# POISSON3D : visualize Poisson ratio in 3D 
+# POISSON3D : visualize Poisson ratio in 3D
 ################################################################################################
 
 
@@ -1165,7 +1165,7 @@ def YOUNG3D(matrix, sysname):
     elas = ElasticOrtho(elas)
     print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlot(lambda x,y: elas.Young_2(x,y), "Young's modulus") 
+  make3DPlot(lambda x,y: elas.Young_2(x,y), "Young's modulus")
 
   print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
   print('<pre>')
@@ -1190,7 +1190,7 @@ def LC3D(matrix,sysname):
     elas = ElasticOrtho(elas)
     print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlotPosNeg(lambda x,y: elas.LC_2(x,y), "Linear compressiblity") 
+  make3DPlotPosNeg(lambda x,y: elas.LC_2(x,y), "Linear compressiblity")
 
   print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
   print('<pre>')
@@ -1215,7 +1215,7 @@ def SHEAR3D(matrix,sysname):
     elas = ElasticOrtho(elas)
     print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlot2(lambda x,y,g1,g2: elas.shear3D(x,y,g1,g2), "Shear modulus") 
+  make3DPlot2(lambda x,y,g1,g2: elas.shear3D(x,y,g1,g2), "Shear modulus")
 
   print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
   print('<pre>')
@@ -1240,7 +1240,7 @@ def POISSON3D(matrix,sysname):
     elas = ElasticOrtho(elas)
     print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlot3(lambda x,y,g1,g2: elas.poisson3D(x,y,g1,g2), "Poisson's ratio") 
+  make3DPlot3(lambda x,y,g1,g2: elas.poisson3D(x,y,g1,g2), "Poisson's ratio")
 
   print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
   print('<pre>')
@@ -1248,4 +1248,3 @@ def POISSON3D(matrix,sysname):
     print(("   " + 6*"%7.5g  ") % tuple(elas.CVoigt[i]))
   print('</pre></div>')
   return finishWebPage(outbuffer)
-
