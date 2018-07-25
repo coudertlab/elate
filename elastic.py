@@ -1,40 +1,28 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from __future__ import unicode_literals
+import base64
+import json
+import math
+import platform
+import random
+import re
+import sys
+import time
 
-import sys, math, random, json, re, base64, time, platform
 from collections import OrderedDict
+from io import StringIO
+from urllib.parse import urlencode
+from urllib.request import urlopen, Request
+
 import numpy as np
-import numpy.linalg as la
 from scipy import optimize
-
-# Importing URL-related routines, compatible with both python 2 & 3
-try:
-  from urllib.parse import urlencode
-  from urllib.request import urlopen, Request
-except ImportError:
-  from urllib import urlencode
-  from urllib2 import urlopen, Request
-
-try:
-  from io import StringIO
-except ImportError:
-  from cStringIO import StringIO
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2017.06.27"
+__version__ = "2018.07.18"
 __license__ = "MIT"
 
 
-
-def isstring(s):
-  """Is the argument a string (Unicode or not)?"""
-  try:
-    return isinstance(s, basestring)
-  except:
-    return isinstance(s, str)
 
 def removeHTMLTags(s):
   """Remove HTML tags, notably for use as page title"""
@@ -107,10 +95,10 @@ def write3DPlotData(dataX, dataY, dataZ, dataR, n, opacity=1.0):
   showcont = "true"
   if (opacity!=1.0): showcont = "false"
   if (n==1):
-    js = OrderedDict([("x", dataX), ("y",dataY), ("z", dataZ), ("text", dataR), ("showscale","false"), ("colorscale","[[\'0\',\'rgb(22,136,51)\'],[\'0.125\',\'rgb(61,153,85)\'],[\'0.25\',\'rgb(121,178,136)\'],[\'0.375\',\'rgb(181,204,187)\'],[\'0.5\',\'rgb(195,230,200)\'],[\'0.625\',\'rgb(181,204,187)\'],[\'0.75\',\'rgb(121,178,136)\'],[\'0.875\',\'rgb(61,153,85)\'],[\'1\',\'rgb(22,136,51)\']]"),("zsmooth", "'fast'"), ("type", "'surface'"), ("hoverinfo", "'text'"),("opacity",opacity),  ("contours","{x :{ show:"+showcont+", color: 'rgb(192,192,192)'},y :{ show:"+showcont+", color: 'rgb(192,192,192)'},z :{ show:"+showcont+", color: 'rgb(192,192,192)'}}")])
+    js = OrderedDict([("x", dataX), ("y", dataY), ("z", dataZ), ("text", dataR), ("showscale", "false"), ("colorscale","[[\'0\',\'rgb(22,136,51)\'],[\'0.125\',\'rgb(61,153,85)\'],[\'0.25\',\'rgb(121,178,136)\'],[\'0.375\',\'rgb(181,204,187)\'],[\'0.5\',\'rgb(195,230,200)\'],[\'0.625\',\'rgb(181,204,187)\'],[\'0.75\',\'rgb(121,178,136)\'],[\'0.875\',\'rgb(61,153,85)\'],[\'1\',\'rgb(22,136,51)\']]"),("zsmooth", "'fast'"), ("type", "'surface'"), ("hoverinfo", "'text'"),("opacity",opacity),  ("contours","{x :{ show:"+showcont+", color: 'rgb(192,192,192)'},y :{ show:"+showcont+", color: 'rgb(192,192,192)'},z :{ show:"+showcont+", color: 'rgb(192,192,192)'}}")])
 
   if (n==2):
-    js = OrderedDict([("x", dataX), ("y",dataY), ("z", dataZ), ("text", dataR), ("showscale","false"), ("colorscale","[[\'0\',\'rgb(180,4,38)\'],[\'0.125\',\'rgb(222,96,77)\'],[\'0.25\',\'rgb(244,154,123)\'],[\'0.375\',\'rgb(245,196,173)\'],[\'0.5\',\'rgb(246,216,201)\'],[\'0.625\',\'rgb(245,196,173)\'],[\'0.75\',\'rgb(244,154,123)\'],[\'0.875\',\'rgb(222,96,77)\'],[\'1\',\'rgb(180,4,38)\']]"),("zsmooth", "'fast'"), ("type", "'surface'"), ("hoverinfo", "'text'"),("opacity",opacity), ("contours","{x :{ show:"+showcont+", color: 'rgb(192,192,192)'},y :{ show:"+showcont+", color: 'rgb(192,192,192)'},z :{ show:"+showcont+", color: 'rgb(192,192,192)'}}")])
+    js = OrderedDict([("x", dataX), ("y", dataY), ("z", dataZ), ("text", dataR), ("showscale", "false"), ("colorscale", "[[\'0\',\'rgb(180,4,38)\'],[\'0.125\',\'rgb(222,96,77)\'],[\'0.25\',\'rgb(244,154,123)\'],[\'0.375\',\'rgb(245,196,173)\'],[\'0.5\',\'rgb(246,216,201)\'],[\'0.625\',\'rgb(245,196,173)\'],[\'0.75\',\'rgb(244,154,123)\'],[\'0.875\',\'rgb(222,96,77)\'],[\'1\',\'rgb(180,4,38)\']]"),("zsmooth", "'fast'"), ("type", "'surface'"), ("hoverinfo", "'text'"),("opacity",opacity), ("contours","{x :{ show:"+showcont+", color: 'rgb(192,192,192)'},y :{ show:"+showcont+", color: 'rgb(192,192,192)'},z :{ show:"+showcont+", color: 'rgb(192,192,192)'}}")])
 
   if (n==3):
     js = OrderedDict([("x", dataX), ("y",dataY), ("z", dataZ), ("text", dataR), ("showscale","false"), ("colorscale","[[\'0\',\'rgb(59,76,192)\'],[\'0.125\',\'rgb(98,130,234)\'],[\'0.25\',\'rgb(141,176,254)\'],[\'0.375\',\'rgb(184,208,249)\'],[\'0.5\',\'rgb(207,223,250)\'],[\'0.625\',\'rgb(184,208,249)\'],[\'0.75\',\'rgb(141,176,254)\'],[\'0.875\',\'rgb(98,130,234)\'],[\'1\',\'rgb(59,76,192)\']]"),("zsmooth", "'fast'"), ("type", "'surface'"), ("hoverinfo", "'text'"),("opacity",opacity),  ("contours","{x :{ show:"+showcont+", color: 'rgb(192,192,192)'},y :{ show:"+showcont+", color: 'rgb(192,192,192)'},z :{ show:"+showcont+", color: 'rgb(192,192,192)'}}")])
@@ -543,7 +531,7 @@ class Elastic:
     except:
       pass
 
-    if isstring(s):
+    if type(s) == str:
       # Remove braces and pipes
       s = s.replace("|", " ").replace("(", " ").replace(")", " ")
 
@@ -580,13 +568,13 @@ class Elastic:
       raise ValueError("should be a square matrix")
 
     # Check that is is symmetric, or make it symmetric
-    if la.norm(np.tril(mat, -1)) == 0:
+    if np.linalg.norm(np.tril(mat, -1)) == 0:
       mat = mat + np.triu(mat, 1).transpose()
-    if la.norm(np.triu(mat, 1)) == 0:
+    if np.linalg.norm(np.triu(mat, 1)) == 0:
       mat = mat + np.tril(mat, -1).transpose()
-    if la.norm(mat - mat.transpose()) > 1e-3:
+    if np.linalg.norm(mat - mat.transpose()) > 1e-3:
       raise ValueError("should be symmetric, or triangular")
-    elif la.norm(mat - mat.transpose()) > 0:
+    elif np.linalg.norm(mat - mat.transpose()) > 0:
       mat = 0.5 * (mat + mat.transpose())
 
     # Store it
@@ -594,7 +582,7 @@ class Elastic:
 
     # Put it in a more useful representation
     try:
-      self.SVoigt = la.inv(self.CVoigt)
+      self.SVoigt = np.linalg.inv(self.CVoigt)
     except:
       raise ValueError("matrix is singular")
 
@@ -724,7 +712,7 @@ class ElasticOrtho(Elastic):
 
   def __init__(self, arg):
     """Initialize from a matrix, or from an Elastic object"""
-    if isstring(arg):
+    if type(arg) == str:
       Elastic.__init__(self, arg)
     elif isinstance(arg, Elastic):
       self.CVoigt = arg.CVoigt
@@ -823,7 +811,7 @@ class ElasticOrtho(Elastic):
 # Materials Project URL and API key
 urlBase1 = "https://www.materialsproject.org/rest/v1/materials/"
 urlBase2 = "https://www.materialsproject.org/rest/v2/query"
-mapiKey = base64.b64decode("b1p3U0ZlclJJVGhFZGkyNg==")
+mapiKey = base64.b64decode("b1p3U0ZlclJJVGhFZGkyNg==").decode('ascii')
 
 
 def queryMaterials(query):
@@ -987,7 +975,7 @@ def ELATE(matrix, sysname):
   <th>&lambda;<sub>5</sub></th>
   <th>&lambda;<sub>6</sub></th>
   </tr><tr>''')
-  eigenval = sorted(la.eig(elas.CVoigt)[0])
+  eigenval = sorted(np.linalg.eig(elas.CVoigt)[0])
   print((6*'<td>%7.5g GPa</td>') % tuple(eigenval))
   print('</tr></table>')
 
@@ -1023,8 +1011,8 @@ def ELATE(matrix, sysname):
   anisLC = ('%8.4f' % (maxLC[1]/minLC[1])) if minLC[1] > 0 else "&infin;"
   anisG = '%8.4g' % (maxG[1]/minG[1])
   anisNu = ('%8.4f' % (maxNu[1]/minNu[1])) if minNu[1]*maxNu[1] > 0 else "&infin;"
-  print(('<tr><td>Anisotropy</td>' + 4*'<td colspan="2">%s</td>'
-        + '<td>Anisotropy</td></tr>') % ( anisE, anisLC, anisG, anisNu ))
+  print(('<tr><td>Anisotropy</td>' + 4 * '<td colspan="2">%s</td>'
+        + '<td>Anisotropy</td></tr>') % (anisE, anisLC, anisG, anisNu))
 
   print('<tr><td>Axis</td>')
   print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(dirVec(*minE[0])))
@@ -1044,7 +1032,6 @@ def ELATE(matrix, sysname):
   print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(dirVec2(*maxNu[0])))
   print('<td>Second axis</td></tr></table>')
 
-
   print("<h2>Spatial dependence of Young's modulus</h2>")
   print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
             <textarea name="matrix" style="display: none;">%s</textarea>
@@ -1053,10 +1040,9 @@ def ELATE(matrix, sysname):
             <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
            </form>""" % (matrix, sysname, "young"))
   m = 1.2 * maxE[1]
-  makePolarPlot(lambda x: elas.Young([np.pi/2,x]), m, "Young's modulus in (xy) plane","xy")
-  makePolarPlot(lambda x: elas.Young([x,0]), m, "Young's modulus in (xz) plane","xz")
-  makePolarPlot(lambda x: elas.Young([x,np.pi/2]), m, "Young's modulus in (yz) plane","yz")
-
+  makePolarPlot(lambda x: elas.Young([np.pi / 2, x]), m, "Young's modulus in (xy) plane", "xy")
+  makePolarPlot(lambda x: elas.Young([x, 0]), m, "Young's modulus in (xz) plane", "xz")
+  makePolarPlot(lambda x: elas.Young([x, np.pi / 2]), m, "Young's modulus in (yz) plane", "yz")
 
   print("<h2>Spatial dependence of linear compressibility</h2>")
   print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
@@ -1066,10 +1052,9 @@ def ELATE(matrix, sysname):
             <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
            </form>""" % (matrix, sysname, "lc"))
   m = 1.2 * max(maxLC[1], abs(minLC[1]))
-  makePolarPlotPosNeg(lambda x: elas.LC([np.pi/2,x]), m, "linear compressibility in (xy) plane","xy")
-  makePolarPlotPosNeg(lambda x: elas.LC([x,0]), m, "linear compressibility in (xz) plane","xz")
-  makePolarPlotPosNeg(lambda x: elas.LC([x,np.pi/2]), m, "linear compressibility in (yz) plane","yz")
-
+  makePolarPlotPosNeg(lambda x: elas.LC([np.pi / 2, x]), m, "linear compressibility in (xy) plane", "xy")
+  makePolarPlotPosNeg(lambda x: elas.LC([x, 0]), m, "linear compressibility in (xz) plane", "xz")
+  makePolarPlotPosNeg(lambda x: elas.LC([x, np.pi / 2]), m, "linear compressibility in (yz) plane", "yz")
 
   print("<h2>Spatial dependence of shear modulus</h2>")
   print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
@@ -1079,10 +1064,9 @@ def ELATE(matrix, sysname):
             <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
            </form>""" % (matrix, sysname, "shear"))
   m = 1.2 * maxG[1]
-  makePolarPlot2(lambda x: elas.shear2D([np.pi/2,x]), m, "Shear modulus in (xy) plane","xy")
-  makePolarPlot2(lambda x: elas.shear2D([x,0]), m, "Shear modulus in (xz) plane","xz")
-  makePolarPlot2(lambda x: elas.shear2D([x,np.pi/2]), m, "Shear modulus in (yz) plane","yz")
-
+  makePolarPlot2(lambda x: elas.shear2D([np.pi / 2, x]), m, "Shear modulus in (xy) plane", "xy")
+  makePolarPlot2(lambda x: elas.shear2D([x, 0]), m, "Shear modulus in (xz) plane", "xz")
+  makePolarPlot2(lambda x: elas.shear2D([x, np.pi / 2]), m, "Shear modulus in (yz) plane", "yz")
 
   print("<h2>Spatial dependence of Poisson's ratio</h2>")
   print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
@@ -1092,9 +1076,9 @@ def ELATE(matrix, sysname):
             <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
            </form>""" % (matrix, sysname, "poisson"))
   m = 1.2 * max(abs(maxNu[1]), abs(minNu[1]))
-  makePolarPlot3(lambda x: elas.Poisson2D([np.pi/2,x]), m, "Poisson's ratio in (xy) plane","xy")
-  makePolarPlot3(lambda x: elas.Poisson2D([x,0]), m, "Poisson's ratio in (xz) plane","xz")
-  makePolarPlot3(lambda x: elas.Poisson2D([x,np.pi/2]), m, "Poisson's ratio in (yz) plane","yz")
+  makePolarPlot3(lambda x: elas.Poisson2D([np.pi / 2, x]), m, "Poisson's ratio in (xy) plane", "xy")
+  makePolarPlot3(lambda x: elas.Poisson2D([x, 0]), m, "Poisson's ratio in (xz) plane", "xz")
+  makePolarPlot3(lambda x: elas.Poisson2D([x, np.pi / 2]), m, "Poisson's ratio in (yz) plane", "yz")
 
   print("</div>")
   return finishWebPage(outbuffer)
@@ -1138,7 +1122,7 @@ def plot3D(matrix, sysname, job):
   """Display a 3D plot"""
 
   # Dispatch to the specific function depending on type
-  functions = { 'young': YOUNG3D, 'lc': LC3D, 'shear': SHEAR3D, 'poisson': POISSON3D }
+  functions = {'young': YOUNG3D, 'lc': LC3D, 'shear': SHEAR3D, 'poisson': POISSON3D}
   return functions[job](matrix, sysname)
 
 
@@ -1153,7 +1137,7 @@ def plot3D(matrix, sysname, job):
 def YOUNG3D(matrix, sysname):
 
   sys.stdout = outbuffer = StringIO()
-  writeHeader(outbuffer,"Young 3D for " + removeHTMLTags(sysname))
+  writeHeader(outbuffer, "Young 3D for " + removeHTMLTags(sysname))
 
   # Start timing
   print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
@@ -1165,20 +1149,20 @@ def YOUNG3D(matrix, sysname):
     elas = ElasticOrtho(elas)
     print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlot(lambda x,y: elas.Young_2(x,y), "Young's modulus")
+  make3DPlot(lambda x, y: elas.Young_2(x, y), "Young's modulus")
 
   print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
   print('<pre>')
   for i in range(6):
-    print(("   " + 6*"%7.5g  ") % tuple(elas.CVoigt[i]))
+    print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
   print('</pre></div>')
   return finishWebPage(outbuffer)
 
 
-def LC3D(matrix,sysname):
+def LC3D(matrix, sysname):
 
   sys.stdout = outbuffer = StringIO()
-  writeHeader(outbuffer,"LC 3D for " + removeHTMLTags(sysname))
+  writeHeader(outbuffer, "LC 3D for " + removeHTMLTags(sysname))
 
   # Start timing
   print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
@@ -1190,20 +1174,20 @@ def LC3D(matrix,sysname):
     elas = ElasticOrtho(elas)
     print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlotPosNeg(lambda x,y: elas.LC_2(x,y), "Linear compressiblity")
+  make3DPlotPosNeg(lambda x, y: elas.LC_2(x, y), "Linear compressiblity")
 
   print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
   print('<pre>')
   for i in range(6):
-    print(("   " + 6*"%7.5g  ") % tuple(elas.CVoigt[i]))
+    print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
   print('</pre></div>')
   return finishWebPage(outbuffer)
 
 
-def SHEAR3D(matrix,sysname):
+def SHEAR3D(matrix, sysname):
 
   sys.stdout = outbuffer = StringIO()
-  writeHeader(outbuffer,"Shear 3D for " + removeHTMLTags(sysname))
+  writeHeader(outbuffer, "Shear 3D for " + removeHTMLTags(sysname))
 
   # Start timing
   print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
@@ -1215,20 +1199,20 @@ def SHEAR3D(matrix,sysname):
     elas = ElasticOrtho(elas)
     print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlot2(lambda x,y,g1,g2: elas.shear3D(x,y,g1,g2), "Shear modulus")
+  make3DPlot2(lambda x, y, g1, g2: elas.shear3D(x, y, g1, g2), "Shear modulus")
 
   print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
   print('<pre>')
   for i in range(6):
-    print(("   " + 6*"%7.5g  ") % tuple(elas.CVoigt[i]))
+    print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
   print('</pre></div>')
   return finishWebPage(outbuffer)
 
 
-def POISSON3D(matrix,sysname):
+def POISSON3D(matrix, sysname):
 
   sys.stdout = outbuffer = StringIO()
-  writeHeader(outbuffer,"Poisson 3D for " + removeHTMLTags(sysname))
+  writeHeader(outbuffer, "Poisson 3D for " + removeHTMLTags(sysname))
 
   # Start timing
   print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
@@ -1240,11 +1224,11 @@ def POISSON3D(matrix,sysname):
     elas = ElasticOrtho(elas)
     print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlot3(lambda x,y,g1,g2: elas.poisson3D(x,y,g1,g2), "Poisson's ratio")
+  make3DPlot3(lambda x, y, g1, g2: elas.poisson3D(x, y, g1, g2), "Poisson's ratio")
 
   print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
   print('<pre>')
   for i in range(6):
-    print(("   " + 6*"%7.5g  ") % tuple(elas.CVoigt[i]))
+    print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
   print('</pre></div>')
   return finishWebPage(outbuffer)
