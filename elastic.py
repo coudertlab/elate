@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-import base64
 import json
 import math
+import os
 import platform
 import random
 import re
@@ -808,13 +808,12 @@ class ElasticOrtho(Elastic):
 
 ################################################################################################
 
-# Materials Project URL and API key
+# Materials Project URLs
 urlBase1 = "https://www.materialsproject.org/rest/v1/materials/"
 urlBase2 = "https://www.materialsproject.org/rest/v2/query"
-mapiKey = base64.b64decode("b1p3U0ZlclJJVGhFZGkyNg==").decode('ascii')
 
 
-def queryMaterials(query):
+def queryMaterials(query, mapiKey):
   """Return a list of material IDs for a given query string"""
 
   try:
@@ -828,7 +827,7 @@ def queryMaterials(query):
   return [mat["material_id"] for mat in resp["response"]]
 
 
-def queryElasticityV1(mat):
+def queryElasticityV1(mat, mapiKey):
   """Return elastic properties for a given material ID, using V1 MAPI """
 
   try:
@@ -843,7 +842,7 @@ def queryElasticityV1(mat):
   return resp["response"][0]
 
 
-def queryElasticityV2(mat):
+def queryElasticityV2(mat, mapiKey):
   """Return elastic properties for a given material ID, using V1 MAPI """
 
   data = urlencode({ 'criteria' : '{"task_id": "' + mat + '"}',
@@ -863,13 +862,13 @@ def queryElasticityV2(mat):
   return resp["response"][0]
 
 
-def ELATE_MaterialsProject(query):
+def ELATE_MaterialsProject(query, mapiKey):
   """Call ELATE with a query from the Materials Project"""
 
   # If we were directly given a material ID, or there is a simple match
-  materials = queryMaterials(query)
+  materials = queryMaterials(query, mapiKey)
   if len(materials) == 1:
-    r = queryElasticityV2(query)
+    r = queryElasticityV2(query, mapiKey)
     if r["elasticity"]:
       tensor = r["elasticity"]["elastic_tensor"]
       return ELATE(tensor, '%s (Materials Project id <a href="%s%s" target="_blank">%s</a>)' % (r["pretty_formula"], "https://www.materialsproject.org/materials/", r["material_id"], r["material_id"]))
@@ -904,7 +903,7 @@ def ELATE_MaterialsProject(query):
 
   print("<table><tr><th>Identifier</th><th>Formula</th><th>Elastic data</th></tr>")
   for mat in materials:
-    r = queryElasticityV2(mat)
+    r = queryElasticityV2(mat, mapiKey)
     print('<tr><td><a href="https://www.materialsproject.org/materials/%s" target="_blank">%s</a></td><td>%s</td>' % (mat, mat, r["pretty_formula"]))
     if "elasticity" in r and r["elasticity"]:
       print('<td>Elastic data available, <a href="/elate/mp?%s" target="_blank">perform analysis</a></td></tr>' % (mat))
