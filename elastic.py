@@ -11,15 +11,14 @@ import time
 
 from collections import OrderedDict
 from io import StringIO
-from urllib.parse import urlencode
-from urllib.request import urlopen, Request
+import requests
 
 import numpy as np
 from scipy import optimize
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2018.07.18"
+__version__ = "2019.01.09"
 __license__ = "MIT"
 
 
@@ -808,50 +807,36 @@ class ElasticOrtho(Elastic):
 
 ################################################################################################
 
-# Materials Project URLs
-urlBase1 = "https://www.materialsproject.org/rest/v1/materials/"
-urlBase2 = "https://www.materialsproject.org/rest/v2/query"
+# Materials Project URL
+urlBase = 'https://www.materialsproject.org/rest'
 
 
 def queryMaterials(query, mapiKey):
   """Return a list of material IDs for a given query string"""
 
+  # If the query is a material ID, return it
+  if query[0:3] == "mp-": return [query]
+
   try:
-    url = Request(urlBase1 + query + "/vasp?API_KEY=" + mapiKey)
-    resp = json.loads(urlopen(url).read().decode("utf-8"))
+    r = requests.get(f'{urlBase}/v2/materials/{query}/mids', headers={"X-API-KEY": mapiKey})
+    resp = r.json()
   except Exception as e:
     print(str(e), file=sys.stderr)
     return []
 
-  if (not resp["valid_response"]): return []
-  return [mat["material_id"] for mat in resp["response"]]
-
-
-def queryElasticityV1(mat, mapiKey):
-  """Return elastic properties for a given material ID, using V1 MAPI """
-
-  try:
-    url = Request(urlBase1 + mat + "/vasp/elasticity?API_KEY=" + mapiKey)
-    resp = json.loads(urlopen(url).read().decode("utf-8"))
-  except:
-    return None
-
-  if not resp["valid_response"]: return None
-  if len(resp["response"]) > 1: raise(Exception("Multiple results returned"))
-  if len(resp["response"]) == 0: return None
-  return resp["response"][0]
+  if (not resp['valid_response']): return []
+  return resp['response']
 
 
 def queryElasticityV2(mat, mapiKey):
-  """Return elastic properties for a given material ID, using V1 MAPI """
+  """Return elastic properties for a given material ID, using V2 MAPI"""
 
-  data = urlencode({ 'criteria' : '{"task_id": "' + mat + '"}',
-        	      'properties' : '["formula", "pretty_formula", "material_id", "elasticity"]',
-        	      'API_KEY' : mapiKey })
-  data = data.encode("utf-8")
+  data = { 'criteria': '{"task_id": "' + mat + '"}',
+           'properties': '["formula", "pretty_formula", "material_id", "elasticity"]',
+           'API_KEY': mapiKey }
   try:
-    url = Request(urlBase2, data)
-    resp = json.loads(urlopen(url).read().decode("utf-8"))
+    r = requests.post(f'{urlBase}/v2/query', data)
+    resp = r.json()
   except Exception as e:
     print(str(e), file=sys.stderr)
     return None
@@ -869,7 +854,8 @@ def ELATE_MaterialsProject(query, mapiKey):
   materials = queryMaterials(query, mapiKey)
   if len(materials) == 1:
     r = queryElasticityV2(query, mapiKey)
-    if r["elasticity"]:
+
+    if r and 'elasticity' in r:
       tensor = r["elasticity"]["elastic_tensor"]
       return ELATE(tensor, '%s (Materials Project id <a href="%s%s" target="_blank">%s</a>)' % (r["pretty_formula"], "https://www.materialsproject.org/materials/", r["material_id"], r["material_id"]))
 
@@ -878,8 +864,8 @@ def ELATE_MaterialsProject(query, mapiKey):
   printTitle(outbuffer, "ELATE: Elastic tensor analysis")
   print('<h2>Query from the Materials Project database</h2>')
 
-  # In case there is no match
-  if len(materials) == 0:
+  # Either there was no match, or a single match with no elastic data
+  if len(materials) <= 1:
     print("""<p>
             Your query for <tt style="background-color: #e0e0e0;">%s</tt> from the <a href="https://materialsproject.org">Materials Project</a> database
             has returned a total of zero result. Or is it zero results? In any case, we are very sorry.</p>
