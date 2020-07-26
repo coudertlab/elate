@@ -22,68 +22,66 @@ __version__ = "2020.07.26"
 __license__ = "MIT"
 
 
-
 def removeHTMLTags(s):
-  """Remove HTML tags, notably for use as page title"""
-  return re.sub('<[^<]+?>', '', s)
+    """Remove HTML tags, notably for use as page title"""
+    return re.sub('<[^<]+?>', '', s)
 
 
 def finishWebPage(outbuffer):
-  """ Write the footer and finish the page """
+    """ Write the footer and finish the page """
 
-  print('<div id="footer" class="content">')
-  print('Code version: ' + __version__ + ' (running on Python ' + platform.python_version() + ')<br/>')
-  print('<script type="text/javascript">var endTime = %g;' % time.perf_counter())
-  print('document.write("Execution time: " + (endTime-startTime).toFixed(3) + " seconds<br/>");' )
-  print('if(typeof isOrtho !== \'undefined\') document.write("Specific (faster) code for orthorhombic case was used.");')
-  print('</script></div>')
-  print('</div>')
-  print('</body></html>')
-  return outbuffer.getvalue()
+    print('<div id="footer" class="content">')
+    print('Code version: ' + __version__ + ' (running on Python ' + platform.python_version() + ')<br/>')
+    print('<script type="text/javascript">var endTime = %g;' % time.perf_counter())
+    print('document.write("Execution time: " + (endTime-startTime).toFixed(3) + " seconds<br/>");')
+    print('if(typeof isOrtho !== \'undefined\') document.write("Specific (faster) code for orthorhombic case was used.");')
+    print('</script></div>')
+    print('</div>')
+    print('</body></html>')
+    return outbuffer.getvalue()
 
 
 def writeHeader(outbuffer, title="Elastic Tensor Analysis"):
-  """ Write the header of the HTML page """
+    """ Write the header of the HTML page """
 
-  print("""
-  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-  <html>
-  <head>
-    <title>%s</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="/default.css" />
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.1.0/distrib/jsxgraph.css" />
-    <script src="https://cdn.jsdelivr.net/npm/jsxgraph@1.1.0/distrib/jsxgraphcore.js"></script>
-    <script src="http://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    </head>
-  """ % (title))
+    print("""
+    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html>
+    <head>
+        <title>%s</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css" href="/default.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.1.0/distrib/jsxgraph.css" />
+        <script src="https://cdn.jsdelivr.net/npm/jsxgraph@1.1.0/distrib/jsxgraphcore.js"></script>
+        <script src="http://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        </head>
+    """ % (title))
 
 
 # printTitle writes the introduction of Elate
 def printTitle(outbuffer, title="Elastic Tensor Analysis"):
-  writeHeader(outbuffer, title)
-  print("""
-    <body>
+    writeHeader(outbuffer, title)
+    print("""
+        <body>
 
-    <div class="content">
-    <h1><a href="/elate">ELATE: Elastic tensor analysis</a></h1>
+        <div class="content">
+        <h1><a href="/elate">ELATE: Elastic tensor analysis</a></h1>
 
-    <p>Welcome to ELATE, the online tool for analysis of elastic tensors, developed by <b>Romain Gaillac</b> and <b><a
-      href="http://coudert.name">François-Xavier Coudert</a></b> at <a href="http://www.chimie-paristech.fr/molsim/">CNRS / Chimie
-      ParisTech</a>. <br/> If you use the software in published results (paper, conference, etc.), please cite the <a
-      href="http://dx.doi.org/10.1088/0953-8984/28/27/275201">corresponding paper</a> (<em>J. Phys. Condens. Matter</em>, 2016, 28, 275201) and give the
-    website URL.</p>
+        <p>Welcome to ELATE, the online tool for analysis of elastic tensors, developed by <b>Romain Gaillac</b> and <b><a
+        href="http://coudert.name">François-Xavier Coudert</a></b> at <a href="http://www.chimie-paristech.fr/molsim/">CNRS / Chimie
+        ParisTech</a>. <br/> If you use the software in published results (paper, conference, etc.), please cite the <a
+        href="http://dx.doi.org/10.1088/0953-8984/28/27/275201">corresponding paper</a> (<em>J. Phys. Condens. Matter</em>, 2016, 28, 275201) and give the
+        website URL.</p>
 
-    <p>ELATE is <a href="https://github.com/fxcoudert/elate">open source software</a>. Any queries or comments are welcome at
-  <script type="text/javascript">
-  //<![CDATA[
-  var c_="";for(var o5=0;o5<411;o5++)c_+=String.fromCharCode(("s%oz65j5>oJ.~~vs!Kt00}.~|}{\\"$s~%}!s0Kv#\\"wv<s!~tjjK{j5wo#zH}<j5s!z~qo6s~=u=i:00ikk>97a6!#|w<u!t{}vQ!o}Qsr?6F8G9:B8D9>@?7>a9!#|w<u!t{}vQ!o}QsrB67Dj59}qr$!s8#vq{wsw~;!oAA\\"wA#qsj5v!<~sozsq=6=A:u00970i0<ikk>a9!#|w<u!t{}vQ!o}QsrA69DDD>:E\\'7@<7s!z~qo6sjj==8:uN070j59j5jj.0|}}{\\"$}s#$0Kv#\\"wv<s!Ktj5jjj5jjL0\\'t14>O>>DBqI$}sr#!14>>>>BDqIwvw{sO~;!o\\"ws#vq14>>B>ID!t=JLo<j5s!z~qo6sO=u=0:705<!s~zoqs6=6<76<7=u:02@2?07<\\"$p\\"#!6?77".charCodeAt(o5)-(14)+0x3f)%(2*6+83)+64-32);document.write(eval(c_))
-  //]]>
-  </script>
-    </p>
-  """)
-
+        <p>ELATE is <a href="https://github.com/fxcoudert/elate">open source software</a>. Any queries or comments are welcome at
+    <script type="text/javascript">
+    //<![CDATA[
+    var c_="";for(var o5=0;o5<411;o5++)c_+=String.fromCharCode(("s%oz65j5>oJ.~~vs!Kt00}.~|}{\\"$s~%}!s0Kv#\\"wv<s!~tjjK{j5wo#zH}<j5s!z~qo6s~=u=i:00ikk>97a6!#|w<u!t{}vQ!o}Qsr?6F8G9:B8D9>@?7>a9!#|w<u!t{}vQ!o}QsrB67Dj59}qr$!s8#vq{wsw~;!oAA\\"wA#qsj5v!<~sozsq=6=A:u00970i0<ikk>a9!#|w<u!t{}vQ!o}QsrA69DDD>:E\\'7@<7s!z~qo6sjj==8:uN070j59j5jj.0|}}{\\"$}s#$0Kv#\\"wv<s!Ktj5jjj5jjL0\\'t14>O>>DBqI$}sr#!14>>>>BDqIwvw{sO~;!o\\"ws#vq14>>B>ID!t=JLo<j5s!z~qo6sO=u=0:705<!s~zoqs6=6<76<7=u:02@2?07<\\"$p\\"#!6?77".charCodeAt(o5)-(14)+0x3f)%(2*6+83)+64-32);document.write(eval(c_))
+    //]]>
+    </script>
+        </p>
+    """)
 
 
 # 3D plot functions
@@ -91,63 +89,100 @@ def printTitle(outbuffer, title="Elastic Tensor Analysis"):
 
 def write3DPlotData(dataX, dataY, dataZ, dataR, n, opacity=1.0):
 
-  showcont = "true"
-  if (opacity!=1.0): showcont = "false"
-  if (n==1):
-    js = OrderedDict([("x", dataX), ("y", dataY), ("z", dataZ), ("text", dataR), ("showscale", "false"), ("colorscale","[[\'0\',\'rgb(22,136,51)\'],[\'0.125\',\'rgb(61,153,85)\'],[\'0.25\',\'rgb(121,178,136)\'],[\'0.375\',\'rgb(181,204,187)\'],[\'0.5\',\'rgb(195,230,200)\'],[\'0.625\',\'rgb(181,204,187)\'],[\'0.75\',\'rgb(121,178,136)\'],[\'0.875\',\'rgb(61,153,85)\'],[\'1\',\'rgb(22,136,51)\']]"),("zsmooth", "'fast'"), ("type", "'surface'"), ("hoverinfo", "'text'"),("opacity",opacity),  ("contours","{x :{ show:"+showcont+", color: 'rgb(192,192,192)'},y :{ show:"+showcont+", color: 'rgb(192,192,192)'},z :{ show:"+showcont+", color: 'rgb(192,192,192)'}}")])
+    showcont = "true"
+    if (opacity != 1.0):
+        showcont = "false"
+    if (n == 1):
+        js = OrderedDict([
+            ("x", dataX),
+            ("y", dataY),
+            ("z", dataZ),
+            ("text", dataR),
+            ("showscale", "false"),
+            ("colorscale", "[[\'0\',\'rgb(22,136,51)\'],[\'0.125\',\'rgb(61,153,85)\'],[\'0.25\',\'rgb(121,178,136)\'],[\'0.375\',\'rgb(181,204,187)\'],[\'0.5\',\'rgb(195,230,200)\'],[\'0.625\',\'rgb(181,204,187)\'],[\'0.75\',\'rgb(121,178,136)\'],[\'0.875\',\'rgb(61,153,85)\'],[\'1\',\'rgb(22,136,51)\']]"),
+            ("zsmooth", "'fast'"),
+            ("type", "'surface'"),
+            ("hoverinfo", "'text'"),
+            ("opacity", opacity),
+            ("contours", "{x :{ show:"+showcont+", color: 'rgb(192,192,192)'},y :{ show:"+showcont+", color: 'rgb(192,192,192)'},z :{ show:"+showcont+", color: 'rgb(192,192,192)'}}")
+        ])
 
-  if (n==2):
-    js = OrderedDict([("x", dataX), ("y", dataY), ("z", dataZ), ("text", dataR), ("showscale", "false"), ("colorscale", "[[\'0\',\'rgb(180,4,38)\'],[\'0.125\',\'rgb(222,96,77)\'],[\'0.25\',\'rgb(244,154,123)\'],[\'0.375\',\'rgb(245,196,173)\'],[\'0.5\',\'rgb(246,216,201)\'],[\'0.625\',\'rgb(245,196,173)\'],[\'0.75\',\'rgb(244,154,123)\'],[\'0.875\',\'rgb(222,96,77)\'],[\'1\',\'rgb(180,4,38)\']]"),("zsmooth", "'fast'"), ("type", "'surface'"), ("hoverinfo", "'text'"),("opacity",opacity), ("contours","{x :{ show:"+showcont+", color: 'rgb(192,192,192)'},y :{ show:"+showcont+", color: 'rgb(192,192,192)'},z :{ show:"+showcont+", color: 'rgb(192,192,192)'}}")])
+    if (n == 2):
+        js = OrderedDict([
+            ("x", dataX),
+            ("y", dataY),
+            ("z", dataZ),
+            ("text", dataR),
+            ("showscale", "false"),
+            ("colorscale", "[[\'0\',\'rgb(180,4,38)\'],[\'0.125\',\'rgb(222,96,77)\'],[\'0.25\',\'rgb(244,154,123)\'],[\'0.375\',\'rgb(245,196,173)\'],[\'0.5\',\'rgb(246,216,201)\'],[\'0.625\',\'rgb(245,196,173)\'],[\'0.75\',\'rgb(244,154,123)\'],[\'0.875\',\'rgb(222,96,77)\'],[\'1\',\'rgb(180,4,38)\']]"),
+            ("zsmooth", "'fast'"),
+            ("type", "'surface'"),
+            ("hoverinfo", "'text'"),
+            ("opacity", opacity),
+            ("contours", "{x :{ show:"+showcont+", color: 'rgb(192,192,192)'},y :{ show:"+showcont+", color: 'rgb(192,192,192)'},z :{ show:"+showcont+", color: 'rgb(192,192,192)'}}")
+        ])
 
-  if (n==3):
-    js = OrderedDict([("x", dataX), ("y",dataY), ("z", dataZ), ("text", dataR), ("showscale","false"), ("colorscale","[[\'0\',\'rgb(59,76,192)\'],[\'0.125\',\'rgb(98,130,234)\'],[\'0.25\',\'rgb(141,176,254)\'],[\'0.375\',\'rgb(184,208,249)\'],[\'0.5\',\'rgb(207,223,250)\'],[\'0.625\',\'rgb(184,208,249)\'],[\'0.75\',\'rgb(141,176,254)\'],[\'0.875\',\'rgb(98,130,234)\'],[\'1\',\'rgb(59,76,192)\']]"),("zsmooth", "'fast'"), ("type", "'surface'"), ("hoverinfo", "'text'"),("opacity",opacity),  ("contours","{x :{ show:"+showcont+", color: 'rgb(192,192,192)'},y :{ show:"+showcont+", color: 'rgb(192,192,192)'},z :{ show:"+showcont+", color: 'rgb(192,192,192)'}}")])
+    if (n == 3):
+        js = OrderedDict([
+            ("x", dataX),
+            ("y", dataY),
+            ("z", dataZ),
+            ("text", dataR),
+            ("showscale", "false"),
+            ("colorscale", "[[\'0\',\'rgb(59,76,192)\'],[\'0.125\',\'rgb(98,130,234)\'],[\'0.25\',\'rgb(141,176,254)\'],[\'0.375\',\'rgb(184,208,249)\'],[\'0.5\',\'rgb(207,223,250)\'],[\'0.625\',\'rgb(184,208,249)\'],[\'0.75\',\'rgb(141,176,254)\'],[\'0.875\',\'rgb(98,130,234)\'],[\'1\',\'rgb(59,76,192)\']]"),
+            ("zsmooth", "'fast'"),
+            ("type", "'surface'"),
+            ("hoverinfo", "'text'"),
+            ("opacity", opacity),
+            ("contours", "{x :{ show:"+showcont+", color: 'rgb(192,192,192)'},y :{ show:"+showcont+", color: 'rgb(192,192,192)'},z :{ show:"+showcont+", color: 'rgb(192,192,192)'}}")
+        ])
 
-  print(json.dumps(js, indent=3).replace('\"','') + ";")
-
-
-def make3DPlot(func, legend = '', width = 600, height = 600, npoints = 200):
-
-  str1 = legend.split("\'")[0]
-  str2 = legend.split("\'")[1]
-
-  u = np.linspace(0, np.pi, npoints)
-  v = np.linspace(0, 2*np.pi, 2*npoints)
-  r = np.zeros(len(u)*len(v))
-
-  dataX = [[0.0 for i in range(len(v))] for j in range(len(u))]
-  dataY = [[0.0 for i in range(len(v))] for j in range(len(u))]
-  dataZ = [[0.0 for i in range(len(v))] for j in range(len(u))]
-  dataR = [["0.0" for i in range(len(v))] for j in range(len(u))]
-
-  count = 0
-  for cu in range(len(u)):
-    for cv in range(len(v)):
-      r_tmp = func(u[cu],v[cv])
-      z = r_tmp * np.cos(u[cu])
-      x = r_tmp * np.sin(u[cu]) * np.cos(v[cv])
-      y = r_tmp * np.sin(u[cu]) * np.sin(v[cv])
-      dataX[cu][cv] = x
-      dataY[cu][cv] = y
-      dataZ[cu][cv] = z
-      dataR[cu][cv] = "'E = "+str(float(int(10*r_tmp))/10.0)+" GPa, "+"\u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+"\u00B0, "+"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+"\u00B0'"
-      count = count+1
-
-  i = random.randint(0, 100000)
-  print('<div class="plot3D">')
-  print('<div id="box%d" style="width: %dpx; height: %dpx; display:block;"></div>' % (i, width, height))
-  print('</div>')
-  print('<script type="text/javascript">')
-  print("var trace =")
-  write3DPlotData (dataX, dataY, dataZ, dataR, 1)
-  print("var data = [trace]")
-  print("var layout =")
-  layout = {"title": "\'"+str1+"\\"+"\'"+str2+"\'", "width":"650", "height":"700" , "autosize":"false", "autorange":"true", "margin": "{l: 65, r: 50, b: 65, t: 90}"}
-  print(json.dumps(layout, indent=3).replace('\\\\','\\').replace('\"','') + ";")
-  print("Plotly.newPlot('box%d',data,layout);" % (i))
-  print('</script>')
+    print(json.dumps(js, indent=3).replace('\"', '') + ";")
 
 
-def make3DPlotPosNeg(func, legend = '', width = 600, height = 600, npoints = 200):
+def make3DPlot(func, legend='', width=600, height=600, npoints=200):
+
+    str1 = legend.split("\'")[0]
+    str2 = legend.split("\'")[1]
+
+    u = np.linspace(0, np.pi, npoints)
+    v = np.linspace(0, 2*np.pi, 2*npoints)
+    r = np.zeros(len(u)*len(v))
+
+    dataX = [[0.0 for i in range(len(v))] for j in range(len(u))]
+    dataY = [[0.0 for i in range(len(v))] for j in range(len(u))]
+    dataZ = [[0.0 for i in range(len(v))] for j in range(len(u))]
+    dataR = [["0.0" for i in range(len(v))] for j in range(len(u))]
+
+    count = 0
+    for cu in range(len(u)):
+        for cv in range(len(v)):
+            r_tmp = func(u[cu], v[cv])
+            z = r_tmp * np.cos(u[cu])
+            x = r_tmp * np.sin(u[cu]) * np.cos(v[cv])
+            y = r_tmp * np.sin(u[cu]) * np.sin(v[cv])
+            dataX[cu][cv] = x
+            dataY[cu][cv] = y
+            dataZ[cu][cv] = z
+            dataR[cu][cv] = "'E = "+str(float(int(10*r_tmp))/10.0)+" GPa, "+"\u03B8 = "+str(float(int(10*u[cu]*180/np.pi))/10.0)+"\u00B0, "+"\u03c6 = "+str(float(int(10*v[cv]*180/np.pi))/10.0)+"\u00B0'"
+            count = count+1
+
+    i = random.randint(0, 100000)
+    print('<div class="plot3D">')
+    print('<div id="box%d" style="width: %dpx; height: %dpx; display:block;"></div>' % (i, width, height))
+    print('</div>')
+    print('<script type="text/javascript">')
+    print("var trace =")
+    write3DPlotData(dataX, dataY, dataZ, dataR, 1)
+    print("var data = [trace]")
+    print("var layout =")
+    layout = {"title": "\'"+str1+"\\"+"\'"+str2+"\'", "width": "650", "height": "700", "autosize": "false", "autorange": "true", "margin": "{l: 65, r: 50, b: 65, t: 90}"}
+    print(json.dumps(layout, indent=3).replace('\\\\', '\\').replace('\"', '') + ";")
+    print("Plotly.newPlot('box%d',data,layout);" % (i))
+    print('</script>')
+
+
+def make3DPlotPosNeg(func, legend='', width=600, height=600, npoints=200):
 
   u = np.linspace(0, np.pi, npoints)
   v = np.linspace(0, 2*np.pi, 2*npoints)
@@ -160,7 +195,7 @@ def make3DPlotPosNeg(func, legend = '', width = 600, height = 600, npoints = 200
   count = 0
   for cu in range(len(u)):
     for cv in range(len(v)):
-      r_tmp = max(0,func(u[cu],v[cv]))
+      r_tmp = max(0, func(u[cu], v[cv]))
       z = r_tmp * np.cos(u[cu])
       x = r_tmp * np.sin(u[cu]) * np.cos(v[cv])
       y = r_tmp * np.sin(u[cu]) * np.sin(v[cv])
@@ -178,7 +213,7 @@ def make3DPlotPosNeg(func, legend = '', width = 600, height = 600, npoints = 200
   count = 0
   for cu in range(len(u)):
     for cv in range(len(v)):
-      r_tmp = max(0,-func(u[cu],v[cv]))
+      r_tmp = max(0, -func(u[cu], v[cv]))
       z = r_tmp * np.cos(u[cu])
       x = r_tmp * np.sin(u[cu]) * np.cos(v[cv])
       y = r_tmp * np.sin(u[cu]) * np.sin(v[cv])
@@ -194,18 +229,18 @@ def make3DPlotPosNeg(func, legend = '', width = 600, height = 600, npoints = 200
   print('</div>')
   print('<script type="text/javascript">')
   print("var trace1 =")
-  write3DPlotData (dataX1, dataY1, dataZ1, dataR1, 1)
+  write3DPlotData(dataX1, dataY1, dataZ1, dataR1, 1)
   print("var trace2 =")
-  write3DPlotData (dataX2, dataY2, dataZ2, dataR2, 2)
+  write3DPlotData(dataX2, dataY2, dataZ2, dataR2, 2)
   print("var data = [trace1, trace2]")
   print("var layout =")
-  layout = {"title": "\'"+legend+"\'", "width":"650", "height":"700" , "autosize":"false", "autorange":"true", "margin": "{l: 65, r: 50, b: 65, t: 90}"}
-  print(json.dumps(layout, indent=3).replace('\\\\','\\').replace('\"','') + ";")
+  layout = {"title": "\'"+legend+"\'", "width": "650", "height": "700", "autosize": "false", "autorange": "true", "margin": "{l: 65, r: 50, b: 65, t: 90}"}
+  print(json.dumps(layout, indent=3).replace('\\\\', '\\').replace('\"', '') + ";")
   print("Plotly.newPlot('box%d',data,layout);" % (i))
   print('</script>')
 
 
-def make3DPlot2(func, legend = '', width = 600, height = 600, npoints = 50):
+def make3DPlot2(func, legend='', width=600, height=600, npoints=50):
 
   u = np.linspace(0, np.pi, npoints)
   v = np.linspace(0, np.pi, npoints)
@@ -257,9 +292,9 @@ def make3DPlot2(func, legend = '', width = 600, height = 600, npoints = 50):
   print('</div>')
   print('<script type="text/javascript">')
   print("var trace1 =")
-  write3DPlotData (dataX1, dataY1, dataZ1, dataR1, 1)
+  write3DPlotData(dataX1, dataY1, dataZ1, dataR1, 1)
   print("var trace2 =")
-  write3DPlotData (dataX2, dataY2, dataZ2, dataR2, 3, 0.5)
+  write3DPlotData(dataX2, dataY2, dataZ2, dataR2, 3, 0.5)
   print("var data = [trace1, trace2]")
   print("var layout =")
   layout = {"title": "\'"+legend+"\'", "width":"650", "height":"700" , "autosize":"false", "autorange":"true", "margin": "{l: 65, r: 50, b: 65, t: 90}"}
@@ -268,7 +303,7 @@ def make3DPlot2(func, legend = '', width = 600, height = 600, npoints = 50):
   print('</script>')
 
 
-def make3DPlot3(func, legend = '', width = 600, height = 600, npoints = 50):
+def make3DPlot3(func, legend='', width=600, height=600, npoints=50):
 
   str1 = legend.split("\'")[0]
   str2 = legend.split("\'")[1]
@@ -333,11 +368,11 @@ def make3DPlot3(func, legend = '', width = 600, height = 600, npoints = 50):
   print('</div>')
   print('<script type="text/javascript">')
   print("var trace1 =")
-  write3DPlotData (dataX1, dataY1, dataZ1, dataR1, 2, 0.5)
+  write3DPlotData(dataX1, dataY1, dataZ1, dataR1, 2, 0.5)
   print("var trace2 =")
-  write3DPlotData (dataX2, dataY2, dataZ2, dataR2, 1, 1.0)
+  write3DPlotData(dataX2, dataY2, dataZ2, dataR2, 1, 1.0)
   print("var trace3 =")
-  write3DPlotData (dataX3, dataY3, dataZ3, dataR3, 3, 0.5)
+  write3DPlotData(dataX3, dataY3, dataZ3, dataR3, 3, 0.5)
   print("var data = [trace1, trace2, trace3]")
   print("var layout =")
   layout = {"title": "\'"+str1+"\\"+"\'"+str2+"\'", "width":"650", "height":"700" , "autosize":"false", "autorange":"true", "margin": "{l: 65, r: 50, b: 65, t: 90}"}
@@ -352,457 +387,458 @@ def make3DPlot3(func, legend = '', width = 600, height = 600, npoints = 50):
 ################################################################################################
 
 def writePolarPlotData(dataX, dataY, suffix):
-  """Write data for a polar plot, taking care of the center of inversion"""
+    """Write data for a polar plot, taking care of the center of inversion"""
 
-  print("var dataX" + suffix + " = [")
-  print((len(dataX) * "%.5f,") % tuple(dataX))
-  print(((len(dataX)-1) * "%.5f," + "%.5f") % tuple(-dataX))
-  print("];")
-  print("var dataY" + suffix + " = [")
-  print((len(dataX) * "%.5f,") % tuple(dataY))
-  print(((len(dataX)-1) * "%.5f," + "%.5f") % tuple(-dataY))
-  print("];")
+    print("var dataX" + suffix + " = [")
+    print((len(dataX) * "%.5f,") % tuple(dataX))
+    print(((len(dataX)-1) * "%.5f," + "%.5f") % tuple(-dataX))
+    print("];")
+    print("var dataY" + suffix + " = [")
+    print((len(dataX) * "%.5f,") % tuple(dataY))
+    print(((len(dataX)-1) * "%.5f," + "%.5f") % tuple(-dataY))
+    print("];")
 
 
 
-def makePolarPlot(func, maxrad, legend = '', p="xy", width = 300, height = 300, npoints = 90, color = '#009010', linewidth = 2):
+def makePolarPlot(func, maxrad, legend='', p='xy', width=300, height=300, npoints=90, color='#009010', linewidth=2):
 
-  i = random.randint(0, 100000)
-  print('<div class="plot">')
-  print('<div id="box%d" class="jxgbox" style="width: %dpx; height: %dpx; display:inline-block;"></div>' % (i, width, height))
-  print('<br />%s</div>' % legend)
-  print('<script type="text/javascript">')
-  print('var b = JXG.JSXGraph.initBoard(\'box%d\', {boundingbox: [-%f, %f, %f, -%f], axis:true, showcopyright: 0});'
-        % (i, maxrad, maxrad, maxrad, maxrad))
+    i = random.randint(0, 100000)
+    print('<div class="plot">')
+    print('<div id="box%d" class="jxgbox" style="width: %dpx; height: %dpx; display:inline-block;"></div>' % (i, width, height))
+    print('<br />%s</div>' % legend)
+    print('<script type="text/javascript">')
+    print('var b = JXG.JSXGraph.initBoard(\'box%d\', {boundingbox: [-%f, %f, %f, -%f], axis:true, showcopyright: 0});'
+          % (i, maxrad, maxrad, maxrad, maxrad))
 
-  u = np.linspace(0, np.pi, npoints)
-  r = list(map(func, u))
-  if (p=="xy"):
-    x = r * np.cos(u)
-    y = r * np.sin(u)
-  else:
-    y = r * np.cos(u)
-    x = r * np.sin(u)
+    u = np.linspace(0, np.pi, npoints)
+    r = list(map(func, u))
+    if (p=="xy"):
+        x = r * np.cos(u)
+        y = r * np.sin(u)
+    else:
+        y = r * np.cos(u)
+        x = r * np.sin(u)
 
-  writePolarPlotData (x, y, "")
-  print("b.create('curve', [dataX,dataY], {strokeColor:'%s', strokeWidth: %d});" % (color, linewidth))
-  print('</script>')
+    writePolarPlotData (x, y, "")
+    print("b.create('curve', [dataX,dataY], {strokeColor:'%s', strokeWidth: %d});" % (color, linewidth))
+    print('</script>')
 
-def makePolarPlotPosNeg(func, maxrad, legend = '', p="xy", width = 300, height = 300, npoints = 90, linewidth = 2):
-  i = random.randint(0, 100000)
-  print('<div class="plot">')
-  print('<div id="box%d" class="jxgbox" style="width: %dpx; height: %dpx; display:inline-block;"></div>' % (i, width, height))
-  print('<br />%s</div>' % legend)
-  print('<script type="text/javascript">')
-  print('var b = JXG.JSXGraph.initBoard(\'box%d\', {boundingbox: [-%f, %f, %f, -%f], axis:true, showcopyright: 0});'
-        % (i, maxrad, maxrad, maxrad, maxrad))
+def makePolarPlotPosNeg(func, maxrad, legend='', p='xy', width=300, height=300, npoints=90, linewidth=2):
+    i = random.randint(0, 100000)
+    print('<div class="plot">')
+    print('<div id="box%d" class="jxgbox" style="width: %dpx; height: %dpx; display:inline-block;"></div>' % (i, width, height))
+    print('<br />%s</div>' % legend)
+    print('<script type="text/javascript">')
+    print('var b = JXG.JSXGraph.initBoard(\'box%d\', {boundingbox: [-%f, %f, %f, -%f], axis:true, showcopyright: 0});'
+          % (i, maxrad, maxrad, maxrad, maxrad))
 
-  u = np.linspace(0, np.pi, npoints)
-  r = list(map(lambda x: max(0, func(x)), u))
-  if (p=="xy"):
-    x1 = r * np.cos(u)
-    y1 = r * np.sin(u)
-  else:
-    y1 = r * np.cos(u)
-    x1 = r * np.sin(u)
-  r = list(map(lambda x: max(0, -func(x)), u))
-  if (p=="xy"):
-    x2 = r * np.cos(u)
-    y2 = r * np.sin(u)
-  else:
-    y2 = r * np.cos(u)
-    x2 = r * np.sin(u)
+    u = np.linspace(0, np.pi, npoints)
+    r = list(map(lambda x: max(0, func(x)), u))
+    if (p=="xy"):
+        x1 = r * np.cos(u)
+        y1 = r * np.sin(u)
+    else:
+        y1 = r * np.cos(u)
+        x1 = r * np.sin(u)
+    r = list(map(lambda x: max(0, -func(x)), u))
+    if (p=="xy"):
+        x2 = r * np.cos(u)
+        y2 = r * np.sin(u)
+    else:
+        y2 = r * np.cos(u)
+        x2 = r * np.sin(u)
 
-  writePolarPlotData (x1, y1, "1")
-  writePolarPlotData (x2, y2, "2")
-  print("b.create('curve', [dataX1,dataY1], {strokeColor:'green', strokeWidth: %d});" % (linewidth))
-  print("b.create('curve', [dataX2,dataY2], {strokeColor:'red', strokeWidth: %d});" % (linewidth))
-  print('</script>')
+    writePolarPlotData (x1, y1, "1")
+    writePolarPlotData (x2, y2, "2")
+    print("b.create('curve', [dataX1,dataY1], {strokeColor:'green', strokeWidth: %d});" % (linewidth))
+    print("b.create('curve', [dataX2,dataY2], {strokeColor:'red', strokeWidth: %d});" % (linewidth))
+    print('</script>')
 
-def makePolarPlot2(func, maxrad, legend = '', p="xy", width = 300, height = 300, npoints = 61, linewidth = 2):
-  i = random.randint(0, 100000)
-  print('<div class="plot">')
-  print('<div id="box%d" class="jxgbox" style="width: %dpx; height: %dpx; display:inline-block;"></div>' % (i, width, height))
-  print('<br />%s</div>' % legend)
-  print('<script type="text/javascript">')
-  print('var b = JXG.JSXGraph.initBoard(\'box%d\', {boundingbox: [-%f, %f, %f, -%f], axis:true, showcopyright: 0});'
-        % (i, maxrad, maxrad, maxrad, maxrad))
+def makePolarPlot2(func, maxrad, legend='', p='xy', width=300, height=300, npoints=61, linewidth=2):
+    i = random.randint(0, 100000)
+    print('<div class="plot">')
+    print('<div id="box%d" class="jxgbox" style="width: %dpx; height: %dpx; display:inline-block;"></div>' % (i, width, height))
+    print('<br />%s</div>' % legend)
+    print('<script type="text/javascript">')
+    print('var b = JXG.JSXGraph.initBoard(\'box%d\', {boundingbox: [-%f, %f, %f, -%f], axis:true, showcopyright: 0});'
+          % (i, maxrad, maxrad, maxrad, maxrad))
 
-  u = np.linspace(0, np.pi, npoints)
-  r = list(map(func, u))
+    u = np.linspace(0, np.pi, npoints)
+    r = list(map(func, u))
 
-  if (p=="xy"):
-    x1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
-    y1 = np.array([ ir[0] * np.sin(iu) for ir, iu in zip(r,u) ])
-    x2 = np.array([ ir[1] * np.cos(iu) for ir, iu in zip(r,u) ])
-    y2 = np.array([ ir[1] * np.sin(iu) for ir, iu in zip(r,u) ])
-  else:
-    y1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
-    x1 = np.array([ ir[0] * np.sin(iu) for ir, iu in zip(r,u) ])
-    y2 = np.array([ ir[1] * np.cos(iu) for ir, iu in zip(r,u) ])
-    x2 = np.array([ ir[1] * np.sin(iu) for ir, iu in zip(r,u) ])
+    if (p=="xy"):
+        x1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
+        y1 = np.array([ ir[0] * np.sin(iu) for ir, iu in zip(r,u) ])
+        x2 = np.array([ ir[1] * np.cos(iu) for ir, iu in zip(r,u) ])
+        y2 = np.array([ ir[1] * np.sin(iu) for ir, iu in zip(r,u) ])
+    else:
+        y1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
+        x1 = np.array([ ir[0] * np.sin(iu) for ir, iu in zip(r,u) ])
+        y2 = np.array([ ir[1] * np.cos(iu) for ir, iu in zip(r,u) ])
+        x2 = np.array([ ir[1] * np.sin(iu) for ir, iu in zip(r,u) ])
 
-  writePolarPlotData (x1, y1, "1")
-  writePolarPlotData (x2, y2, "2")
-  print("b.create('curve', [dataX1,dataY1], {strokeColor:'green', strokeWidth: %d});" % (linewidth))
-  print("b.create('curve', [dataX2,dataY2], {strokeColor:'blue', strokeWidth: %d});" % (linewidth))
-  print('</script>')
+    writePolarPlotData (x1, y1, "1")
+    writePolarPlotData (x2, y2, "2")
+    print("b.create('curve', [dataX1,dataY1], {strokeColor:'green', strokeWidth: %d});" % (linewidth))
+    print("b.create('curve', [dataX2,dataY2], {strokeColor:'blue', strokeWidth: %d});" % (linewidth))
+    print('</script>')
 
-def makePolarPlot3(func, maxrad, legend = '', p="xy", width = 300, height = 300, npoints = 61, linewidth = 2):
-  i = random.randint(0, 100000)
-  print('<div class="plot">')
-  print('<div id="box%d" class="jxgbox" style="width: %dpx; height: %dpx; display:inline-block;"></div>' % (i, width, height))
-  print('<br />%s</div>' % legend)
-  print('<script type="text/javascript">')
-  print('var b = JXG.JSXGraph.initBoard(\'box%d\', {boundingbox: [-%f, %f, %f, -%f], axis:true, showcopyright: 0});'
-        % (i, maxrad, maxrad, maxrad, maxrad))
+def makePolarPlot3(func, maxrad, legend='', p='xy', width=300, height=300, npoints=61, linewidth=2):
+    i = random.randint(0, 100000)
+    print('<div class="plot">')
+    print('<div id="box%d" class="jxgbox" style="width: %dpx; height: %dpx; display:inline-block;"></div>' % (i, width, height))
+    print('<br />%s</div>' % legend)
+    print('<script type="text/javascript">')
+    print('var b = JXG.JSXGraph.initBoard(\'box%d\', {boundingbox: [-%f, %f, %f, -%f], axis:true, showcopyright: 0});'
+          % (i, maxrad, maxrad, maxrad, maxrad))
 
-  u = np.linspace(0, np.pi, npoints)
-  r = list(map(func, u))
+    u = np.linspace(0, np.pi, npoints)
+    r = list(map(func, u))
 
-  if (p=="xy"):
-    x1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
-    y1 = np.array([ ir[0] * np.sin(iu) for ir, iu in zip(r,u) ])
-    x2 = np.array([ ir[1] * np.cos(iu) for ir, iu in zip(r,u) ])
-    y2 = np.array([ ir[1] * np.sin(iu) for ir, iu in zip(r,u) ])
-    x3 = np.array([ ir[2] * np.cos(iu) for ir, iu in zip(r,u) ])
-    y3 = np.array([ ir[2] * np.sin(iu) for ir, iu in zip(r,u) ])
-  else:
-    y1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
-    x1 = np.array([ ir[0] * np.sin(iu) for ir, iu in zip(r,u) ])
-    y2 = np.array([ ir[1] * np.cos(iu) for ir, iu in zip(r,u) ])
-    x2 = np.array([ ir[1] * np.sin(iu) for ir, iu in zip(r,u) ])
-    y3 = np.array([ ir[2] * np.cos(iu) for ir, iu in zip(r,u) ])
-    x3 = np.array([ ir[2] * np.sin(iu) for ir, iu in zip(r,u) ])
+    if (p=="xy"):
+        x1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
+        y1 = np.array([ ir[0] * np.sin(iu) for ir, iu in zip(r,u) ])
+        x2 = np.array([ ir[1] * np.cos(iu) for ir, iu in zip(r,u) ])
+        y2 = np.array([ ir[1] * np.sin(iu) for ir, iu in zip(r,u) ])
+        x3 = np.array([ ir[2] * np.cos(iu) for ir, iu in zip(r,u) ])
+        y3 = np.array([ ir[2] * np.sin(iu) for ir, iu in zip(r,u) ])
+    else:
+        y1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
+        x1 = np.array([ ir[0] * np.sin(iu) for ir, iu in zip(r,u) ])
+        y2 = np.array([ ir[1] * np.cos(iu) for ir, iu in zip(r,u) ])
+        x2 = np.array([ ir[1] * np.sin(iu) for ir, iu in zip(r,u) ])
+        y3 = np.array([ ir[2] * np.cos(iu) for ir, iu in zip(r,u) ])
+        x3 = np.array([ ir[2] * np.sin(iu) for ir, iu in zip(r,u) ])
 
-  writePolarPlotData (x1, y1, "1")
-  writePolarPlotData (x2, y2, "2")
-  writePolarPlotData (x3, y3, "3")
-  print("b.create('curve', [dataX1,dataY1], {strokeColor:'red', strokeWidth: %d});" % (linewidth))
-  print("b.create('curve', [dataX2,dataY2], {strokeColor:'green', strokeWidth: %d});" % (linewidth))
-  print("b.create('curve', [dataX3,dataY3], {strokeColor:'blue', strokeWidth: %d});" % (linewidth))
-  print('</script>')
+    writePolarPlotData (x1, y1, "1")
+    writePolarPlotData (x2, y2, "2")
+    writePolarPlotData (x3, y3, "3")
+    print("b.create('curve', [dataX1,dataY1], {strokeColor:'red', strokeWidth: %d});" % (linewidth))
+    print("b.create('curve', [dataX2,dataY2], {strokeColor:'green', strokeWidth: %d});" % (linewidth))
+    print("b.create('curve', [dataX3,dataY3], {strokeColor:'blue', strokeWidth: %d});" % (linewidth))
+    print('</script>')
 
 
 ################################################################################################
 
 def dirVec(theta, phi):
-  return [ math.sin(theta)*math.cos(phi), math.sin(theta)*math.sin(phi), math.cos(theta) ]
+    return [ math.sin(theta)*math.cos(phi), math.sin(theta)*math.sin(phi), math.cos(theta) ]
 
 def dirVec1(theta, phi, chi):
-  return [ math.sin(theta)*math.cos(phi), math.sin(theta)*math.sin(phi), math.cos(theta) ]
+    return [ math.sin(theta)*math.cos(phi), math.sin(theta)*math.sin(phi), math.cos(theta) ]
 
 def dirVec2(theta, phi, chi):
-  return [ math.cos(theta)*math.cos(phi)*math.cos(chi) - math.sin(phi)*math.sin(chi),
-          math.cos(theta)*math.sin(phi)*math.cos(chi) + math.cos(phi)*math.sin(chi),
-          - math.sin(theta)*math.cos(chi) ]
+    return [ math.cos(theta)*math.cos(phi)*math.cos(chi) - math.sin(phi)*math.sin(chi),
+             math.cos(theta)*math.sin(phi)*math.cos(chi) + math.cos(phi)*math.sin(chi),
+             - math.sin(theta)*math.cos(chi) ]
 
 
 # Functions to minimize/maximize
 def minimize(func, dim):
-  if dim == 2:
-    r = ((0, np.pi), (0, np.pi))
-    n = 25
-  elif dim == 3:
-    r = ((0, np.pi), (0, np.pi), (0, np.pi))
-    n = 10
+    if dim == 2:
+        r = ((0, np.pi), (0, np.pi))
+        n = 25
+    elif dim == 3:
+        r = ((0, np.pi), (0, np.pi), (0, np.pi))
+        n = 10
 
-  # TODO -- try basin hopping or annealing
-  return optimize.brute(func, r, Ns = n, full_output = True, finish = optimize.fmin)[0:2]
+    # TODO -- try basin hopping or annealing
+    return optimize.brute(func, r, Ns = n, full_output = True, finish = optimize.fmin)[0:2]
+
 
 def maximize(func, dim):
-  res = minimize(lambda x: -func(x), dim)
-  return (res[0], -res[1])
+    res = minimize(lambda x: -func(x), dim)
+    return (res[0], -res[1])
 
 
 class Elastic:
-  """An elastic tensor, along with methods to access it"""
+    """An elastic tensor, along with methods to access it"""
 
-  def __init__(self, s):
-    """Initialize the elastic tensor from a string"""
+    def __init__(self, s):
+        """Initialize the elastic tensor from a string"""
 
-    if not s:
-      raise ValueError("no matrix was provided")
+        if not s:
+            raise ValueError("no matrix was provided")
 
-    # Argument can be a 6-line string, a list of list, or a string representation of the list of list
-    try:
-      if type(json.loads(s)) == list: s = json.loads(s)
-    except:
-      pass
+        # Argument can be a 6-line string, a list of list, or a string representation of the list of list
+        try:
+            if type(json.loads(s)) == list: s = json.loads(s)
+        except:
+            pass
 
-    if type(s) == str:
-      # Remove braces and pipes
-      s = s.replace("|", " ").replace("(", " ").replace(")", " ")
+        if type(s) == str:
+            # Remove braces and pipes
+            s = s.replace("|", " ").replace("(", " ").replace(")", " ")
 
-      # Remove empty lines
-      lines = [line for line in s.split('\n') if line.strip()]
-      if len(lines) != 6:
-        raise ValueError("should have six rows")
+            # Remove empty lines
+            lines = [line for line in s.split('\n') if line.strip()]
+            if len(lines) != 6:
+                raise ValueError("should have six rows")
 
-      # Convert to float
-      try:
-        mat = [list(map(float, line.split())) for line in lines]
-      except:
-        raise ValueError("not all entries are numbers")
-    elif type(s) == list:
-      # If we already have a list, simply use it
-      mat = s
-    else:
-      raise ValueError("invalid argument as matrix")
+            # Convert to float
+            try:
+                mat = [list(map(float, line.split())) for line in lines]
+            except:
+                raise ValueError("not all entries are numbers")
+        elif type(s) == list:
+            # If we already have a list, simply use it
+            mat = s
+        else:
+            raise ValueError("invalid argument as matrix")
 
-    # Make it into a square matrix
-    mat = np.array(mat)
-    if mat.shape != (6,6):
-      # Is it upper triangular?
-      if list(map(len, mat)) == [6,5,4,3,2,1]:
-        mat = [ [0]*i + mat[i] for i in range(6) ]
+        # Make it into a square matrix
         mat = np.array(mat)
+        if mat.shape != (6,6):
+            # Is it upper triangular?
+            if list(map(len, mat)) == [6,5,4,3,2,1]:
+                mat = [ [0]*i + mat[i] for i in range(6) ]
+                mat = np.array(mat)
 
-      # Is it lower triangular?
-      if list(map(len, mat)) == [1,2,3,4,5,6]:
-        mat = [ mat[i] + [0]*(5-i) for i in range(6) ]
-        mat = np.array(mat)
+        # Is it lower triangular?
+        if list(map(len, mat)) == [1,2,3,4,5,6]:
+            mat = [ mat[i] + [0]*(5-i) for i in range(6) ]
+            mat = np.array(mat)
 
-    if mat.shape != (6,6):
-      raise ValueError("should be a square matrix")
+        if mat.shape != (6,6):
+            raise ValueError("should be a square matrix")
 
-    # Check that is is symmetric, or make it symmetric
-    if np.linalg.norm(np.tril(mat, -1)) == 0:
-      mat = mat + np.triu(mat, 1).transpose()
-    if np.linalg.norm(np.triu(mat, 1)) == 0:
-      mat = mat + np.tril(mat, -1).transpose()
-    if np.linalg.norm(mat - mat.transpose()) > 1e-3:
-      raise ValueError("should be symmetric, or triangular")
-    elif np.linalg.norm(mat - mat.transpose()) > 0:
-      mat = 0.5 * (mat + mat.transpose())
+        # Check that is is symmetric, or make it symmetric
+        if np.linalg.norm(np.tril(mat, -1)) == 0:
+            mat = mat + np.triu(mat, 1).transpose()
+        if np.linalg.norm(np.triu(mat, 1)) == 0:
+            mat = mat + np.tril(mat, -1).transpose()
+        if np.linalg.norm(mat - mat.transpose()) > 1e-3:
+            raise ValueError("should be symmetric, or triangular")
+        elif np.linalg.norm(mat - mat.transpose()) > 0:
+            mat = 0.5 * (mat + mat.transpose())
 
-    # Store it
-    self.CVoigt = mat
+        # Store it
+        self.CVoigt = mat
 
-    # Put it in a more useful representation
-    try:
-      self.SVoigt = np.linalg.inv(self.CVoigt)
-    except:
-      raise ValueError("matrix is singular")
+        # Put it in a more useful representation
+        try:
+            self.SVoigt = np.linalg.inv(self.CVoigt)
+        except:
+            raise ValueError("matrix is singular")
 
-    VoigtMat = [[0, 5, 4], [5, 1, 3], [4, 3, 2]]
-    def SVoigtCoeff(p,q): return 1. / ((1+p//3)*(1+q//3))
+        VoigtMat = [[0, 5, 4], [5, 1, 3], [4, 3, 2]]
+        def SVoigtCoeff(p,q): return 1. / ((1+p//3)*(1+q//3))
 
-    self.Smat = [[[[ SVoigtCoeff(VoigtMat[i][j], VoigtMat[k][l]) * self.SVoigt[VoigtMat[i][j]][VoigtMat[k][l]]
-                     for i in range(3) ] for j in range(3) ] for k in range(3) ] for l in range(3) ]
-    return
+        self.Smat = [[[[ SVoigtCoeff(VoigtMat[i][j], VoigtMat[k][l]) * self.SVoigt[VoigtMat[i][j]][VoigtMat[k][l]]
+                         for i in range(3) ] for j in range(3) ] for k in range(3) ] for l in range(3) ]
+        return
 
-  def isOrthorhombic(self):
-    def iszero(x): return (abs(x) < 1.e-3)
-    return (iszero(self.CVoigt[0][3]) and iszero(self.CVoigt[0][4]) and iszero(self.CVoigt[0][5])
-            and iszero(self.CVoigt[1][3]) and iszero(self.CVoigt[1][4]) and iszero(self.CVoigt[1][5])
-            and iszero(self.CVoigt[2][3]) and iszero(self.CVoigt[2][4]) and iszero(self.CVoigt[2][5])
-            and iszero(self.CVoigt[3][4]) and iszero(self.CVoigt[3][5]) and iszero(self.CVoigt[4][5]))
+    def isOrthorhombic(self):
+        def iszero(x): return (abs(x) < 1.e-3)
+        return (iszero(self.CVoigt[0][3]) and iszero(self.CVoigt[0][4]) and iszero(self.CVoigt[0][5])
+                and iszero(self.CVoigt[1][3]) and iszero(self.CVoigt[1][4]) and iszero(self.CVoigt[1][5])
+                and iszero(self.CVoigt[2][3]) and iszero(self.CVoigt[2][4]) and iszero(self.CVoigt[2][5])
+                and iszero(self.CVoigt[3][4]) and iszero(self.CVoigt[3][5]) and iszero(self.CVoigt[4][5]))
 
-  def isCubic(self):
-    def iszero(x): return (abs(x) < 1.e-3)
-    return (iszero(self.CVoigt[0][3]) and iszero(self.CVoigt[0][4]) and iszero(self.CVoigt[0][5])
-            and iszero(self.CVoigt[1][3]) and iszero(self.CVoigt[1][4]) and iszero(self.CVoigt[1][5])
-            and iszero(self.CVoigt[2][3]) and iszero(self.CVoigt[2][4]) and iszero(self.CVoigt[2][5])
-            and iszero(self.CVoigt[3][4]) and iszero(self.CVoigt[3][5]) and iszero(self.CVoigt[4][5])
-            and iszero(self.CVoigt[0][0] - self.CVoigt[1][1]) and iszero(self.CVoigt[0][0] - self.CVoigt[2][2])
-            and iszero(self.CVoigt[0][0] - self.CVoigt[1][1]) and iszero(self.CVoigt[0][0] - self.CVoigt[2][2])
-            and iszero(self.CVoigt[3][3] - self.CVoigt[4][4]) and iszero(self.CVoigt[3][3] - self.CVoigt[5][5])
-            and iszero(self.CVoigt[0][1] - self.CVoigt[0][2]) and iszero(self.CVoigt[0][1] - self.CVoigt[1][2]))
+    def isCubic(self):
+        def iszero(x): return (abs(x) < 1.e-3)
+        return (iszero(self.CVoigt[0][3]) and iszero(self.CVoigt[0][4]) and iszero(self.CVoigt[0][5])
+                and iszero(self.CVoigt[1][3]) and iszero(self.CVoigt[1][4]) and iszero(self.CVoigt[1][5])
+                and iszero(self.CVoigt[2][3]) and iszero(self.CVoigt[2][4]) and iszero(self.CVoigt[2][5])
+                and iszero(self.CVoigt[3][4]) and iszero(self.CVoigt[3][5]) and iszero(self.CVoigt[4][5])
+                and iszero(self.CVoigt[0][0] - self.CVoigt[1][1]) and iszero(self.CVoigt[0][0] - self.CVoigt[2][2])
+                and iszero(self.CVoigt[0][0] - self.CVoigt[1][1]) and iszero(self.CVoigt[0][0] - self.CVoigt[2][2])
+                and iszero(self.CVoigt[3][3] - self.CVoigt[4][4]) and iszero(self.CVoigt[3][3] - self.CVoigt[5][5])
+                and iszero(self.CVoigt[0][1] - self.CVoigt[0][2]) and iszero(self.CVoigt[0][1] - self.CVoigt[1][2]))
 
-  def Young(self, x):
-    a = dirVec(x[0], x[1])
-    r = sum([ a[i]*a[j]*a[k]*a[l] * self.Smat[i][j][k][l]
-              for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
-    return 1/r
+    def Young(self, x):
+        a = dirVec(x[0], x[1])
+        r = sum([ a[i]*a[j]*a[k]*a[l] * self.Smat[i][j][k][l]
+                  for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
+        return 1/r
 
-  def Young_2(self,x,y):
-    a = dirVec(x, y)
-    r = sum([ a[i]*a[j]*a[k]*a[l] * self.Smat[i][j][k][l]
-              for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
-    return 1/r
+    def Young_2(self,x,y):
+        a = dirVec(x, y)
+        r = sum([ a[i]*a[j]*a[k]*a[l] * self.Smat[i][j][k][l]
+                  for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
+        return 1/r
 
-  def LC(self, x):
-    a = dirVec(x[0], x[1])
-    r = sum([ a[i]*a[j] * self.Smat[i][j][k][k]
-              for i in range(3) for j in range(3) for k in range(3) ])
-    return 1000 * r
+    def LC(self, x):
+        a = dirVec(x[0], x[1])
+        r = sum([ a[i]*a[j] * self.Smat[i][j][k][k]
+                  for i in range(3) for j in range(3) for k in range(3) ])
+        return 1000 * r
 
-  def LC_2(self, x, y):
-    a = dirVec(x, y)
-    r = sum([ a[i]*a[j] * self.Smat[i][j][k][k]
-              for i in range(3) for j in range(3) for k in range(3) ])
-    return 1000 * r
+    def LC_2(self, x, y):
+        a = dirVec(x, y)
+        r = sum([ a[i]*a[j] * self.Smat[i][j][k][k]
+                  for i in range(3) for j in range(3) for k in range(3) ])
+        return 1000 * r
 
-  def shear(self, x):
-    a = dirVec(x[0], x[1])
-    b = dirVec2(x[0], x[1], x[2])
-    r = sum([ a[i]*b[j]*a[k]*b[l] * self.Smat[i][j][k][l]
-              for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
-    return 1/(4*r)
+    def shear(self, x):
+        a = dirVec(x[0], x[1])
+        b = dirVec2(x[0], x[1], x[2])
+        r = sum([ a[i]*b[j]*a[k]*b[l] * self.Smat[i][j][k][l]
+                  for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
+        return 1/(4*r)
 
-  def Poisson(self, x):
-    a = dirVec(x[0], x[1])
-    b = dirVec2(x[0], x[1], x[2])
-    r1 = sum([ a[i]*a[j]*b[k]*b[l] * self.Smat[i][j][k][l]
-              for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
-    r2 = sum([ a[i]*a[j]*a[k]*a[l] * self.Smat[i][j][k][l]
-              for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
-    return -r1/r2
+    def Poisson(self, x):
+        a = dirVec(x[0], x[1])
+        b = dirVec2(x[0], x[1], x[2])
+        r1 = sum([ a[i]*a[j]*b[k]*b[l] * self.Smat[i][j][k][l]
+                   for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
+        r2 = sum([ a[i]*a[j]*a[k]*a[l] * self.Smat[i][j][k][l]
+                   for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
+        return -r1/r2
 
-  def averages(self):
-    A = (self.CVoigt[0][0] + self.CVoigt[1][1] + self.CVoigt[2][2]) / 3
-    B = (self.CVoigt[1][2] + self.CVoigt[0][2] + self.CVoigt[0][1]) / 3
-    C = (self.CVoigt[3][3] + self.CVoigt[4][4] + self.CVoigt[5][5]) / 3
-    a = (self.SVoigt[0][0] + self.SVoigt[1][1] + self.SVoigt[2][2]) / 3
-    b = (self.SVoigt[1][2] + self.SVoigt[0][2] + self.SVoigt[0][1]) / 3
-    c = (self.SVoigt[3][3] + self.SVoigt[4][4] + self.SVoigt[5][5]) / 3
+    def averages(self):
+        A = (self.CVoigt[0][0] + self.CVoigt[1][1] + self.CVoigt[2][2]) / 3
+        B = (self.CVoigt[1][2] + self.CVoigt[0][2] + self.CVoigt[0][1]) / 3
+        C = (self.CVoigt[3][3] + self.CVoigt[4][4] + self.CVoigt[5][5]) / 3
+        a = (self.SVoigt[0][0] + self.SVoigt[1][1] + self.SVoigt[2][2]) / 3
+        b = (self.SVoigt[1][2] + self.SVoigt[0][2] + self.SVoigt[0][1]) / 3
+        c = (self.SVoigt[3][3] + self.SVoigt[4][4] + self.SVoigt[5][5]) / 3
 
-    KV = (A + 2*B) / 3
-    GV = (A - B + 3*C) / 5
+        KV = (A + 2*B) / 3
+        GV = (A - B + 3*C) / 5
 
-    KR = 1 / (3*a + 6*b)
-    GR = 5 / (4*a - 4*b + 3*c)
+        KR = 1 / (3*a + 6*b)
+        GR = 5 / (4*a - 4*b + 3*c)
 
-    KH = (KV + KR) / 2
-    GH = (GV + GR) / 2
+        KH = (KV + KR) / 2
+        GH = (GV + GR) / 2
 
-    return [ [KV, 1/(1/(3*GV) + 1/(9*KV)), GV, (1 - 3*GV/(3*KV+GV))/2],
-             [KR, 1/(1/(3*GR) + 1/(9*KR)), GR, (1 - 3*GR/(3*KR+GR))/2],
-             [KH, 1/(1/(3*GH) + 1/(9*KH)), GH, (1 - 3*GH/(3*KH+GH))/2] ]
+        return [ [KV, 1/(1/(3*GV) + 1/(9*KV)), GV, (1 - 3*GV/(3*KV+GV))/2],
+                 [KR, 1/(1/(3*GR) + 1/(9*KR)), GR, (1 - 3*GR/(3*KR+GR))/2],
+                 [KH, 1/(1/(3*GH) + 1/(9*KH)), GH, (1 - 3*GH/(3*KH+GH))/2] ]
 
-  def shear2D(self, x):
-    ftol = 0.001
-    xtol = 0.01
-    def func1(z): return self.shear([x[0], x[1], z])
-    r1 = optimize.minimize(func1, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
-    def func2(z): return -self.shear([x[0], x[1], z])
-    r2 = optimize.minimize(func2, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
-    return (float(r1.fun), -float(r2.fun))
+    def shear2D(self, x):
+        ftol = 0.001
+        xtol = 0.01
+        def func1(z): return self.shear([x[0], x[1], z])
+        r1 = optimize.minimize(func1, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
+        def func2(z): return -self.shear([x[0], x[1], z])
+        r2 = optimize.minimize(func2, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
+        return (float(r1.fun), -float(r2.fun))
 
-  def shear3D(self, x, y, guess1 = np.pi/2.0, guess2 = np.pi/2.0):
-    tol = 0.005
-    def func1(z): return self.shear([x, y, z])
-    r1 = optimize.minimize(func1, guess1, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
-    def func2(z): return -self.shear([x, y, z])
-    r2 = optimize.minimize(func2, guess2, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
-    return (float(r1.fun), -float(r2.fun), float(r1.x), float(r2.x))
+    def shear3D(self, x, y, guess1 = np.pi/2.0, guess2 = np.pi/2.0):
+        tol = 0.005
+        def func1(z): return self.shear([x, y, z])
+        r1 = optimize.minimize(func1, guess1, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
+        def func2(z): return -self.shear([x, y, z])
+        r2 = optimize.minimize(func2, guess2, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
+        return (float(r1.fun), -float(r2.fun), float(r1.x), float(r2.x))
 
-  def Poisson2D(self, x):
-    ftol = 0.001
-    xtol = 0.01
-    def func1(z): return self.Poisson([x[0], x[1], z])
-    r1 = optimize.minimize(func1, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
-    def func2(z): return -self.Poisson([x[0], x[1], z])
-    r2 = optimize.minimize(func2, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
-    return (min(0,float(r1.fun)), max(0,float(r1.fun)), -float(r2.fun))
+    def Poisson2D(self, x):
+        ftol = 0.001
+        xtol = 0.01
+        def func1(z): return self.Poisson([x[0], x[1], z])
+        r1 = optimize.minimize(func1, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
+        def func2(z): return -self.Poisson([x[0], x[1], z])
+        r2 = optimize.minimize(func2, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
+        return (min(0,float(r1.fun)), max(0,float(r1.fun)), -float(r2.fun))
 
-  def poisson3D(self, x, y, guess1 = np.pi/2.0, guess2 = np.pi/2.0):
-    tol = 0.005
-    def func1(z): return self.Poisson([x, y, z])
-    r1 = optimize.minimize(func1, guess1, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
-    def func2(z): return -self.Poisson([x, y, z])
-    r2 = optimize.minimize(func2, guess2, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
-    return (min(0,float(r1.fun)), max(0,float(r1.fun)), -float(r2.fun), float(r1.x), float(r2.x))
+    def poisson3D(self, x, y, guess1 = np.pi/2.0, guess2 = np.pi/2.0):
+        tol = 0.005
+        def func1(z): return self.Poisson([x, y, z])
+        r1 = optimize.minimize(func1, guess1, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
+        def func2(z): return -self.Poisson([x, y, z])
+        r2 = optimize.minimize(func2, guess2, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
+        return (min(0,float(r1.fun)), max(0,float(r1.fun)), -float(r2.fun), float(r1.x), float(r2.x))
 
 
 class ElasticOrtho(Elastic):
-  """An elastic tensor, for the specific case of an orthorhombic system"""
+    """An elastic tensor, for the specific case of an orthorhombic system"""
 
-  def __init__(self, arg):
-    """Initialize from a matrix, or from an Elastic object"""
-    if type(arg) == str:
-      Elastic.__init__(self, arg)
-    elif isinstance(arg, Elastic):
-      self.CVoigt = arg.CVoigt
-      self.SVoigt = arg.SVoigt
-      self.Smat = arg.Smat
-    else:
-      raise TypeError("ElasticOrtho constructor argument should be string or Elastic object")
+    def __init__(self, arg):
+        """Initialize from a matrix, or from an Elastic object"""
+        if type(arg) == str:
+            Elastic.__init__(self, arg)
+        elif isinstance(arg, Elastic):
+            self.CVoigt = arg.CVoigt
+            self.SVoigt = arg.SVoigt
+            self.Smat = arg.Smat
+        else:
+            raise TypeError("ElasticOrtho constructor argument should be string or Elastic object")
 
-  def Young(self, x):
-    ct2 = math.cos(x[0])**2
-    st2 = 1 - ct2
-    cf2 = math.cos(x[1])**2
-    sf2 = 1 - cf2
-    s11 = self.Smat[0][0][0][0]
-    s22 = self.Smat[1][1][1][1]
-    s33 = self.Smat[2][2][2][2]
-    s44 = 4 * self.Smat[1][2][1][2]
-    s55 = 4 * self.Smat[0][2][0][2]
-    s66 = 4 * self.Smat[0][1][0][1]
-    s12 = self.Smat[0][0][1][1]
-    s13 = self.Smat[0][0][2][2]
-    s23 = self.Smat[1][1][2][2]
-    return 1/(ct2**2*s33 + 2*cf2*ct2*s13*st2 + cf2*ct2*s55*st2 + 2*ct2*s23*sf2*st2 + ct2*s44*sf2*st2 + cf2**2*s11*st2**2 + 2*cf2*s12*sf2*st2**2 + cf2*s66*sf2*st2**2 + s22*sf2**2*st2**2)
+    def Young(self, x):
+        ct2 = math.cos(x[0])**2
+        st2 = 1 - ct2
+        cf2 = math.cos(x[1])**2
+        sf2 = 1 - cf2
+        s11 = self.Smat[0][0][0][0]
+        s22 = self.Smat[1][1][1][1]
+        s33 = self.Smat[2][2][2][2]
+        s44 = 4 * self.Smat[1][2][1][2]
+        s55 = 4 * self.Smat[0][2][0][2]
+        s66 = 4 * self.Smat[0][1][0][1]
+        s12 = self.Smat[0][0][1][1]
+        s13 = self.Smat[0][0][2][2]
+        s23 = self.Smat[1][1][2][2]
+        return 1/(ct2**2*s33 + 2*cf2*ct2*s13*st2 + cf2*ct2*s55*st2 + 2*ct2*s23*sf2*st2 + ct2*s44*sf2*st2 + cf2**2*s11*st2**2 + 2*cf2*s12*sf2*st2**2 + cf2*s66*sf2*st2**2 + s22*sf2**2*st2**2)
 
-  def LC(self, x):
-    ct2 = math.cos(x[0])**2
-    cf2 = math.cos(x[1])**2
-    s11 = self.Smat[0][0][0][0]
-    s22 = self.Smat[1][1][1][1]
-    s33 = self.Smat[2][2][2][2]
-    s12 = self.Smat[0][0][1][1]
-    s13 = self.Smat[0][0][2][2]
-    s23 = self.Smat[1][1][2][2]
-    return 1000 * (ct2 * (s13 + s23 + s33) + (cf2 * (s11 + s12 + s13) + (s12 + s22 + s23) * (1 - cf2)) * (1 - ct2))
+    def LC(self, x):
+        ct2 = math.cos(x[0])**2
+        cf2 = math.cos(x[1])**2
+        s11 = self.Smat[0][0][0][0]
+        s22 = self.Smat[1][1][1][1]
+        s33 = self.Smat[2][2][2][2]
+        s12 = self.Smat[0][0][1][1]
+        s13 = self.Smat[0][0][2][2]
+        s23 = self.Smat[1][1][2][2]
+        return 1000 * (ct2 * (s13 + s23 + s33) + (cf2 * (s11 + s12 + s13) + (s12 + s22 + s23) * (1 - cf2)) * (1 - ct2))
 
-  def shear(self, x):
-    ct = math.cos(x[0])
-    ct2 = ct*ct
-    st2 = 1 - ct2
-    cf = math.cos(x[1])
-    sf = math.sin(x[1])
-    sf2 = sf*sf
-    cx = math.cos(x[2])
-    cx2 = cx*cx
-    sx = math.sin(x[2])
-    sx2 = 1 - cx2
-    s11 = self.Smat[0][0][0][0]
-    s22 = self.Smat[1][1][1][1]
-    s33 = self.Smat[2][2][2][2]
-    s44 = 4 * self.Smat[1][2][1][2]
-    s55 = 4 * self.Smat[0][2][0][2]
-    s66 = 4 * self.Smat[0][1][0][1]
-    s12 = self.Smat[0][0][1][1]
-    s13 = self.Smat[0][0][2][2]
-    s23 = self.Smat[1][1][2][2]
-    r = (
-          ct2*ct2*cx2*s44*sf2 + cx2*s44*sf2*st2*st2 + 4*cf**3*ct*cx*(-2*s11 + 2*s12 + s66)*sf*st2*sx
-          + 2*cf*ct*cx*sf*(ct2*(s44 - s55) + (4*s13 - 4*s23 - s44 + s55 - 4*s12*sf2 + 4*s22*sf2 - 2*s66*sf2)*st2)*sx
-          + s66*sf2*sf2*st2*sx2 + cf**4*st2*(4*ct2*cx2*s11 + s66*sx2)
-          + ct2*(2*cx2*(2*s33 + sf2*(-4*s23 - s44 + 2*s22*sf2))*st2 + s55*sf2*sx2)
-          + cf**2*(ct2*ct2*cx2*s55 + ct2*(-2*cx2*(4*s13 + s55 - 2*(2*s12 + s66)*sf2)*st2 + s44*sx2)
-                   + st2*(cx2*s55*st2 + 2*(2*s11 - 4*s12 + 2*s22 - s66)*sf2*sx2))
+    def shear(self, x):
+        ct = math.cos(x[0])
+        ct2 = ct*ct
+        st2 = 1 - ct2
+        cf = math.cos(x[1])
+        sf = math.sin(x[1])
+        sf2 = sf*sf
+        cx = math.cos(x[2])
+        cx2 = cx*cx
+        sx = math.sin(x[2])
+        sx2 = 1 - cx2
+        s11 = self.Smat[0][0][0][0]
+        s22 = self.Smat[1][1][1][1]
+        s33 = self.Smat[2][2][2][2]
+        s44 = 4 * self.Smat[1][2][1][2]
+        s55 = 4 * self.Smat[0][2][0][2]
+        s66 = 4 * self.Smat[0][1][0][1]
+        s12 = self.Smat[0][0][1][1]
+        s13 = self.Smat[0][0][2][2]
+        s23 = self.Smat[1][1][2][2]
+        r = (
+            ct2*ct2*cx2*s44*sf2 + cx2*s44*sf2*st2*st2 + 4*cf**3*ct*cx*(-2*s11 + 2*s12 + s66)*sf*st2*sx
+            + 2*cf*ct*cx*sf*(ct2*(s44 - s55) + (4*s13 - 4*s23 - s44 + s55 - 4*s12*sf2 + 4*s22*sf2 - 2*s66*sf2)*st2)*sx
+            + s66*sf2*sf2*st2*sx2 + cf**4*st2*(4*ct2*cx2*s11 + s66*sx2)
+            + ct2*(2*cx2*(2*s33 + sf2*(-4*s23 - s44 + 2*s22*sf2))*st2 + s55*sf2*sx2)
+            + cf**2*(ct2*ct2*cx2*s55 + ct2*(-2*cx2*(4*s13 + s55 - 2*(2*s12 + s66)*sf2)*st2 + s44*sx2)
+                     + st2*(cx2*s55*st2 + 2*(2*s11 - 4*s12 + 2*s22 - s66)*sf2*sx2))
+            )
+        return 1/r
+
+    def Poisson(self, x):
+        ct = math.cos(x[0])
+        ct2 = ct*ct
+        st2 = 1 - ct2
+        cf = math.cos(x[1])
+        sf = math.sin(x[1])
+        cx = math.cos(x[2])
+        sx = math.sin(x[2])
+        s11 = self.Smat[0][0][0][0]
+        s22 = self.Smat[1][1][1][1]
+        s33 = self.Smat[2][2][2][2]
+        s44 = 4 * self.Smat[1][2][1][2]
+        s55 = 4 * self.Smat[0][2][0][2]
+        s66 = 4 * self.Smat[0][1][0][1]
+        s12 = self.Smat[0][0][1][1]
+        s13 = self.Smat[0][0][2][2]
+        s23 = self.Smat[1][1][2][2]
+
+        return (
+    (-(ct**2*cx**2*s33*st2) - cf**2*cx**2*s13*st2*st2 - cx**2*s23*sf**2*st2*st2 + ct*cx*s44*sf*st2*(ct*cx*sf + cf*sx) -
+            ct**2*s23*(ct*cx*sf + cf*sx)**2 - cf**2*s12*st2*(ct*cx*sf + cf*sx)**2 - s22*sf**2*st2*(ct*cx*sf + cf*sx)**2 +
+            cf*ct*cx*s55*st2*(cf*ct*cx - sf*sx) - cf*s66*sf*st2*(ct*cx*sf + cf*sx)*(cf*ct*cx - sf*sx) -
+            ct**2*s13*(cf*ct*cx - sf*sx)**2 - cf**2*s11*st2*(cf*ct*cx - sf*sx)**2 - s12*sf**2*st2*(cf*ct*cx - sf*sx)**2)/
+            (ct**4*s33 + 2*cf**2*ct**2*s13*st2 + cf**2*ct**2*s55*st2 + 2*ct**2*s23*sf**2*st2 + ct**2*s44*sf**2*st2 +
+            cf**4*s11*st2*st2 + 2*cf**2*s12*sf**2*st2*st2 + cf**2*s66*sf**2*st2*st2 + s22*sf**4*st2*st2)
         )
-    return 1/r
-
-  def Poisson(self, x):
-    ct = math.cos(x[0])
-    ct2 = ct*ct
-    st2 = 1 - ct2
-    cf = math.cos(x[1])
-    sf = math.sin(x[1])
-    cx = math.cos(x[2])
-    sx = math.sin(x[2])
-    s11 = self.Smat[0][0][0][0]
-    s22 = self.Smat[1][1][1][1]
-    s33 = self.Smat[2][2][2][2]
-    s44 = 4 * self.Smat[1][2][1][2]
-    s55 = 4 * self.Smat[0][2][0][2]
-    s66 = 4 * self.Smat[0][1][0][1]
-    s12 = self.Smat[0][0][1][1]
-    s13 = self.Smat[0][0][2][2]
-    s23 = self.Smat[1][1][2][2]
-
-    return (
-  (-(ct**2*cx**2*s33*st2) - cf**2*cx**2*s13*st2*st2 - cx**2*s23*sf**2*st2*st2 + ct*cx*s44*sf*st2*(ct*cx*sf + cf*sx) -
-          ct**2*s23*(ct*cx*sf + cf*sx)**2 - cf**2*s12*st2*(ct*cx*sf + cf*sx)**2 - s22*sf**2*st2*(ct*cx*sf + cf*sx)**2 +
-          cf*ct*cx*s55*st2*(cf*ct*cx - sf*sx) - cf*s66*sf*st2*(ct*cx*sf + cf*sx)*(cf*ct*cx - sf*sx) -
-          ct**2*s13*(cf*ct*cx - sf*sx)**2 - cf**2*s11*st2*(cf*ct*cx - sf*sx)**2 - s12*sf**2*st2*(cf*ct*cx - sf*sx)**2)/
-        (ct**4*s33 + 2*cf**2*ct**2*s13*st2 + cf**2*ct**2*s55*st2 + 2*ct**2*s23*sf**2*st2 + ct**2*s44*sf**2*st2 +
-          cf**4*s11*st2*st2 + 2*cf**2*s12*sf**2*st2*st2 + cf**2*s66*sf**2*st2*st2 + s22*sf**4*st2*st2)
-    )
 
 
 ################################################################################################
@@ -812,39 +848,39 @@ urlBase = 'https://www.materialsproject.org/rest'
 
 
 def queryMaterials(query, mapiKey):
-  """Return a list of material IDs for a given query string"""
+    """Return a list of material IDs for a given query string"""
 
-  # If the query is a material ID, return it
-  if query[0:3] == "mp-": return [query]
+    # If the query is a material ID, return it
+    if query[0:3] == "mp-": return [query]
 
-  try:
-    r = requests.get(f'{urlBase}/v2/materials/{query}/mids', headers={"X-API-KEY": mapiKey})
-    resp = r.json()
-  except Exception as e:
-    print(str(e), file=sys.stderr)
-    return []
+    try:
+        r = requests.get(f'{urlBase}/v2/materials/{query}/mids', headers={"X-API-KEY": mapiKey})
+        resp = r.json()
+    except Exception as e:
+        print(str(e), file=sys.stderr)
+        return []
 
-  if (not resp['valid_response']): return []
-  return resp['response']
+    if (not resp['valid_response']): return []
+    return resp['response']
 
 
 def queryElasticityV2(mat, mapiKey):
-  """Return elastic properties for a given material ID, using V2 MAPI"""
+    """Return elastic properties for a given material ID, using V2 MAPI"""
 
-  data = { 'criteria': '{"task_id": "' + mat + '"}',
-           'properties': '["formula", "pretty_formula", "material_id", "elasticity"]',
-           'API_KEY': mapiKey }
-  try:
-    r = requests.post(f'{urlBase}/v2/query', data)
-    resp = r.json()
-  except Exception as e:
-    print(str(e), file=sys.stderr)
-    return None
+    data = { 'criteria': '{"task_id": "' + mat + '"}',
+             'properties': '["formula", "pretty_formula", "material_id", "elasticity"]',
+             'API_KEY': mapiKey }
+    try:
+        r = requests.post(f'{urlBase}/v2/query', data)
+        resp = r.json()
+    except Exception as e:
+        print(str(e), file=sys.stderr)
+        return None
 
-  if not resp["valid_response"]: return None
-  if len(resp["response"]) > 1: raise(Exception("Multiple results returned"))
-  if len(resp["response"]) == 0: return None
-  return resp["response"][0]
+    if not resp["valid_response"]: return None
+    if len(resp["response"]) > 1: raise(Exception("Multiple results returned"))
+    if len(resp["response"]) == 0: return None
+    return resp["response"][0]
 
 
 def ELATE_MaterialsProject(query, mapiKey):
@@ -1070,45 +1106,45 @@ def ELATE(matrix, sysname):
 
 
 def wait3D(matrix, sysname, job):
-  """Display a waiting page while we calculate a 3D plot"""
+    """Display a waiting page while we calculate a 3D plot"""
 
-  sys.stdout = outbuffer = StringIO()
-  writeHeader(outbuffer, "Young 3D for " + removeHTMLTags(sysname))
+    sys.stdout = outbuffer = StringIO()
+    writeHeader(outbuffer, "Young 3D for " + removeHTMLTags(sysname))
 
-  print("""
-  <div class="content">
-  <img src="/loading.gif" alt="[loading]" />
-  <p>Please wait while your 3D graph is loading… (it can take from 15 seconds up to a minute)</p>
+    print("""
+    <div class="content">
+    <img src="/loading.gif" alt="[loading]" />
+    <p>Please wait while your 3D graph is loading… (it can take from 15 seconds up to a minute)</p>
     """)
 
-  # Pass arguments
-  print("""
+    # Pass arguments
+    print("""
     <form id="elastic" action="/plot3D" method="post" style="display: none;">
-      <textarea name="matrix">%s</textarea>
-      <textarea name="sysname">%s</textarea>
-      <textarea name="job">%s</textarea>
-      <input type="submit" value="">
+        <textarea name="matrix">%s</textarea>
+        <textarea name="sysname">%s</textarea>
+        <textarea name="job">%s</textarea>
+        <input type="submit" value="">
     </form>""" % (matrix, sysname, job))
 
-  # Reload immediately
-  print("""
+    # Reload immediately
+    print("""
     <script type="text/javascript">
-    window.onload = function(){
-    setTimeout(function () {
-          document.getElementById("elastic").submit();
-              }, 100);
-          };
+        window.onload = function(){
+        setTimeout(function () {
+            document.getElementById("elastic").submit();
+                }, 100);
+            };
     </script>""")
 
-  return finishWebPage(outbuffer)
+    return finishWebPage(outbuffer)
 
 
 def plot3D(matrix, sysname, job):
-  """Display a 3D plot"""
+    """Display a 3D plot"""
 
-  # Dispatch to the specific function depending on type
-  functions = {'young': YOUNG3D, 'lc': LC3D, 'shear': SHEAR3D, 'poisson': POISSON3D}
-  return functions[job](matrix, sysname)
+    # Dispatch to the specific function depending on type
+    functions = {'young': YOUNG3D, 'lc': LC3D, 'shear': SHEAR3D, 'poisson': POISSON3D}
+    return functions[job](matrix, sysname)
 
 
 # ELATE : basic usage of the tool, only 2D plots
@@ -1121,99 +1157,99 @@ def plot3D(matrix, sysname, job):
 
 def YOUNG3D(matrix, sysname):
 
-  sys.stdout = outbuffer = StringIO()
-  writeHeader(outbuffer, "Young 3D for " + removeHTMLTags(sysname))
+    sys.stdout = outbuffer = StringIO()
+    writeHeader(outbuffer, "Young 3D for " + removeHTMLTags(sysname))
 
-  # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
-  print('<div class="content">')
+    # Start timing
+    print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
+    print('<div class="content">')
 
-  print("<h1> 3D Visualization of Young's modulus </h1>")
-  elas = Elastic(matrix)
-  if elas.isOrthorhombic():
-    elas = ElasticOrtho(elas)
-    print('<script type="text/javascript">var isOrtho = 1;</script>')
+    print("<h1> 3D Visualization of Young's modulus </h1>")
+    elas = Elastic(matrix)
+    if elas.isOrthorhombic():
+        elas = ElasticOrtho(elas)
+        print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlot(lambda x, y: elas.Young_2(x, y), "Young's modulus")
+    make3DPlot(lambda x, y: elas.Young_2(x, y), "Young's modulus")
 
-  print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
-  print('<pre>')
-  for i in range(6):
-    print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
-  print('</pre></div>')
-  return finishWebPage(outbuffer)
+    print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
+    print('<pre>')
+    for i in range(6):
+        print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
+    print('</pre></div>')
+    return finishWebPage(outbuffer)
 
 
 def LC3D(matrix, sysname):
 
-  sys.stdout = outbuffer = StringIO()
-  writeHeader(outbuffer, "LC 3D for " + removeHTMLTags(sysname))
+    sys.stdout = outbuffer = StringIO()
+    writeHeader(outbuffer, "LC 3D for " + removeHTMLTags(sysname))
 
-  # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
-  print('<div class="content">')
+    # Start timing
+    print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
+    print('<div class="content">')
 
-  print("<h1> 3D Visualization of Linear compressiblity </h1>")
-  elas = Elastic(matrix)
-  if elas.isOrthorhombic():
-    elas = ElasticOrtho(elas)
-    print('<script type="text/javascript">var isOrtho = 1;</script>')
+    print("<h1> 3D Visualization of Linear compressiblity </h1>")
+    elas = Elastic(matrix)
+    if elas.isOrthorhombic():
+        elas = ElasticOrtho(elas)
+        print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlotPosNeg(lambda x, y: elas.LC_2(x, y), "Linear compressiblity")
+    make3DPlotPosNeg(lambda x, y: elas.LC_2(x, y), "Linear compressiblity")
 
-  print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
-  print('<pre>')
-  for i in range(6):
-    print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
-  print('</pre></div>')
-  return finishWebPage(outbuffer)
+    print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
+    print('<pre>')
+    for i in range(6):
+        print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
+    print('</pre></div>')
+    return finishWebPage(outbuffer)
 
 
 def SHEAR3D(matrix, sysname):
 
-  sys.stdout = outbuffer = StringIO()
-  writeHeader(outbuffer, "Shear 3D for " + removeHTMLTags(sysname))
+    sys.stdout = outbuffer = StringIO()
+    writeHeader(outbuffer, "Shear 3D for " + removeHTMLTags(sysname))
 
-  # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
-  print('<div class="content">')
+    # Start timing
+    print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
+    print('<div class="content">')
 
-  print("<h1> 3D Visualization of Shear modulus </h1>")
-  elas = Elastic(matrix)
-  if elas.isOrthorhombic():
-    elas = ElasticOrtho(elas)
-    print('<script type="text/javascript">var isOrtho = 1;</script>')
+    print("<h1> 3D Visualization of Shear modulus </h1>")
+    elas = Elastic(matrix)
+    if elas.isOrthorhombic():
+        elas = ElasticOrtho(elas)
+        print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlot2(lambda x, y, g1, g2: elas.shear3D(x, y, g1, g2), "Shear modulus")
+    make3DPlot2(lambda x, y, g1, g2: elas.shear3D(x, y, g1, g2), "Shear modulus")
 
-  print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
-  print('<pre>')
-  for i in range(6):
-    print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
-  print('</pre></div>')
-  return finishWebPage(outbuffer)
+    print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
+    print('<pre>')
+    for i in range(6):
+        print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
+    print('</pre></div>')
+    return finishWebPage(outbuffer)
 
 
 def POISSON3D(matrix, sysname):
 
-  sys.stdout = outbuffer = StringIO()
-  writeHeader(outbuffer, "Poisson 3D for " + removeHTMLTags(sysname))
+    sys.stdout = outbuffer = StringIO()
+    writeHeader(outbuffer, "Poisson 3D for " + removeHTMLTags(sysname))
 
-  # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
-  print('<div class="content">')
+    # Start timing
+    print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
+    print('<div class="content">')
 
-  print("<h1> 3D Visualization of Poisson's ratio </h1>")
-  elas = Elastic(matrix)
-  if elas.isOrthorhombic():
-    elas = ElasticOrtho(elas)
-    print('<script type="text/javascript">var isOrtho = 1;</script>')
+    print("<h1> 3D Visualization of Poisson's ratio </h1>")
+    elas = Elastic(matrix)
+    if elas.isOrthorhombic():
+        elas = ElasticOrtho(elas)
+        print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  make3DPlot3(lambda x, y, g1, g2: elas.poisson3D(x, y, g1, g2), "Poisson's ratio")
+    make3DPlot3(lambda x, y, g1, g2: elas.poisson3D(x, y, g1, g2), "Poisson's ratio")
 
-  print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
-  print('<pre>')
-  for i in range(6):
-    print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
-  print('</pre></div>')
-  return finishWebPage(outbuffer)
+    print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
+    print('<pre>')
+    for i in range(6):
+        print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
+    print('</pre></div>')
+    return finishWebPage(outbuffer)
