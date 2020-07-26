@@ -18,7 +18,7 @@ from scipy import optimize
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2019.01.09"
+__version__ = "2020.07.26"
 __license__ = "MIT"
 
 
@@ -33,7 +33,7 @@ def finishWebPage(outbuffer):
 
   print('<div id="footer" class="content">')
   print('Code version: ' + __version__ + ' (running on Python ' + platform.python_version() + ')<br/>')
-  print('<script type="text/javascript">var endTime = %g;' % time.clock())
+  print('<script type="text/javascript">var endTime = %g;' % time.perf_counter())
   print('document.write("Execution time: " + (endTime-startTime).toFixed(3) + " seconds<br/>");' )
   print('if(typeof isOrtho !== \'undefined\') document.write("Specific (faster) code for orthorhombic case was used.");')
   print('</script></div>')
@@ -52,10 +52,10 @@ def writeHeader(outbuffer, title="Elastic Tensor Analysis"):
     <title>%s</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="/default.css" />
-    <link rel="stylesheet" type="text/css" href="/jsxgraph.css" />
-    <script type="text/javascript" src="/jsxgraphcore.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.1.0/distrib/jsxgraph.css" />
+    <script src="https://cdn.jsdelivr.net/npm/jsxgraph@1.1.0/distrib/jsxgraphcore.js"></script>
     <script src="http://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     </head>
   """ % (title))
 
@@ -907,7 +907,7 @@ def ELATE(matrix, sysname):
   sys.stdout = outbuffer = StringIO()
 
   # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
+  print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
 
   printTitle(outbuffer, "Elastic analysis of " + removeHTMLTags(sysname))
 
@@ -1125,7 +1125,7 @@ def YOUNG3D(matrix, sysname):
   writeHeader(outbuffer, "Young 3D for " + removeHTMLTags(sysname))
 
   # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
+  print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
   print('<div class="content">')
 
   print("<h1> 3D Visualization of Young's modulus </h1>")
@@ -1150,7 +1150,7 @@ def LC3D(matrix, sysname):
   writeHeader(outbuffer, "LC 3D for " + removeHTMLTags(sysname))
 
   # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
+  print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
   print('<div class="content">')
 
   print("<h1> 3D Visualization of Linear compressiblity </h1>")
@@ -1175,7 +1175,7 @@ def SHEAR3D(matrix, sysname):
   writeHeader(outbuffer, "Shear 3D for " + removeHTMLTags(sysname))
 
   # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
+  print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
   print('<div class="content">')
 
   print("<h1> 3D Visualization of Shear modulus </h1>")
@@ -1200,7 +1200,7 @@ def POISSON3D(matrix, sysname):
   writeHeader(outbuffer, "Poisson 3D for " + removeHTMLTags(sysname))
 
   # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % time.clock())
+  print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
   print('<div class="content">')
 
   print("<h1> 3D Visualization of Poisson's ratio </h1>")
