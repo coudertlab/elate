@@ -19,8 +19,8 @@ references:
       - family-names: Coudert
 	given-names: François-Xavier
 	orcid: 0000-0001-5318-3910
-    title: ELATE: an open-source online application for analysis and visualization of elastic tensors
-    journal: Journal of Physics: Condensed Matter
+    title: 'ELATE: an open-source online application for analysis and visualization of elastic tensors'
+    journal: 'Journal of Physics: Condensed Matter'
     doi: 10.1088/0953-8984/28/27/275201
     year: 2016
     volume: 28
