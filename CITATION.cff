@@ -1,0 +1,12 @@
+cff-version: 1.1.0
+authors:
+  - family-names: Gaillac
+    given-names: Romain
+    orcid: 0000-0002-7392-6803
+  - family-names: Coudert
+    given-names: François-Xavier
+    orcid: 0000-0001-5318-3910
+title: ELATE
+version: 2020.07.26
+date-released: 2020-07-26
+doi: 10.1088/0953-8984/28/27/275201
