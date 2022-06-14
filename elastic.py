@@ -18,7 +18,7 @@ from scipy import optimize
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2020.07.26"
+__version__ = "2022.06.14"
 __license__ = "MIT"
 
 
@@ -844,7 +844,7 @@ class ElasticOrtho(Elastic):
 ################################################################################################
 
 # Materials Project URL
-urlBase = 'https://www.materialsproject.org/rest'
+urlBase = 'https://legacy.materialsproject.org/rest'
 
 
 def queryMaterials(query, mapiKey):
