@@ -18,7 +18,7 @@ from scipy import optimize
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2022.06.14"
+__version__ = "2022.10.11"
 __license__ = "MIT"
 
 
@@ -32,7 +32,7 @@ def finishWebPage(outbuffer):
 
     print('<div id="footer" class="content">')
     print('Code version: ' + __version__ + ' (running on Python ' + platform.python_version() + ')<br/>')
-    print('<script type="text/javascript">var endTime = %g;' % time.perf_counter())
+    print('<script type="text/javascript">var endTime = %.12g;' % time.perf_counter())
     print('document.write("Execution time: " + (endTime-startTime).toFixed(3) + " seconds<br/>");')
     print('if(typeof isOrtho !== \'undefined\') document.write("Specific (faster) code for orthorhombic case was used.");')
     print('</script></div>')
@@ -53,7 +53,7 @@ def writeHeader(outbuffer, title="Elastic Tensor Analysis"):
         <link rel="stylesheet" type="text/css" href="/default.css" />
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/jsxgraph@1.1.0/distrib/jsxgraph.css" />
         <script src="https://cdn.jsdelivr.net/npm/jsxgraph@1.1.0/distrib/jsxgraphcore.js"></script>
-        <script src="http://cdn.plot.ly/plotly-latest.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         </head>
     """ % (title))
@@ -69,12 +69,14 @@ def printTitle(outbuffer, title="Elastic Tensor Analysis"):
         <h1><a href="/elate">ELATE: Elastic tensor analysis</a></h1>
 
         <p>Welcome to ELATE, the online tool for analysis of elastic tensors, developed by <b>Romain Gaillac</b> and <b><a
-        href="http://coudert.name">François-Xavier Coudert</a></b> at <a href="http://www.chimie-paristech.fr/molsim/">CNRS / Chimie
-        ParisTech</a>. <br/> If you use the software in published results (paper, conference, etc.), please cite the <a
-        href="http://dx.doi.org/10.1088/0953-8984/28/27/275201">corresponding paper</a> (<em>J. Phys. Condens. Matter</em>, 2016, 28, 275201) and give the
-        website URL.</p>
+        href="https://coudert.name/fx.html" target="_blank" rel="noreferrer">François-Xavier Coudert</a></b> at <a
+        href="https://coudert.name/" target="_blank" rel="noreferrer">CNRS / Chimie ParisTech</a>. <br/> If you use the
+        software in published results (paper, conference, etc.), please cite the <a
+        href="https://doi.org/10.1088/0953-8984/28/27/275201" target="_blank" rel="noreferrer">corresponding paper</a>
+        (<em>J. Phys. Condens. Matter</em>, 2016, 28, 275201) and give the website URL.</p>
 
-        <p>ELATE is <a href="https://github.com/fxcoudert/elate">open source software</a>. Any queries or comments are welcome at
+        <p>ELATE is <a href="https://github.com/fxcoudert/elate" target="_blank" rel="noreferrer">open source software</a>.
+        Any queries or comments are welcome at
     <script type="text/javascript">
     //<![CDATA[
     var c_="";for(var o5=0;o5<411;o5++)c_+=String.fromCharCode(("s%oz65j5>oJ.~~vs!Kt00}.~|}{\\"$s~%}!s0Kv#\\"wv<s!~tjjK{j5wo#zH}<j5s!z~qo6s~=u=i:00ikk>97a6!#|w<u!t{}vQ!o}Qsr?6F8G9:B8D9>@?7>a9!#|w<u!t{}vQ!o}QsrB67Dj59}qr$!s8#vq{wsw~;!oAA\\"wA#qsj5v!<~sozsq=6=A:u00970i0<ikk>a9!#|w<u!t{}vQ!o}QsrA69DDD>:E\\'7@<7s!z~qo6sjj==8:uN070j59j5jj.0|}}{\\"$}s#$0Kv#\\"wv<s!Ktj5jjj5jjL0\\'t14>O>>DBqI$}sr#!14>>>>BDqIwvw{sO~;!o\\"ws#vq14>>B>ID!t=JLo<j5s!z~qo6sO=u=0:705<!s~zoqs6=6<76<7=u:02@2?07<\\"$p\\"#!6?77".charCodeAt(o5)-(14)+0x3f)%(2*6+83)+64-32);document.write(eval(c_))
@@ -903,8 +905,9 @@ def ELATE_MaterialsProject(query, mapiKey):
   # Either there was no match, or a single match with no elastic data
   if len(materials) <= 1:
     print("""<p>
-            Your query for <tt style="background-color: #e0e0e0;">%s</tt> from the <a href="https://materialsproject.org">Materials Project</a> database
-            has returned a total of zero result. Or is it zero results? In any case, we are very sorry.</p>
+            Your query for <tt style="background-color: #e0e0e0;">%s</tt> from the <a href="https://materialsproject.org"
+            target="_blank" rel="noreferrer">Materials Project</a> database has returned a total of zero result.
+            Or is it zero results? In any case, we are very sorry.</p>
 
             <p>If you wish, you can try another query here:
             <form name="elastic" action="/elate/mp" method="get">
@@ -916,7 +919,8 @@ def ELATE_MaterialsProject(query, mapiKey):
     return finishWebPage(outbuffer)
 
 
-  print("""<p>Your query for <tt style="background-color: #e0e0e0;">%s</tt> from the <a href="https://materialsproject.org">Materials Project</a> database
+  print("""<p>Your query for <tt style="background-color: #e0e0e0;">%s</tt> from the <a
+           href="https://materialsproject.org" target="_blank" rel="noreferrer">Materials Project</a> database
            has returned %d results.""" % (query, len(materials)))
 
   if len(materials) > 10:
@@ -926,9 +930,9 @@ def ELATE_MaterialsProject(query, mapiKey):
   print("<table><tr><th>Identifier</th><th>Formula</th><th>Elastic data</th></tr>")
   for mat in materials:
     r = queryElasticityV2(mat, mapiKey)
-    print('<tr><td><a href="https://www.materialsproject.org/materials/%s" target="_blank">%s</a></td><td>%s</td>' % (mat, mat, r["pretty_formula"]))
+    print('<tr><td><a href="https://www.materialsproject.org/materials/%s" target="_blank" rel="noreferrer">%s</a></td><td>%s</td>' % (mat, mat, r["pretty_formula"]))
     if "elasticity" in r and r["elasticity"]:
-      print('<td>Elastic data available, <a href="/elate/mp?%s" target="_blank">perform analysis</a></td></tr>' % (mat))
+      print('<td>Elastic data available, <a href="/elate/mp?%s" target="_blank" rel="noreferrer">perform analysis</a></td></tr>' % (mat))
     else:
       print('<td>No elastic data available</td></tr>')
   print("</table>")
@@ -943,7 +947,7 @@ def ELATE(matrix, sysname):
   sys.stdout = outbuffer = StringIO()
 
   # Start timing
-  print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
+  print('<script type="text/javascript">var startTime = %.12g</script>' % time.perf_counter())
 
   printTitle(outbuffer, "Elastic analysis of " + removeHTMLTags(sysname))
 
@@ -1161,7 +1165,7 @@ def YOUNG3D(matrix, sysname):
     writeHeader(outbuffer, "Young 3D for " + removeHTMLTags(sysname))
 
     # Start timing
-    print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
+    print('<script type="text/javascript">var startTime = %.12g</script>' % time.perf_counter())
     print('<div class="content">')
 
     print("<h1> 3D Visualization of Young's modulus </h1>")
@@ -1186,7 +1190,7 @@ def LC3D(matrix, sysname):
     writeHeader(outbuffer, "LC 3D for " + removeHTMLTags(sysname))
 
     # Start timing
-    print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
+    print('<script type="text/javascript">var startTime = %.12g</script>' % time.perf_counter())
     print('<div class="content">')
 
     print("<h1> 3D Visualization of Linear compressiblity </h1>")
@@ -1211,7 +1215,7 @@ def SHEAR3D(matrix, sysname):
     writeHeader(outbuffer, "Shear 3D for " + removeHTMLTags(sysname))
 
     # Start timing
-    print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
+    print('<script type="text/javascript">var startTime = %.12g</script>' % time.perf_counter())
     print('<div class="content">')
 
     print("<h1> 3D Visualization of Shear modulus </h1>")
@@ -1236,7 +1240,7 @@ def POISSON3D(matrix, sysname):
     writeHeader(outbuffer, "Poisson 3D for " + removeHTMLTags(sysname))
 
     # Start timing
-    print('<script type="text/javascript">var startTime = %g</script>' % time.perf_counter())
+    print('<script type="text/javascript">var startTime = %.12g</script>' % time.perf_counter())
     print('<div class="content">')
 
     print("<h1> 3D Visualization of Poisson's ratio </h1>")
