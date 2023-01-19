@@ -18,7 +18,7 @@ from scipy import optimize
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2022.10.11"
+__version__ = "2023.01.19"
 __license__ = "MIT"
 
 
@@ -589,20 +589,23 @@ class Elastic:
             raise ValueError("invalid argument as matrix")
 
         # Make it into a square matrix
-        mat = np.array(mat)
-        if mat.shape != (6,6):
+        try:
+            mat = np.array(mat)
+        except:
             # Is it upper triangular?
             if list(map(len, mat)) == [6,5,4,3,2,1]:
                 mat = [ [0]*i + mat[i] for i in range(6) ]
                 mat = np.array(mat)
 
-        # Is it lower triangular?
-        if list(map(len, mat)) == [1,2,3,4,5,6]:
-            mat = [ mat[i] + [0]*(5-i) for i in range(6) ]
-            mat = np.array(mat)
+            # Is it lower triangular?
+            if list(map(len, mat)) == [1,2,3,4,5,6]:
+                mat = [ mat[i] + [0]*(5-i) for i in range(6) ]
+                mat = np.array(mat)
 
+        if not isinstance(mat, np.ndarray):
+            raise ValueError("should be a square or triangular matrix")
         if mat.shape != (6,6):
-            raise ValueError("should be a square matrix")
+            raise ValueError("should be a square or triangular matrix")
 
         # Check that is is symmetric, or make it symmetric
         if np.linalg.norm(np.tril(mat, -1)) == 0:
