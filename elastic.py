@@ -18,7 +18,7 @@ from scipy import optimize
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2023.01.19"
+__version__ = "2023.11.14"
 __license__ = "MIT"
 
 
