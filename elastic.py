@@ -937,11 +937,50 @@ class Elastic2D:
         except:
             raise ValueError("matrix is singular")
 
+        # Store the important components
+        self.s11 = self.SVoigt[0][0]
+        self.s12 = self.SVoigt[0][1]
+        self.s16 = self.SVoigt[0][2]
+        self.s22 = self.SVoigt[1][1]
+        self.s26 = self.SVoigt[1][2]
+        self.s66 = self.SVoigt[2][2]
+
         return
 
 
     def is2D(self):
         return True
+
+
+    def Young(self, theta):
+        ct = math.cos(theta)
+        st = math.sin(theta)
+
+        return 1/(self.s11*ct**4 + self.s22*st**4 + 2*self.s16*ct**3*st + 2*self.s26*ct*st**3 + (2*self.s12+self.s66)*ct**2*st**2)
+
+    def shear(self, theta):
+        ct = math.cos(theta)
+        st = math.sin(theta)
+
+        calc = ((self.s11 + self.s22 - 2*self.s12)*ct**2*st**2
+                + self.s66/4*(ct**4 + st**4 - 2*st**2*ct**2)
+                + self.s16*(st**3*ct - ct**3*st)
+                + self.s26*(ct**3*st - st**3*ct))
+        return 1 / (4 * calc)
+
+    def Poisson(self, theta):
+        ct = math.cos(theta)
+        st = math.sin(theta)
+
+        num = ((self.s11 + self.s22 - self.s66)*ct**2*st**2
+               + self.s12*(ct**4 + st**4)
+               + self.s16*(st**3*ct - ct**3*st)
+               + self.s26*(ct**3*st - st**3*ct))
+        denom = ((2*self.s12 + self.s66)*ct**2*st**2
+                 + self.s11*ct**4 + self.s22*st**4
+                 + 2*self.s16*st**3*ct
+                 + 2*self.s26*ct**3*st)
+        return -num/denom
 
 ################################################################################################
 
@@ -1090,11 +1129,85 @@ def ELATE_main_2D(elas, matrix, sysname, outbuffer):
     print('<h2>Summary of the properties (2D material)</h2>')
 
     displayname = " of " + sysname if len(sysname) else ""
-    print('<h3>Input: stiffness matrix (coefficients in GPa)%s</h3>' % (displayname))
+    print('<h3>Input: stiffness matrix (coefficients in N/m)%s</h3>' % (displayname))
     print('<pre>')
     for i in range(3):
         print(("   " + 3*"%7.5g  ") % tuple(elas.CVoigt[i]))
     print('</pre>')
+
+    print('''<h3>Eigenvalues of the stiffness matrix</h3>
+    <table><tr>
+    <th>&lambda;<sub>1</sub></th>
+    <th>&lambda;<sub>2</sub></th>
+    <th>&lambda;<sub>3</sub></th>
+    </tr><tr>''')
+    eigenval = sorted(np.linalg.eig(elas.CVoigt)[0])
+    print((3*'<td>%7.5g N/m</td>') % tuple(eigenval))
+    print('</tr></table>')
+
+    if eigenval[0] <= 0:
+        print('<div class="error">Stiffness matrix is not definite positive, crystal is mechanically unstable<br/>')
+        print('No further analysis will be performed.</div>')
+        return finishWebPage(outbuffer)
+
+    def findMin(func):
+        # We prefer the brute() function to minimize_scalar(), which only does local optimization
+        # But our functions are one-dimensional, which brute() does not accept, so make a wrapper
+        res = optimize.brute(lambda x: func(x[0]), ((0, np.pi),), Ns = 100, full_output = True, finish = optimize.fmin)
+        return (res[0][0], res[1])
+
+    def findMax(func):
+        # We prefer the brute() function to minimize_scalar(), which only does local optimization
+        # But our functions are one-dimensional, which brute() does not accept, so make a wrapper
+        res = optimize.brute(lambda x: -func(x[0]), ((0, np.pi),), Ns = 100, full_output = True, finish = optimize.fmin)
+        return (res[0][0], -res[1])
+
+    minE = findMin(elas.Young)
+    maxE = findMax(elas.Young)
+    minG = findMin(elas.shear)
+    maxG = findMax(elas.shear)
+    minNu = findMin(elas.Poisson)
+    maxNu = findMax(elas.Poisson)
+
+    print("""<h3>Variations of the elastic moduli</h3>
+                <table>
+                <tr><td></td><th colspan="2">Young's modulus</th>
+                <th colspan="2">Shear modulus</th>
+                <th colspan="2">Poisson's ratio</th></tr>
+                <tr><td></td><th><em>E</em><sub>min</sub></th><th><em>E</em><sub>max</sub></th>
+                <th><em>G</em><sub>min</sub></th><th><em>G</em><sub>max</sub></th>
+                <th>&nu;<sub>min</sub></th><th>&nu;<sub>max</sub></th><th></th></tr>""")
+
+    print(('<tr><td>Value</td><td>%8.5g N/m</td><td>%8.5g N/m</td>'
+            + '<td>%8.5g N/m</td><td>%8.5g N/m</td>'
+            + '<td>%.5g</td><td>%.5g</td><td>Value</td></tr>') % (minE[1], maxE[1], minG[1], maxG[1], minNu[1], maxNu[1]))
+
+    anisE = '%8.4g' % (maxE[1]/minE[1])
+    anisG = '%8.4g' % (maxG[1]/minG[1])
+    anisNu = ('%8.4f' % (maxNu[1]/minNu[1])) if minNu[1]*maxNu[1] > 0 else "&infin;"
+    print(('<tr><td>Anisotropy</td>' + 3 * '<td colspan="2">%s</td>'
+            + '<td>Anisotropy</td></tr>') % (anisE, anisG, anisNu))
+
+    print('<tr><td>Angle</td>')
+    print('<td>%.2f°</td>' % (minE[0] * 180 / np.pi))
+    print('<td>%.2f°</td>' % (maxE[0] * 180 / np.pi))
+    print('<td>%.2f°</td>' % (minG[0] * 180 / np.pi))
+    print('<td>%.2f°</td>' % (maxG[0] * 180 / np.pi))
+    print('<td>%.2f°</td>' % (minNu[0] * 180 / np.pi))
+    print('<td>%.2f°</td>' % (maxNu[0] * 180 / np.pi))
+    print('<td>Axis</td></tr></table>')
+
+    print("<h2>Spatial dependence of Young's modulus</h2>")
+    m = 1.2 * maxE[1]
+    makePolarPlot(elas.Young, m, "Young's modulus", width=500, height=500)
+
+    print("<h2>Spatial dependence of shear modulus</h2>")
+    m = 1.2 * maxG[1]
+    makePolarPlot(elas.shear, m, "Shear modulus", width=500, height=500)
+
+    print("<h2>Spatial dependence of shear modulus</h2>")
+    m = 1.2 * max(abs(maxNu[1]), abs(minNu[1]))
+    makePolarPlotPosNeg(elas.Poisson, m, "Poisson's ratio", width=500, height=500)
 
     return finishWebPage(outbuffer)
 
