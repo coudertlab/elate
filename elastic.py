@@ -554,7 +554,12 @@ def maximize(func, dim):
 
 
 class Elastic:
-    """An elastic tensor, along with methods to access it"""
+    """
+    An elastic tensor, along with methods to access it.
+
+    It will raise a ValueError when the input is invalid, and a TypeError
+    if the input is valid but corresponds to a 2D material.
+    """
 
     def __init__(self, s):
         """Initialize the elastic tensor from a string"""
@@ -574,8 +579,10 @@ class Elastic:
 
             # Remove empty lines
             lines = [line for line in s.split('\n') if line.strip()]
+            if len(lines) == 3:
+                raise TypeError("is a 2D material")
             if len(lines) != 6:
-                raise ValueError("should have six rows")
+                raise ValueError("should have three or six rows")
 
             # Convert to float
             try:
@@ -596,14 +603,22 @@ class Elastic:
             if list(map(len, mat)) == [6,5,4,3,2,1]:
                 mat = [ [0]*i + mat[i] for i in range(6) ]
                 mat = np.array(mat)
+            if list(map(len, mat)) == [3,2,1]:
+                mat = [ [0]*i + mat[i] for i in range(3) ]
+                mat = np.array(mat)
 
             # Is it lower triangular?
             if list(map(len, mat)) == [1,2,3,4,5,6]:
                 mat = [ mat[i] + [0]*(5-i) for i in range(6) ]
                 mat = np.array(mat)
+            if list(map(len, mat)) == [1,2,3]:
+                mat = [ mat[i] + [0]*(2-i) for i in range(3) ]
+                mat = np.array(mat)
 
         if not isinstance(mat, np.ndarray):
             raise ValueError("should be a square or triangular matrix")
+        if mat.shape == (3,3):
+            raise TypeError("is a 2D material")
         if mat.shape != (6,6):
             raise ValueError("should be a square or triangular matrix")
 
@@ -632,6 +647,9 @@ class Elastic:
         self.Smat = [[[[ SVoigtCoeff(VoigtMat[i][j], VoigtMat[k][l]) * self.SVoigt[VoigtMat[i][j]][VoigtMat[k][l]]
                          for i in range(3) ] for j in range(3) ] for k in range(3) ] for l in range(3) ]
         return
+
+    def is2D(self):
+        return False
 
     def isOrthorhombic(self):
         def iszero(x): return (abs(x) < 1.e-3)
@@ -846,7 +864,87 @@ class ElasticOrtho(Elastic):
         )
 
 
+class Elastic2D:
+    """Elastic tensor for 2D material, along with methods to access it"""
+
+    def __init__(self, s):
+        """Initialize the elastic tensor from a string"""
+
+        if not s:
+            raise ValueError("no matrix was provided")
+
+        # Argument can be a 3-line string, a list of list, or a string representation of the list of list
+        try:
+            if type(json.loads(s)) == list: s = json.loads(s)
+        except:
+            pass
+
+        if type(s) == str:
+            # Remove braces and pipes
+            s = s.replace("|", " ").replace("(", " ").replace(")", " ")
+
+            # Remove empty lines
+            lines = [line for line in s.split('\n') if line.strip()]
+            if len(lines) != 3:
+                raise ValueError("should have three rows")
+
+            # Convert to float
+            try:
+                mat = [list(map(float, line.split())) for line in lines]
+            except:
+                raise ValueError("not all entries are numbers")
+        elif type(s) == list:
+            # If we already have a list, simply use it
+            mat = s
+        else:
+            raise ValueError("invalid argument as matrix")
+
+        # Make it into a square matrix
+        try:
+            mat = np.array(mat)
+        except:
+            # Is it upper triangular?
+            if list(map(len, mat)) == [3,2,1]:
+                mat = [ [0]*i + mat[i] for i in range(3) ]
+                mat = np.array(mat)
+
+            # Is it lower triangular?
+            if list(map(len, mat)) == [1,2,3]:
+                mat = [ mat[i] + [0]*(2-i) for i in range(3) ]
+                mat = np.array(mat)
+
+        if not isinstance(mat, np.ndarray):
+            raise ValueError("should be a square or triangular matrix")
+        if mat.shape != (3,3):
+            raise ValueError("should be a square or triangular matrix")
+
+        # Check that is is symmetric, or make it symmetric
+        if np.linalg.norm(np.tril(mat, -1)) == 0:
+            mat = mat + np.triu(mat, 1).transpose()
+        if np.linalg.norm(np.triu(mat, 1)) == 0:
+            mat = mat + np.tril(mat, -1).transpose()
+        if np.linalg.norm(mat - mat.transpose()) > 1e-3:
+            raise ValueError("should be symmetric, or triangular")
+        elif np.linalg.norm(mat - mat.transpose()) > 0:
+            mat = 0.5 * (mat + mat.transpose())
+
+        # Store it
+        self.CVoigt = mat
+
+        # Put it in a more useful representation
+        try:
+            self.SVoigt = np.linalg.inv(self.CVoigt)
+        except:
+            raise ValueError("matrix is singular")
+
+        return
+
+
+    def is2D(self):
+        return True
+
 ################################################################################################
+
 
 # Materials Project URL
 urlBase = 'https://legacy.materialsproject.org/rest'
@@ -944,33 +1042,71 @@ def ELATE_MaterialsProject(query, mapiKey):
 
 
 def ELATE(matrix, sysname):
-  """ELATE performs the calculation and plots every property in 2D"""
+    """
+    ELATE is the main function, interprets the matrix for 2D or 3D material,
+    and dispatches the work to specialized functions.
+    """
 
-  # Redirect output to out string buffer
-  sys.stdout = outbuffer = StringIO()
+    # Redirect output to out string buffer
+    sys.stdout = outbuffer = StringIO()
 
-  # Start timing
-  print('<script type="text/javascript">var startTime = %.12g</script>' % time.perf_counter())
+    # Start timing
+    print('<script type="text/javascript">var startTime = %.12g</script>' % time.perf_counter())
+    sysname = removeHTMLTags(sysname).strip()
+    printTitle(outbuffer, "Elastic analysis of " + sysname)
 
-  printTitle(outbuffer, "Elastic analysis of " + removeHTMLTags(sysname))
+    try:
+        # First try to interpret as a 3D matrix
+        elas = Elastic(matrix)
+    except TypeError as e:
+        try:
+            elas = Elastic2D(matrix)
+        except ValueError as e:
+            print('<div class="error">Invalid stiffness matrix: ')
+            print(e.args[0])
+            if matrix:
+                print('<pre>' + str(matrix) + '</pre>')
+            print('</div>')
+            print('<input action="action" type="button" value="Go back" onclick="window.history.go(-1); return false;" />')
+            return finishWebPage(outbuffer)
+    except ValueError as e:
+        print('<div class="error">Invalid stiffness matrix: ')
+        print(e.args[0])
+        if matrix:
+            print('<pre>' + str(matrix) + '</pre>')
+        print('</div>')
+        print('<input action="action" type="button" value="Go back" onclick="window.history.go(-1); return false;" />')
+        return finishWebPage(outbuffer)
 
-  try:
-    elas = Elastic(matrix)
-  except ValueError as e:
-    print('<div class="error">Invalid stiffness matrix: ')
-    print(e.args[0])
-    if matrix:
-      print('<pre>' + str(matrix) + '</pre>')
+    if elas.is2D():
+        return ELATE_main_2D(elas, matrix, sysname, outbuffer)
+    else:
+        return ELATE_main_3D(elas, matrix, sysname, outbuffer)
 
-    print('</div>')
-    print('<input action="action" type="button" value="Go back" onclick="window.history.go(-1); return false;" />')
+
+def ELATE_main_2D(elas, matrix, sysname, outbuffer):
+    """Performs the calculations and plots properties for 2D materials"""
+
+    print('<h2>Summary of the properties (2D material)</h2>')
+
+    displayname = " of " + sysname if len(sysname) else ""
+    print('<h3>Input: stiffness matrix (coefficients in GPa)%s</h3>' % (displayname))
+    print('<pre>')
+    for i in range(3):
+        print(("   " + 3*"%7.5g  ") % tuple(elas.CVoigt[i]))
+    print('</pre>')
+
     return finishWebPage(outbuffer)
+
+
+def ELATE_main_3D(elas, matrix, sysname, outbuffer):
+  """Performs the calculations and plots properties for 3D materials"""
 
   if elas.isOrthorhombic():
     elas = ElasticOrtho(elas)
     print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  print('<h2>Summary of the properties</h2>')
+  print('<h2>Summary of the properties (3D material)</h2>')
 
   print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
   print('<pre>')
