@@ -675,7 +675,7 @@ class Elastic:
                   for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
         return 1/r
 
-    def Young_2(self,x,y):
+    def Young_2(self, x, y):
         a = dirVec(x, y)
         r = sum([ a[i]*a[j]*a[k]*a[l] * self.Smat[i][j][k][l]
                   for i in range(3) for j in range(3) for k in range(3) for l in range(3) ])
