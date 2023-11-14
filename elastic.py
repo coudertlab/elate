@@ -733,36 +733,36 @@ class Elastic:
     def shear2D(self, x):
         ftol = 0.001
         xtol = 0.01
-        def func1(z): return self.shear([x[0], x[1], z])
+        def func1(z): return self.shear([x[0], x[1], z[0]])
         r1 = optimize.minimize(func1, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
-        def func2(z): return -self.shear([x[0], x[1], z])
+        def func2(z): return -self.shear([x[0], x[1], z[0]])
         r2 = optimize.minimize(func2, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
         return (float(r1.fun), -float(r2.fun))
 
     def shear3D(self, x, y, guess1 = np.pi/2.0, guess2 = np.pi/2.0):
         tol = 0.005
-        def func1(z): return self.shear([x, y, z])
+        def func1(z): return self.shear([x, y, z[0]])
         r1 = optimize.minimize(func1, guess1, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
-        def func2(z): return -self.shear([x, y, z])
+        def func2(z): return -self.shear([x, y, z[0]])
         r2 = optimize.minimize(func2, guess2, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
-        return (float(r1.fun), -float(r2.fun), float(r1.x), float(r2.x))
+        return (float(r1.fun), -float(r2.fun), float(r1.x[0]), float(r2.x[0]))
 
     def Poisson2D(self, x):
         ftol = 0.001
         xtol = 0.01
-        def func1(z): return self.Poisson([x[0], x[1], z])
+        def func1(z): return self.Poisson([x[0], x[1], z[0]])
         r1 = optimize.minimize(func1, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
-        def func2(z): return -self.Poisson([x[0], x[1], z])
+        def func2(z): return -self.Poisson([x[0], x[1], z[0]])
         r2 = optimize.minimize(func2, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
         return (min(0,float(r1.fun)), max(0,float(r1.fun)), -float(r2.fun))
 
     def poisson3D(self, x, y, guess1 = np.pi/2.0, guess2 = np.pi/2.0):
         tol = 0.005
-        def func1(z): return self.Poisson([x, y, z])
+        def func1(z): return self.Poisson([x, y, z[0]])
         r1 = optimize.minimize(func1, guess1, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
-        def func2(z): return -self.Poisson([x, y, z])
+        def func2(z): return -self.Poisson([x, y, z[0]])
         r2 = optimize.minimize(func2, guess2, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
-        return (min(0,float(r1.fun)), max(0,float(r1.fun)), -float(r2.fun), float(r1.x), float(r2.x))
+        return (min(0,float(r1.fun)), max(0,float(r1.fun)), -float(r2.fun), float(r1.x[0]), float(r2.x[0]))
 
 
 class ElasticOrtho(Elastic):
