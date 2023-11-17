@@ -1205,7 +1205,7 @@ def ELATE_main_2D(elas, matrix, sysname, outbuffer):
     m = 1.2 * maxG[1]
     makePolarPlot(elas.shear, m, "Shear modulus", width=500, height=500)
 
-    print("<h2>Spatial dependence of shear modulus</h2>")
+    print("<h2>Spatial dependence of Poisson's ratio</h2>")
     m = 1.2 * max(abs(maxNu[1]), abs(minNu[1]))
     makePolarPlotPosNeg(elas.Poisson, m, "Poisson's ratio", width=500, height=500)
 
