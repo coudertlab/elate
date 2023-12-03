@@ -18,7 +18,7 @@ from scipy import optimize
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2023.11.14"
+__version__ = "2023.12.03"
 __license__ = "MIT"
 
 
@@ -1199,15 +1199,15 @@ def ELATE_main_2D(elas, matrix, sysname, outbuffer):
 
     print("<h2>Spatial dependence of Young's modulus</h2>")
     m = 1.2 * maxE[1]
-    makePolarPlot(elas.Young, m, "Young's modulus", width=500, height=500)
+    makePolarPlot(elas.Young, m, "Young's modulus", width=500, height=500, npoints=180)
 
     print("<h2>Spatial dependence of shear modulus</h2>")
     m = 1.2 * maxG[1]
-    makePolarPlot(elas.shear, m, "Shear modulus", width=500, height=500)
+    makePolarPlot(elas.shear, m, "Shear modulus", width=500, height=500, npoints=180)
 
     print("<h2>Spatial dependence of Poisson's ratio</h2>")
     m = 1.2 * max(abs(maxNu[1]), abs(minNu[1]))
-    makePolarPlotPosNeg(elas.Poisson, m, "Poisson's ratio", width=500, height=500)
+    makePolarPlotPosNeg(elas.Poisson, m, "Poisson's ratio", width=500, height=500, npoints=180)
 
     return finishWebPage(outbuffer)
 
