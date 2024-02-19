@@ -5,4 +5,6 @@ Welcome to [ELATE, the online tool for analysis of elastic tensors](http://progs
 
 This repository contains the source code for the web service, which you can use [online here](http://progs.coudert.name/elate).
 
-If you use the software (the website or the code itself) in published results (paper, conference, etc.), please cite the [corresponding paper (_J. Phys. Condens. Matter_, *2016*, 28, 275201)](https://doi.org/10.1088/0953-8984/28/27/275201).
+You can also find here [**a Jupyter notebook explaining how to use the code locally**](https://github.com/coudertlab/elate/blob/master/tutorial.ipynb) (without the website).
+
+If you use the software (the website or the code itself) in published results (paper, conference, etc.), please cite the [corresponding paper (_J. Phys. Condens. Matter_, **2016**, 28, 275201)](https://doi.org/10.1088/0953-8984/28/27/275201).
