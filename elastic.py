@@ -18,7 +18,7 @@ from scipy import optimize
 
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2023.12.03"
+__version__ = "2024.02.19"
 __license__ = "MIT"
 
 
@@ -986,56 +986,69 @@ class Elastic2D:
 
 
 # Materials Project URL
-urlBase = 'https://legacy.materialsproject.org/rest'
+urlBase = 'https://api.materialsproject.org'
 
 
 def queryMaterials(query, mapiKey):
     """Return a list of material IDs for a given query string"""
 
     # If the query is a material ID, return it
-    if query[0:3] == "mp-": return [query]
+    if query[0:3] == "mp-":
+        return 1, [query]
+
+    # We accept either a chemical system or a formula
+    if '-' in query:
+        query = 'chemsys=' + query
+    else:
+        query = 'formula=' + query
 
     try:
-        r = requests.get(f'{urlBase}/v2/materials/{query}/mids', headers={"X-API-KEY": mapiKey})
+        r = requests.get(f'{urlBase}/materials/summary/?{query}&deprecated=false&_fields=has_props,material_id,formula_pretty',
+                         headers={'X-API-KEY': mapiKey, 'accept': 'application/json'}, timeout=4)
         resp = r.json()
     except Exception as e:
         print(str(e), file=sys.stderr)
-        return []
+        return 0, []
 
-    if (not resp['valid_response']): return []
-    return resp['response']
+    if 'meta' not in resp or resp['meta']['total_doc'] == 0:
+        return 0, []
+
+    # Return the total number of hits, and the first page of results
+    return resp['meta']['total_doc'], resp['data']
 
 
-def queryElasticityV2(mat, mapiKey):
-    """Return elastic properties for a given material ID, using V2 MAPI"""
+def queryElasticity(mat, mapiKey):
+    """Return elastic properties for a given material ID, using so-called 'new API'"""
 
-    data = { 'criteria': '{"task_id": "' + mat + '"}',
-             'properties': '["formula", "pretty_formula", "material_id", "elasticity"]',
-             'API_KEY': mapiKey }
     try:
-        r = requests.post(f'{urlBase}/v2/query', data)
+        r = requests.get(f'{urlBase}/materials/elasticity/?material_ids={mat}&&_fields=elastic_tensor,material_id,formula_pretty',
+                         headers={'X-API-KEY': mapiKey, 'accept': 'application/json'}, timeout=4)
         resp = r.json()
     except Exception as e:
         print(str(e), file=sys.stderr)
         return None
 
-    if not resp["valid_response"]: return None
-    if len(resp["response"]) > 1: raise(Exception("Multiple results returned"))
-    if len(resp["response"]) == 0: return None
-    return resp["response"][0]
+
+    if resp["meta"]["total_doc"] == 0:
+        return None
+    if resp["meta"]["total_doc"] > 1:
+        raise(Exception("Multiple results returned"))
+
+    return resp["data"][0]
+
 
 
 def ELATE_MaterialsProject(query, mapiKey):
   """Call ELATE with a query from the Materials Project"""
 
   # If we were directly given a material ID, or there is a simple match
-  materials = queryMaterials(query, mapiKey)
+  nres, materials = queryMaterials(query, mapiKey)
   if len(materials) == 1:
-    r = queryElasticityV2(query, mapiKey)
+    r = queryElasticity(query, mapiKey)
 
-    if r and 'elasticity' in r:
-      tensor = r["elasticity"]["elastic_tensor"]
-      return ELATE(tensor, '%s (Materials Project id <a href="%s%s" target="_blank">%s</a>)' % (r["pretty_formula"], "https://www.materialsproject.org/materials/", r["material_id"], r["material_id"]))
+    if r and 'elastic_tensor' in r:
+      tensor = r["elastic_tensor"]["ieee_format"]
+      return ELATE(tensor, '%s (Materials Project id <a href="%s%s" target="_blank">%s</a>)' % (r["formula_pretty"], "https://www.materialsproject.org/materials/", r["material_id"], r["material_id"]))
 
   # Otherwise, run the MP query, list the matches and let the user choose
   sys.stdout = outbuffer = StringIO()
@@ -1061,18 +1074,17 @@ def ELATE_MaterialsProject(query, mapiKey):
 
   print("""<p>Your query for <tt style="background-color: #e0e0e0;">%s</tt> from the <a
            href="https://materialsproject.org" target="_blank" rel="noreferrer">Materials Project</a> database
-           has returned %d results.""" % (query, len(materials)))
+           has returned %d results.""" % (query, nres))
 
-  if len(materials) > 10:
-    materials = materials[0:10]
-    print("Below is a table of the 10 first matches.")
+  if len(materials) < nres:
+    print(f'Below is a table of the {len(materials)} first matches.')
 
   print("<table><tr><th>Identifier</th><th>Formula</th><th>Elastic data</th></tr>")
   for mat in materials:
-    r = queryElasticityV2(mat, mapiKey)
-    print('<tr><td><a href="https://www.materialsproject.org/materials/%s" target="_blank" rel="noreferrer">%s</a></td><td>%s</td>' % (mat, mat, r["pretty_formula"]))
-    if "elasticity" in r and r["elasticity"]:
-      print('<td>Elastic data available, <a href="/elate/mp?%s" target="_blank" rel="noreferrer">perform analysis</a></td></tr>' % (mat))
+    mid = mat['material_id']
+    print('<tr><td><a href="https://www.materialsproject.org/materials/%s" target="_blank" rel="noreferrer">%s</a></td><td>%s</td>' % (mid, mid, mat["formula_pretty"]))
+    if mat['has_props'].get('elasticity'):
+      print('<td>Elastic data available, <a href="/elate/mp?%s" target="_blank" rel="noreferrer">perform analysis</a></td></tr>' % (mid))
     else:
       print('<td>No elastic data available</td></tr>')
   print("</table>")
