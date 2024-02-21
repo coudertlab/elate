@@ -1,5 +1,7 @@
-matplotlib
+# Requirements for the ELATE module (elastic.py)
 numpy
-pandas
 requests
 scipy
+# Additional requirements for the Jupyter notebook
+matplotlib
+pandas
