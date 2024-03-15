@@ -64,17 +64,19 @@ class Elastic:
     def __init__(self, s):
         """Initialize the elastic tensor from a string"""
 
-        if not s:
-            raise ValueError("no matrix was provided")
-
         # Argument can be a 6-line string, a list of list, or a string representation of the list of list
-        try:
-            if isinstance(json.loads(s), list):
-                s = json.loads(s)
-        except:
-            pass
 
+        # If the argument is JSON, decode it
         if isinstance(s, str):
+            try:
+                s = json.loads(s)
+            except:
+                pass
+
+        if isinstance(s, np.ndarray) or isinstance(s, list):
+            # If we already have a list or numpy array, fine
+            mat = s
+        elif isinstance(s, str):
             # Remove braces and pipes
             s = s.replace("|", " ").replace("(", " ").replace(")", " ")
 
@@ -85,14 +87,11 @@ class Elastic:
             if len(lines) != 6:
                 raise ValueError("should have three or six rows")
 
-            # Convert to float
+            # Convert to list of list of floats
             try:
                 mat = [list(map(float, line.split())) for line in lines]
             except:
                 raise ValueError("not all entries are numbers")
-        elif isinstance(s, list):
-            # If we already have a list, simply use it
-            mat = s
         else:
             raise ValueError("invalid argument as matrix")
 
@@ -102,18 +101,18 @@ class Elastic:
         except:
             # Is it upper triangular?
             if list(map(len, mat)) == [6,5,4,3,2,1]:
-                mat = [ [0]*i + mat[i] for i in range(6) ]
+                mat = [[0]*i + mat[i] for i in range(6)]
                 mat = np.array(mat)
             if list(map(len, mat)) == [3,2,1]:
-                mat = [ [0]*i + mat[i] for i in range(3) ]
+                mat = [[0]*i + mat[i] for i in range(3)]
                 mat = np.array(mat)
 
             # Is it lower triangular?
             if list(map(len, mat)) == [1,2,3,4,5,6]:
-                mat = [ mat[i] + [0]*(5-i) for i in range(6) ]
+                mat = [mat[i] + [0]*(5-i) for i in range(6)]
                 mat = np.array(mat)
             if list(map(len, mat)) == [1,2,3]:
-                mat = [ mat[i] + [0]*(2-i) for i in range(3) ]
+                mat = [mat[i] + [0]*(2-i) for i in range(3)]
                 mat = np.array(mat)
 
         if not isinstance(mat, np.ndarray):
