@@ -69,12 +69,12 @@ class Elastic:
 
         # Argument can be a 6-line string, a list of list, or a string representation of the list of list
         try:
-            if type(json.loads(s)) == list:
+            if isinstance(json.loads(s), list):
                 s = json.loads(s)
         except:
             pass
 
-        if type(s) == str:
+        if isinstance(s, str):
             # Remove braces and pipes
             s = s.replace("|", " ").replace("(", " ").replace(")", " ")
 
@@ -90,7 +90,7 @@ class Elastic:
                 mat = [list(map(float, line.split())) for line in lines]
             except:
                 raise ValueError("not all entries are numbers")
-        elif type(s) == list:
+        elif isinstance(s, list):
             # If we already have a list, simply use it
             mat = s
         else:
@@ -273,7 +273,7 @@ class ElasticOrtho(Elastic):
 
     def __init__(self, arg):
         """Initialize from a matrix, or from an Elastic object"""
-        if type(arg) == str:
+        if isinstance(arg, str):
             Elastic.__init__(self, arg)
         elif isinstance(arg, Elastic):
             self.CVoigt = arg.CVoigt
@@ -373,16 +373,14 @@ class Elastic2D:
     def __init__(self, s):
         """Initialize the elastic tensor from a string"""
 
-        if not s:
-            raise ValueError("no matrix was provided")
-
         # Argument can be a 3-line string, a list of list, or a string representation of the list of list
         try:
-            if type(json.loads(s)) == list: s = json.loads(s)
+            if isinstance(json.loads(s), list):
+                s = json.loads(s)
         except:
             pass
 
-        if type(s) == str:
+        if isinstance(s, str):
             # Remove braces and pipes
             s = s.replace("|", " ").replace("(", " ").replace(")", " ")
 
@@ -396,7 +394,7 @@ class Elastic2D:
                 mat = [list(map(float, line.split())) for line in lines]
             except:
                 raise ValueError("not all entries are numbers")
-        elif type(s) == list:
+        elif isinstance(s, list):
             # If we already have a list, simply use it
             mat = s
         else:
