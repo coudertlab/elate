@@ -415,7 +415,7 @@ def makePolarPlot(func, maxrad, legend='', p='xy', width=300, height=300, npoint
 
     u = np.linspace(0, np.pi, npoints)
     r = list(map(func, u))
-    if (p=="xy"):
+    if (p == "xy"):
         x = r * np.cos(u)
         y = r * np.sin(u)
     else:
@@ -437,14 +437,14 @@ def makePolarPlotPosNeg(func, maxrad, legend='', p='xy', width=300, height=300, 
 
     u = np.linspace(0, np.pi, npoints)
     r = list(map(lambda x: max(0, func(x)), u))
-    if (p=="xy"):
+    if (p == "xy"):
         x1 = r * np.cos(u)
         y1 = r * np.sin(u)
     else:
         y1 = r * np.cos(u)
         x1 = r * np.sin(u)
     r = list(map(lambda x: max(0, -func(x)), u))
-    if (p=="xy"):
+    if (p == "xy"):
         x2 = r * np.cos(u)
         y2 = r * np.sin(u)
     else:
@@ -469,7 +469,7 @@ def makePolarPlot2(func, maxrad, legend='', p='xy', width=300, height=300, npoin
     u = np.linspace(0, np.pi, npoints)
     r = list(map(func, u))
 
-    if (p=="xy"):
+    if (p == "xy"):
         x1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
         y1 = np.array([ ir[0] * np.sin(iu) for ir, iu in zip(r,u) ])
         x2 = np.array([ ir[1] * np.cos(iu) for ir, iu in zip(r,u) ])
@@ -498,7 +498,7 @@ def makePolarPlot3(func, maxrad, legend='', p='xy', width=300, height=300, npoin
     u = np.linspace(0, np.pi, npoints)
     r = list(map(func, u))
 
-    if (p=="xy"):
+    if (p == "xy"):
         x1 = np.array([ ir[0] * np.cos(iu) for ir, iu in zip(r,u) ])
         y1 = np.array([ ir[0] * np.sin(iu) for ir, iu in zip(r,u) ])
         x2 = np.array([ ir[1] * np.cos(iu) for ir, iu in zip(r,u) ])
