@@ -684,7 +684,7 @@ def ELATE_main_2D(elas, matrix, sysname, outbuffer):
     print('<h3>Input: stiffness matrix (coefficients in N/m)%s</h3>' % (displayname))
     print('<pre>')
     for i in range(3):
-        print(("   " + 3*"%7.5g  ") % tuple(elas.CVoigt[i]))
+        print(("   " + 3 * "%7.5g  ") % tuple(elas.CVoigt[i]))
     print('</pre>')
 
     print('''<h3>Eigenvalues of the stiffness matrix</h3>
@@ -694,7 +694,7 @@ def ELATE_main_2D(elas, matrix, sysname, outbuffer):
     <th>&lambda;<sub>3</sub></th>
     </tr><tr>''')
     eigenval = sorted(np.linalg.eig(elas.CVoigt)[0])
-    print((3*'<td>%7.5g N/m</td>') % tuple(eigenval))
+    print((3 * '<td>%7.5g N/m</td>') % tuple(eigenval))
     print('</tr></table>')
 
     if eigenval[0] <= 0:
@@ -705,13 +705,13 @@ def ELATE_main_2D(elas, matrix, sysname, outbuffer):
     def findMin(func):
         # We prefer the brute() function to minimize_scalar(), which only does local optimization
         # But our functions are one-dimensional, which brute() does not accept, so make a wrapper
-        res = optimize.brute(lambda x: func(x[0]), ((0, np.pi),), Ns = 100, full_output = True, finish = optimize.fmin)
+        res = optimize.brute(lambda x: func(x[0]), ((0, np.pi),), Ns=100, full_output=True, finish=optimize.fmin)
         return (res[0][0], res[1])
 
     def findMax(func):
         # We prefer the brute() function to minimize_scalar(), which only does local optimization
         # But our functions are one-dimensional, which brute() does not accept, so make a wrapper
-        res = optimize.brute(lambda x: -func(x[0]), ((0, np.pi),), Ns = 100, full_output = True, finish = optimize.fmin)
+        res = optimize.brute(lambda x: -func(x[0]), ((0, np.pi),), Ns=100, full_output=True, finish=optimize.fmin)
         return (res[0][0], -res[1])
 
     minE = findMin(elas.Young)
@@ -731,14 +731,14 @@ def ELATE_main_2D(elas, matrix, sysname, outbuffer):
                 <th>&nu;<sub>min</sub></th><th>&nu;<sub>max</sub></th><th></th></tr>""")
 
     print(('<tr><td>Value</td><td>%8.5g N/m</td><td>%8.5g N/m</td>'
-            + '<td>%8.5g N/m</td><td>%8.5g N/m</td>'
-            + '<td>%.5g</td><td>%.5g</td><td>Value</td></tr>') % (minE[1], maxE[1], minG[1], maxG[1], minNu[1], maxNu[1]))
+           + '<td>%8.5g N/m</td><td>%8.5g N/m</td>'
+           + '<td>%.5g</td><td>%.5g</td><td>Value</td></tr>') % (minE[1], maxE[1], minG[1], maxG[1], minNu[1], maxNu[1]))
 
-    anisE = '%8.4g' % (maxE[1]/minE[1])
-    anisG = '%8.4g' % (maxG[1]/minG[1])
-    anisNu = ('%8.4f' % (maxNu[1]/minNu[1])) if minNu[1]*maxNu[1] > 0 else "&infin;"
+    anisE = '%8.4g' % (maxE[1] / minE[1])
+    anisG = '%8.4g' % (maxG[1] / minG[1])
+    anisNu = ('%8.4f' % (maxNu[1] / minNu[1])) if minNu[1] * maxNu[1] > 0 else "&infin;"
     print(('<tr><td>Anisotropy</td>' + 3 * '<td colspan="2">%s</td>'
-            + '<td>Anisotropy</td></tr>') % (anisE, anisG, anisNu))
+           + '<td>Anisotropy</td></tr>') % (anisE, anisG, anisNu))
 
     print('<tr><td>Angle</td>')
     print('<td>%.2f°</td>' % (minE[0] * 180 / np.pi))
@@ -765,152 +765,146 @@ def ELATE_main_2D(elas, matrix, sysname, outbuffer):
 
 
 def ELATE_main_3D(elas, matrix, sysname, outbuffer):
-  """Performs the calculations and plots properties for 3D materials"""
+    """Performs the calculations and plots properties for 3D materials"""
 
-  if elas.isOrthorhombic():
-    elas = elastic.ElasticOrtho(elas)
-    print('<script type="text/javascript">var isOrtho = 1;</script>')
+    if elas.isOrthorhombic():
+        elas = elastic.ElasticOrtho(elas)
+        print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-  print('<h2>Summary of the properties (3D material)</h2>')
+    print('<h2>Summary of the properties (3D material)</h2>')
 
-  print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
-  print('<pre>')
-  for i in range(6):
-    print(("   " + 6*"%7.5g  ") % tuple(elas.CVoigt[i]))
-  print('</pre>')
+    print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
+    print('<pre>')
+    for i in range(6):
+        print(("   " + 6 * "%7.5g  ") % tuple(elas.CVoigt[i]))
+    print('</pre>')
 
-  avg = elas.averages()
-  print('<h3>Average properties</h3>')
+    avg = elas.averages()
+    print('<h3>Average properties</h3>')
 
-  print("<table><tr><th>Averaging scheme</th><th>Bulk modulus</th><th>Young's modulus</th><th>Shear modulus</th><th>Poisson's ratio</th></tr>")
-  print(('<tr><td>Voigt</td><td><em>K</em><sub>V</sub> = %7.5g GPa</td><td><em>E</em><sub>V</sub> = %7.5g GPa</td>'
-          + '<td><em>G</em><sub>V</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>V</sub> = %.5g</td></tr>')
-        % tuple(avg[0]))
-  print(('<tr><td>Reuss</td><td><em>K</em><sub>R</sub> = %7.5g GPa</td><td><em>E</em><sub>R</sub> = %7.5g GPa</td>'
-          + '<td><em>G</em><sub>R</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>R</sub> = %.5g</td></tr>')
-        % tuple(avg[1]))
-  print(('<tr><td>Hill</td><td><em>K</em><sub>H</sub> = %7.5g GPa</td><td><em>E</em><sub>H</sub> = %7.5g GPa</td>'
-          + '<td><em>G</em><sub>H</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>H</sub> = %.5g</td></tr>')
-        % tuple(avg[2]))
-  print('</table>')
+    print("<table><tr><th>Averaging scheme</th><th>Bulk modulus</th><th>Young's modulus</th><th>Shear modulus</th><th>Poisson's ratio</th></tr>")
+    print(('<tr><td>Voigt</td><td><em>K</em><sub>V</sub> = %7.5g GPa</td><td><em>E</em><sub>V</sub> = %7.5g GPa</td>'
+           + '<td><em>G</em><sub>V</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>V</sub> = %.5g</td></tr>') % tuple(avg[0]))
+    print(('<tr><td>Reuss</td><td><em>K</em><sub>R</sub> = %7.5g GPa</td><td><em>E</em><sub>R</sub> = %7.5g GPa</td>'
+           + '<td><em>G</em><sub>R</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>R</sub> = %.5g</td></tr>') % tuple(avg[1]))
+    print(('<tr><td>Hill</td><td><em>K</em><sub>H</sub> = %7.5g GPa</td><td><em>E</em><sub>H</sub> = %7.5g GPa</td>'
+           + '<td><em>G</em><sub>H</sub> = %7.5g GPa</td><td><em>&nu;</em><sub>H</sub> = %.5g</td></tr>') % tuple(avg[2]))
+    print('</table>')
 
+    print('''<h3>Eigenvalues of the stiffness matrix</h3>
+    <table><tr>
+    <th>&lambda;<sub>1</sub></th>
+    <th>&lambda;<sub>2</sub></th>
+    <th>&lambda;<sub>3</sub></th>
+    <th>&lambda;<sub>4</sub></th>
+    <th>&lambda;<sub>5</sub></th>
+    <th>&lambda;<sub>6</sub></th>
+    </tr><tr>''')
+    eigenval = sorted(np.linalg.eig(elas.CVoigt)[0])
+    print((6 * '<td>%7.5g GPa</td>') % tuple(eigenval))
+    print('</tr></table>')
 
-  print('''<h3>Eigenvalues of the stiffness matrix</h3>
-  <table><tr>
-  <th>&lambda;<sub>1</sub></th>
-  <th>&lambda;<sub>2</sub></th>
-  <th>&lambda;<sub>3</sub></th>
-  <th>&lambda;<sub>4</sub></th>
-  <th>&lambda;<sub>5</sub></th>
-  <th>&lambda;<sub>6</sub></th>
-  </tr><tr>''')
-  eigenval = sorted(np.linalg.eig(elas.CVoigt)[0])
-  print((6*'<td>%7.5g GPa</td>') % tuple(eigenval))
-  print('</tr></table>')
+    if eigenval[0] <= 0:
+        print('<div class="error">Stiffness matrix is not definite positive, crystal is mechanically unstable<br/>')
+        print('No further analysis will be performed.</div>')
+        return finishWebPage(outbuffer)
 
-  if eigenval[0] <= 0:
-    print('<div class="error">Stiffness matrix is not definite positive, crystal is mechanically unstable<br/>')
-    print('No further analysis will be performed.</div>')
+    minE = elastic.minimize(elas.Young, 2)
+    maxE = elastic.maximize(elas.Young, 2)
+    minLC = elastic.minimize(elas.LC, 2)
+    maxLC = elastic.maximize(elas.LC, 2)
+    minG = elastic.minimize(elas.shear, 3)
+    maxG = elastic.maximize(elas.shear, 3)
+    minNu = elastic.minimize(elas.Poisson, 3)
+    maxNu = elastic.maximize(elas.Poisson, 3)
+
+    print("""<h3>Variations of the elastic moduli</h3>
+                <table>
+                <tr><td></td><th colspan="2">Young\'s modulus</th><th colspan="2">Linear compressibility</th>
+                <th colspan="2">Shear modulus</th><th colspan="2">Poisson\'s ratio</th><th></th></tr>
+                <td></td><th><em>E</em><sub>min</sub></th><th><em>E</em><sub>max</sub></th>
+                <th>&beta;<sub>min</sub></th><th>&beta;<sub>max</sub></th><th><em>G</em><sub>min</sub></th><th><em>G</em><sub>max</sub></th>
+                <th>&nu;<sub>min</sub></th><th>&nu;<sub>max</sub></th><th></th></tr>""")
+
+    print(('<tr><td>Value</td><td>%8.5g GPa</td><td>%8.5g GPa</td>'
+           + '<td>%8.5g TPa<sup>&ndash;1</sup></td><td>%8.5g TPa<sup>&ndash;1</sup></td>'
+           + '<td>%8.5g GPa</td><td>%8.5g GPa</td>'
+           + '<td>%.5g</td><td>%.5g</td><td>Value</td></tr>') % (minE[1], maxE[1], minLC[1], maxLC[1], minG[1], maxG[1], minNu[1], maxNu[1]))
+
+    anisE = '%8.4g' % (maxE[1] / minE[1])
+    anisLC = ('%8.4f' % (maxLC[1] / minLC[1])) if minLC[1] > 0 else "&infin;"
+    anisG = '%8.4g' % (maxG[1] / minG[1])
+    anisNu = ('%8.4f' % (maxNu[1] / minNu[1])) if minNu[1] * maxNu[1] > 0 else "&infin;"
+    print(('<tr><td>Anisotropy</td>' + 4 * '<td colspan="2">%s</td>' + '<td>Anisotropy</td></tr>') % (anisE, anisLC, anisG, anisNu))
+
+    print('<tr><td>Axis</td>')
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec(*minE[0])))
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec(*maxE[0])))
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec(*minLC[0])))
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec(*maxLC[0])))
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec1(*minG[0])))
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec1(*maxG[0])))
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec1(*minNu[0])))
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec1(*maxNu[0])))
+    print('<td>Axis</td></tr>')
+
+    print('<tr><td></td><td></td><td></td><td></td><td></td>')
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec2(*minG[0])))
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec2(*maxG[0])))
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec2(*minNu[0])))
+    print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec2(*maxNu[0])))
+    print('<td>Second axis</td></tr></table>')
+
+    print("<h2>Spatial dependence of Young's modulus</h2>")
+    print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
+                <textarea name="matrix" style="display: none;">%s</textarea>
+                <textarea name="sysname" style="display: none;">%s</textarea>
+                <textarea name="job" style="display: none;">%s</textarea>
+                <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
+            </form>""" % (matrix, sysname, "young"))
+    m = 1.2 * maxE[1]
+    makePolarPlot(lambda x: elas.Young([np.pi / 2, x]), m, "Young's modulus in (xy) plane", "xy")
+    makePolarPlot(lambda x: elas.Young([x, 0]), m, "Young's modulus in (xz) plane", "xz")
+    makePolarPlot(lambda x: elas.Young([x, np.pi / 2]), m, "Young's modulus in (yz) plane", "yz")
+
+    print("<h2>Spatial dependence of linear compressibility</h2>")
+    print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
+                <textarea name="matrix" style="display: none;">%s</textarea>
+                <textarea name="sysname" style="display: none;">%s</textarea>
+                <textarea name="job" style="display: none;">%s</textarea>
+                <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
+            </form>""" % (matrix, sysname, "lc"))
+    m = 1.2 * max(maxLC[1], abs(minLC[1]))
+    makePolarPlotPosNeg(lambda x: elas.LC([np.pi / 2, x]), m, "linear compressibility in (xy) plane", "xy")
+    makePolarPlotPosNeg(lambda x: elas.LC([x, 0]), m, "linear compressibility in (xz) plane", "xz")
+    makePolarPlotPosNeg(lambda x: elas.LC([x, np.pi / 2]), m, "linear compressibility in (yz) plane", "yz")
+
+    print("<h2>Spatial dependence of shear modulus</h2>")
+    print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
+                <textarea name="matrix" style="display: none;">%s</textarea>
+                <textarea name="sysname" style="display: none;">%s</textarea>
+                <textarea name="job" style="display: none;">%s</textarea>
+                <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
+            </form>""" % (matrix, sysname, "shear"))
+    m = 1.2 * maxG[1]
+    makePolarPlot2(lambda x: elas.shear2D([np.pi / 2, x]), m, "Shear modulus in (xy) plane", "xy")
+    makePolarPlot2(lambda x: elas.shear2D([x, 0]), m, "Shear modulus in (xz) plane", "xz")
+    makePolarPlot2(lambda x: elas.shear2D([x, np.pi / 2]), m, "Shear modulus in (yz) plane", "yz")
+
+    print("<h2>Spatial dependence of Poisson's ratio</h2>")
+    print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
+                <textarea name="matrix" style="display: none;">%s</textarea>
+                <textarea name="sysname" style="display: none;">%s</textarea>
+                <textarea name="job" style="display: none;">%s</textarea>
+                <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
+            </form>""" % (matrix, sysname, "poisson"))
+    m = 1.2 * max(abs(maxNu[1]), abs(minNu[1]))
+    makePolarPlot3(lambda x: elas.Poisson2D([np.pi / 2, x]), m, "Poisson's ratio in (xy) plane", "xy")
+    makePolarPlot3(lambda x: elas.Poisson2D([x, 0]), m, "Poisson's ratio in (xz) plane", "xz")
+    makePolarPlot3(lambda x: elas.Poisson2D([x, np.pi / 2]), m, "Poisson's ratio in (yz) plane", "yz")
+
+    print("</div>")
     return finishWebPage(outbuffer)
-
-
-  minE = elastic.minimize(elas.Young, 2)
-  maxE = elastic.maximize(elas.Young, 2)
-  minLC = elastic.minimize(elas.LC, 2)
-  maxLC = elastic.maximize(elas.LC, 2)
-  minG = elastic.minimize(elas.shear, 3)
-  maxG = elastic.maximize(elas.shear, 3)
-  minNu = elastic.minimize(elas.Poisson, 3)
-  maxNu = elastic.maximize(elas.Poisson, 3)
-
-  print("""<h3>Variations of the elastic moduli</h3>
-            <table>
-            <tr><td></td><th colspan="2">Young\'s modulus</th><th colspan="2">Linear compressibility</th>
-            <th colspan="2">Shear modulus</th><th colspan="2">Poisson\'s ratio</th><th></th></tr>
-            <td></td><th><em>E</em><sub>min</sub></th><th><em>E</em><sub>max</sub></th>
-            <th>&beta;<sub>min</sub></th><th>&beta;<sub>max</sub></th><th><em>G</em><sub>min</sub></th><th><em>G</em><sub>max</sub></th>
-            <th>&nu;<sub>min</sub></th><th>&nu;<sub>max</sub></th><th></th></tr>""")
-
-  print(('<tr><td>Value</td><td>%8.5g GPa</td><td>%8.5g GPa</td>'
-        + '<td>%8.5g TPa<sup>&ndash;1</sup></td><td>%8.5g TPa<sup>&ndash;1</sup></td>'
-        + '<td>%8.5g GPa</td><td>%8.5g GPa</td>'
-        + '<td>%.5g</td><td>%.5g</td><td>Value</td></tr>') % (minE[1], maxE[1], minLC[1], maxLC[1], minG[1], maxG[1], minNu[1], maxNu[1]))
-
-  anisE = '%8.4g' % (maxE[1]/minE[1])
-  anisLC = ('%8.4f' % (maxLC[1]/minLC[1])) if minLC[1] > 0 else "&infin;"
-  anisG = '%8.4g' % (maxG[1]/minG[1])
-  anisNu = ('%8.4f' % (maxNu[1]/minNu[1])) if minNu[1]*maxNu[1] > 0 else "&infin;"
-  print(('<tr><td>Anisotropy</td>' + 4 * '<td colspan="2">%s</td>'
-        + '<td>Anisotropy</td></tr>') % (anisE, anisLC, anisG, anisNu))
-
-  print('<tr><td>Axis</td>')
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec(*minE[0])))
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec(*maxE[0])))
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec(*minLC[0])))
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec(*maxLC[0])))
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec1(*minG[0])))
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec1(*maxG[0])))
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec1(*minNu[0])))
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec1(*maxNu[0])))
-  print('<td>Axis</td></tr>')
-
-  print('<tr><td></td><td></td><td></td><td></td><td></td>')
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec2(*minG[0])))
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec2(*maxG[0])))
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec2(*minNu[0])))
-  print('<td>%.4f<br />%.4f<br />%.4f</td>' % tuple(elastic.dirVec2(*maxNu[0])))
-  print('<td>Second axis</td></tr></table>')
-
-  print("<h2>Spatial dependence of Young's modulus</h2>")
-  print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
-            <textarea name="matrix" style="display: none;">%s</textarea>
-            <textarea name="sysname" style="display: none;">%s</textarea>
-            <textarea name="job" style="display: none;">%s</textarea>
-            <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
-           </form>""" % (matrix, sysname, "young"))
-  m = 1.2 * maxE[1]
-  makePolarPlot(lambda x: elas.Young([np.pi / 2, x]), m, "Young's modulus in (xy) plane", "xy")
-  makePolarPlot(lambda x: elas.Young([x, 0]), m, "Young's modulus in (xz) plane", "xz")
-  makePolarPlot(lambda x: elas.Young([x, np.pi / 2]), m, "Young's modulus in (yz) plane", "yz")
-
-  print("<h2>Spatial dependence of linear compressibility</h2>")
-  print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
-            <textarea name="matrix" style="display: none;">%s</textarea>
-            <textarea name="sysname" style="display: none;">%s</textarea>
-            <textarea name="job" style="display: none;">%s</textarea>
-            <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
-           </form>""" % (matrix, sysname, "lc"))
-  m = 1.2 * max(maxLC[1], abs(minLC[1]))
-  makePolarPlotPosNeg(lambda x: elas.LC([np.pi / 2, x]), m, "linear compressibility in (xy) plane", "xy")
-  makePolarPlotPosNeg(lambda x: elas.LC([x, 0]), m, "linear compressibility in (xz) plane", "xz")
-  makePolarPlotPosNeg(lambda x: elas.LC([x, np.pi / 2]), m, "linear compressibility in (yz) plane", "yz")
-
-  print("<h2>Spatial dependence of shear modulus</h2>")
-  print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
-            <textarea name="matrix" style="display: none;">%s</textarea>
-            <textarea name="sysname" style="display: none;">%s</textarea>
-            <textarea name="job" style="display: none;">%s</textarea>
-            <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
-           </form>""" % (matrix, sysname, "shear"))
-  m = 1.2 * maxG[1]
-  makePolarPlot2(lambda x: elas.shear2D([np.pi / 2, x]), m, "Shear modulus in (xy) plane", "xy")
-  makePolarPlot2(lambda x: elas.shear2D([x, 0]), m, "Shear modulus in (xz) plane", "xz")
-  makePolarPlot2(lambda x: elas.shear2D([x, np.pi / 2]), m, "Shear modulus in (yz) plane", "yz")
-
-  print("<h2>Spatial dependence of Poisson's ratio</h2>")
-  print("""<form id="elastic" action="/wait3D" method="post" target="_blank">
-            <textarea name="matrix" style="display: none;">%s</textarea>
-            <textarea name="sysname" style="display: none;">%s</textarea>
-            <textarea name="job" style="display: none;">%s</textarea>
-            <br /><input type="submit" style="font-size: 100%%; color: #b02020;" value="Visualize in 3D">
-           </form>""" % (matrix, sysname, "poisson"))
-  m = 1.2 * max(abs(maxNu[1]), abs(minNu[1]))
-  makePolarPlot3(lambda x: elas.Poisson2D([np.pi / 2, x]), m, "Poisson's ratio in (xy) plane", "xy")
-  makePolarPlot3(lambda x: elas.Poisson2D([x, 0]), m, "Poisson's ratio in (xz) plane", "xz")
-  makePolarPlot3(lambda x: elas.Poisson2D([x, np.pi / 2]), m, "Poisson's ratio in (yz) plane", "yz")
-
-  print("</div>")
-  return finishWebPage(outbuffer)
 
 
 def wait3D(matrix, sysname, job):
