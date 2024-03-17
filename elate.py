@@ -1053,7 +1053,7 @@ def POISSON3D(matrix, sysname):
         elas = elastic.ElasticOrtho(elas)
         print('<script type="text/javascript">var isOrtho = 1;</script>')
 
-    make3DPlot3(lambda x, y, g1, g2: elas.poisson3D(x, y, g1, g2), "Poisson's ratio")
+    make3DPlot3(lambda x, y, g1, g2: elas.Poisson3D(x, y, g1, g2), "Poisson's ratio")
 
     print('<h3>Input: stiffness matrix (coefficients in GPa) of %s</h3>' % (sysname))
     print('<pre>')

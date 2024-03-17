@@ -258,7 +258,7 @@ class Elastic:
         r2 = optimize.minimize(func2, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
         return (min(0,float(r1.fun)), max(0,float(r1.fun)), -float(r2.fun))
 
-    def poisson3D(self, x, y, guess1 = np.pi/2.0, guess2 = np.pi/2.0):
+    def Poisson3D(self, x, y, guess1 = np.pi/2.0, guess2 = np.pi/2.0):
         tol = 0.005
         def func1(z): return self.Poisson([x, y, z[0]])
         r1 = optimize.minimize(func1, guess1, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
