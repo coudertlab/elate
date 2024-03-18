@@ -232,6 +232,9 @@ class Elastic:
                  [KR, 1/(1/(3*GR) + 1/(9*KR)), GR, (1 - 3*GR/(3*KR+GR))/2],
                  [KH, 1/(1/(3*GH) + 1/(9*KH)), GH, (1 - 3*GH/(3*KH+GH))/2] ]
 
+    def eigenvalues(self):
+        return np.sort(np.linalg.eig(self.CVoigt)[0])
+
     def shear2D(self, x):
         ftol = 0.001
         xtol = 0.01
@@ -478,3 +481,6 @@ class Elastic2D:
                  + 2*self.s16*st**3*ct
                  + 2*self.s26*ct**3*st)
         return -num/denom
+
+    def eigenvalues(self):
+        return np.sort(np.linalg.eig(self.CVoigt)[0])

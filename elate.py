@@ -693,7 +693,7 @@ def ELATE_main_2D(elas, matrix, sysname, outbuffer):
     <th>&lambda;<sub>2</sub></th>
     <th>&lambda;<sub>3</sub></th>
     </tr><tr>''')
-    eigenval = sorted(np.linalg.eig(elas.CVoigt)[0])
+    eigenval = elas.eigenvalues()
     print((3 * '<td>%7.5g N/m</td>') % tuple(eigenval))
     print('</tr></table>')
 
@@ -800,7 +800,7 @@ def ELATE_main_3D(elas, matrix, sysname, outbuffer):
     <th>&lambda;<sub>5</sub></th>
     <th>&lambda;<sub>6</sub></th>
     </tr><tr>''')
-    eigenval = sorted(np.linalg.eig(elas.CVoigt)[0])
+    eigenval = elas.eigenvalues()
     print((6 * '<td>%7.5g GPa</td>') % tuple(eigenval))
     print('</tr></table>')
 
