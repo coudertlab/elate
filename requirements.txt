@@ -1,7 +1,12 @@
-# Requirements for the ELATE module (elastic.py)
+# Dependencies of package, matching `pyproject.toml`
 numpy
 requests
 scipy
 # Additional requirements for the Jupyter notebook
 matplotlib
 pandas
+# Build/test/doc dependencies
+build
+flake8
+hatch
+pytest

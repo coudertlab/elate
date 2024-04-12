@@ -1,0 +1,31 @@
+[project]
+name = "ELATE"
+version = "2024.04.12
+authors = [
+  { name="François-Xavier Coudert", email="fxcoudert@gmail.com" },
+  { name="Romain Gaillac" },
+]
+description = "Elastic tensor analysis and visualization"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: Scientific/Engineering :: Chemistry",
+]
+dependencies = [
+  "numpy",
+  "requests",
+  "scipy",
+]
+
+[project.urls]
+Homepage = "https://github.com/coudertlab/elate"
+Issues = "https://github.com/coudertlab/elate/issues"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
