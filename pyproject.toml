@@ -1,6 +1,6 @@
 [project]
 name = "ELATE"
-version = "2024.04.12
+version = "2024.04.12"
 authors = [
   { name="François-Xavier Coudert", email="fxcoudert@gmail.com" },
   { name="Romain Gaillac" },
