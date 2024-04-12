@@ -16,7 +16,7 @@ import requests
 import numpy as np
 from scipy import optimize
 
-import elastic
+from ELATE import elastic
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
 __version__ = "2024.03.15"
