@@ -7,7 +7,7 @@ import numpy as np
 from scipy import optimize
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2024.03.15"
+__version__ = "2025.08.26"
 __license__ = "MIT"
 
 
@@ -239,34 +239,34 @@ class Elastic:
         ftol = 0.001
         xtol = 0.01
         def func1(z): return self.shear([x[0], x[1], z[0]])
-        r1 = optimize.minimize(func1, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
+        r1 = optimize.minimize(func1, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})
         def func2(z): return -self.shear([x[0], x[1], z[0]])
-        r2 = optimize.minimize(func2, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
+        r2 = optimize.minimize(func2, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})
         return (float(r1.fun), -float(r2.fun))
 
     def shear3D(self, x, y, guess1 = np.pi/2.0, guess2 = np.pi/2.0):
-        tol = 0.005
+        tol = 0.0005
         def func1(z): return self.shear([x, y, z[0]])
-        r1 = optimize.minimize(func1, guess1, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
+        r1 = optimize.minimize(func1, guess1, args=(), method = 'L-BFGS-B')
         def func2(z): return -self.shear([x, y, z[0]])
-        r2 = optimize.minimize(func2, guess2, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
+        r2 = optimize.minimize(func2, guess2, args=(), method = 'L-BFGS-B')
         return (float(r1.fun), -float(r2.fun), float(r1.x[0]), float(r2.x[0]))
 
     def Poisson2D(self, x):
         ftol = 0.001
         xtol = 0.01
         def func1(z): return self.Poisson([x[0], x[1], z[0]])
-        r1 = optimize.minimize(func1, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
+        r1 = optimize.minimize(func1, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})
         def func2(z): return -self.Poisson([x[0], x[1], z[0]])
-        r2 = optimize.minimize(func2, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})#, bounds=[(0.0,np.pi)])
+        r2 = optimize.minimize(func2, np.pi/2.0, args=(), method = 'Powell', options={"xtol":xtol, "ftol":ftol})
         return (min(0,float(r1.fun)), max(0,float(r1.fun)), -float(r2.fun))
 
     def Poisson3D(self, x, y, guess1 = np.pi/2.0, guess2 = np.pi/2.0):
         tol = 0.005
         def func1(z): return self.Poisson([x, y, z[0]])
-        r1 = optimize.minimize(func1, guess1, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
+        r1 = optimize.minimize(func1, guess1, args=(), method = 'L-BFGS-B')
         def func2(z): return -self.Poisson([x, y, z[0]])
-        r2 = optimize.minimize(func2, guess2, args=(), method = 'COBYLA', options={"tol":tol})#, bounds=[(0.0,np.pi)])
+        r2 = optimize.minimize(func2, guess2, args=(), method = 'L-BFGS-B')
         return (min(0,float(r1.fun)), max(0,float(r1.fun)), -float(r2.fun), float(r1.x[0]), float(r2.x[0]))
 
 

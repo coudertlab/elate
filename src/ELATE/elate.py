@@ -19,7 +19,7 @@ from scipy import optimize
 from ELATE import elastic
 
 __author__ = "Romain Gaillac and François-Xavier Coudert"
-__version__ = "2024.03.15"
+__version__ = "2025.08.26"
 __license__ = "MIT"
 
 
@@ -643,8 +643,8 @@ def ELATE(matrix, sysname):
 
     # Start timing
     print('<script type="text/javascript">var startTime = %.12g</script>' % time.perf_counter())
-    sysname = removeHTMLTags(sysname).strip()
-    printTitle(outbuffer, "Elastic analysis of " + sysname)
+    sysname_sanitized = removeHTMLTags(sysname).strip()
+    printTitle(outbuffer, "Elastic analysis of " + sysname_sanitized)
 
     try:
         # First try to interpret as a 3D matrix
